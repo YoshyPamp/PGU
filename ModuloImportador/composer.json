@@ -1,0 +1,14 @@
+{
+    "name": "vendor/modulo-importador",
+    "description": "Description of project ModuloImportador.",
+    "authors": [
+        {
+            "name": "YoshyPamp",
+            "email": "your@email.here"
+        }
+    ],
+    "require": {
+        
+        "smalot/pdfparser": "*"
+    }
+}
