@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -21,17 +21,17 @@ class Database {
     public $conn;
     
     function __construct() {
-		//PRD
-		// $this->DB_NAME = "FAM";
-        // $this->DB_USER = "sa";
-        // $this->DB_PASS = "informatica.2015*";
-        // $this->DB_SERVER = "172.16.22.8";
+	//PRD
+	$this->DB_NAME = "FAM";
+        $this->DB_USER = "sa";
+        $this->DB_PASS = "informatica.2015*";
+        $this->DB_SERVER = "172.16.22.8";
 
-		//QAS
-        $this->DB_NAME = "FAM";
-        $this->DB_USER = "valentys_sql";
-        $this->DB_PASS = "valentys.2012*";
-        $this->DB_SERVER = "172.16.39.64";
+	//QAS
+        //$this->DB_NAME = "FAM";
+        //$this->DB_USER = "valentys_sql";
+        //$this->DB_PASS = "valentys.2012*";
+        //$this->DB_SERVER = "172.16.39.64";
         $this->connectionInfo = array("Database" => $this->DB_NAME,
                                       "UID" => $this->DB_USER,
                                       "PWD" => $this->DB_PASS);
@@ -223,7 +223,7 @@ class Database {
 	
 	function VERIFICAR_PLAN_EXISTENTE($codigo){
 		
-		$deg = "SELECT * FROM FAM_PLAN_MAESTRA WHERE FAM_PLAN_MAESTRA_CODIGO = '".$codigo."'";
+		$deg = "SELECT * FROM PLANESTUDIO WHERE COD_PLANESTUDIO = '".$codigo."'";
 		
 		$stmt = odbc_exec($this->conn,$deg);
 		

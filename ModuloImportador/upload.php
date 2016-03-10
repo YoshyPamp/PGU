@@ -24,7 +24,7 @@ if(isset($_POST["submit"])) {
         $uploadOk = 0;
     }
 }
-echo $_FILES["fileToUpload"]["tmp_name"];
+
 // Check if file already exists
 if (file_exists($target_file)) {
     echo "Sorry, file already exists.";
@@ -43,5 +43,5 @@ if ($uploadOk == 0) {
     }
 }
 
-//echo "<script>window.location='index.php?upload=true&name=".$nameFile."&tipo=".$tipo_file."';</script>";
+echo "<script>window.location='index.php?upload=true&name=".$nameFile."&tipo=".$tipo_file."';</script>";
 ?>
