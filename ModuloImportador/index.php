@@ -72,7 +72,7 @@
                     <img alt="Brand"  src="../Imagenes/logo-U.jpg">
                 </a>
             </div>
-            <h1 class="col-md-8">SISTEMA DE GESTIÓN UNIVERSITARIO</h1>
+            <h1 class="col-md-8">MÓDULO IMPORTADOR DE DATOS</h1>
         </div>
     </nav>
 
@@ -280,7 +280,7 @@
                             <label for="sede">Sede: </label>
                             <input type="text" name="sede" value="<?php echo $resultado_decreto['DATOS']->getSede(); ?>" class="form-control" required>
                             <label for="grado_bach">Grado Bachiller: </label>
-                            <input type="text" name="grado_bach" value="<?php echo $resultado_decreto['DATOS']->getGrado_bach(); ?>" class="form-control" required>
+                            <input type="text" name="grado_bach" value="<?php echo $resultado_decreto['DATOS']->getGrado_bach(); ?>" class="form-control">
                             <label for="grado_acad">Grado Académico: </label>
                             <input type="text" name="grado_acad" value="<?php echo $resultado_decreto['DATOS']->getGrado_acad(); ?>" class="form-control" required>
                             <label for="titulo">Título Profesional: </label>
@@ -393,7 +393,7 @@
 							
 							
 							<?php
-							var_dump($resultado_oferta);
+							//var_dump($resultado_oferta);
 							
 							
 

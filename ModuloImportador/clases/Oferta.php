@@ -39,13 +39,12 @@
 		public function leerPaginas($inputFileName){
 			
 			//Usage:
-			$this->convertXLStoCSV($inputFileName,'oferta.csv');
+			//$this->convertXLStoCSV($inputFileName,'oferta.csv');
 			 
 			/**  Identify the type of $inputFileName  **/
-			$inputFileType = PHPExcel_IOFactory::identify('oferta.csv');
+			$inputFileType = PHPExcel_IOFactory::identify($inputFileName);
 
 
-			
 			/**  Create a new Reader of the type defined in $inputFileType  **/ 
 			$objReader = PHPExcel_IOFactory::createReader($inputFileType); 
 			/**  Tell the Reader that we want to use the Read Filter  **/ 

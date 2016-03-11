@@ -22,16 +22,16 @@ class Database {
     
     function __construct() {
 	//PRD
-	$this->DB_NAME = "FAM";
-        $this->DB_USER = "sa";
-        $this->DB_PASS = "informatica.2015*";
-        $this->DB_SERVER = "172.16.22.8";
+	//$this->DB_NAME = "FAM";
+    //    $this->DB_USER = "sa";
+    //    $this->DB_PASS = "informatica.2015*";
+    //    $this->DB_SERVER = "172.16.22.8";
 
 	//QAS
-        //$this->DB_NAME = "FAM";
-        //$this->DB_USER = "valentys_sql";
-        //$this->DB_PASS = "valentys.2012*";
-        //$this->DB_SERVER = "172.16.39.64";
+        $this->DB_NAME = "FAM";
+        $this->DB_USER = "valentys_sql";
+        $this->DB_PASS = "valentys.2012*";
+        $this->DB_SERVER = "172.16.39.64";
         $this->connectionInfo = array("Database" => $this->DB_NAME,
                                       "UID" => $this->DB_USER,
                                       "PWD" => $this->DB_PASS);
@@ -87,7 +87,6 @@ class Database {
         while( $row = odbc_fetch_array($stmt) ) {
             $result[]['COD_ASIGNATURA'] = $row['COD_ASIGNATURA'];
             $result[count($result)-1]['NOM_ASIGNATURA'] = utf8_encode($row['NOM_ASIGNATURA']);
-            $result[count($result)-1]['SEMESTRE_COD_SEMESTRE'] = $row['SEMESTRE_COD_SEMESTRE'];
             $result[count($result)-1]['PLANESTUDIO_COD_PLANESTUDIO'] = $row['PLANESTUDIO_COD_PLANESTUDIO'];
         }
         odbc_free_result( $stmt);
@@ -123,11 +122,11 @@ class Database {
 	
 	function SELECT_ASIGNATURAS_BYPLAN($codigo) {
 		
-		$deg = "SELECT * FROM FAM_ASIGNATURA_MAESTRA WHERE FAM_ASIGNATURA_MAESTRA_PLAN = '".$codigo."'";
+		$deg = "SELECT * FROM ASIGNATURA WHERE PLANESTUDIO_COD_PLANESTUDIO = '".$codigo."'";
 		
 		$stmt = odbc_exec($this->conn,$deg);
 		
-		$deg2 = "SELECT FAM_PLAN_MAESTRA_DURACION FROM FAM_PLAN_MAESTRA WHERE FAM_PLAN_MAESTRA_CODIGO = '".$codigo."'";
+		$deg2 = "SELECT DURACION FROM PLANESTUDIO WHERE COD_PLANESTUDIO = '".$codigo."'";
 		
 		$stmt2 = odbc_exec($this->conn,$deg2);
 		
@@ -144,7 +143,7 @@ class Database {
         }
 		
 		$plan = odbc_fetch_array($stmt2);
-		$duracion = $plan['FAM_PLAN_MAESTRA_DURACION'];
+		$duracion = $plan['DURACION'];
 		
 		$result = array();
 		$con = 1;
@@ -155,9 +154,9 @@ class Database {
 
 		
 		while( $row = odbc_fetch_array($stmt) ) {
-			$result[$row['FAM_ASIGNATURA_MAESTRA_NIVEL']][] = array(
-				$row['FAM_ASIGNATURA_MAESTRA_NOMBRE'],
-				$row['FAM_ASIGNATURA_MAESTRA_CODIGO']
+			$result[$row['NIVEL']][] = array(
+				$row['NOM_ASIGNATURA'],
+				$row['COD_ASIGNATURA']
 			);
         }
 		
@@ -172,44 +171,41 @@ class Database {
     function FAM_PLAN_INSERT($codigo, $tipo, $facultad, $escuela,
             $sede, $grd_bach, $grd_acad, $titulo, $nombre, $jornada,$duracion){
         
-        $dec = "INSERT INTO FAM_PLAN_MAESTRA VALUES("
-                . "'".$codigo."',"
-                . "'".$tipo."',"
-                . "'".$facultad."',"
-                . "'".$escuela."',"
-                . "'".$sede."',"
-                . "'".$grd_acad."',"
-                . "'".$grd_bach."',"
-                . "'".$titulo."',"
-                . "'".$nombre."',"
-                . "'".$jornada."',"
-                .$duracion.")";
-				
+        $dec = "INSERT INTO CARRERA OUTPUT Inserted.COD_CARRERA VALUES('$nombre','$jornada','ICC-01')";
+			
+		$stmt = odbc_exec($this->conn,$dec);
         
-		//echo "<pre>"; var_dump($dec); echo "</pre>";
-        
-        $stmt = odbc_exec($this->conn,$dec);
-        
-        if( $stmt === false )
-        {
-             echo "Error al ejecutar procedimiento.\n";
-             die( print_r( odbc_error(), true));
-        }
+        if( $stmt === false ) {
+			echo "Error al ejecutar procedimiento.\n";
+			die( print_r( odbc_error(), true));
+        }else {
+			$row = odbc_fetch_array($stmt);
+			$id_carrera = $row['COD_CARRERA'];
+		}
         
         odbc_free_result( $stmt);
+			
+		$dec2 = "INSERT INTO PLANESTUDIO VALUES('$codigo','$id_carrera','$nombre','$tipo',
+		'$grd_bach','$grd_acad','$titulo','$duracion')";
+		
+        $stmt = odbc_exec($this->conn,$dec2);
+        
+        if( $stmt === false ) {
+			echo "Error al ejecutar procedimiento.\n";
+			die( print_r( odbc_error(), true));
+        }
+		
+		odbc_free_result( $stmt);
     }  
 	
 	function FAM_ASIGNATURA_INSERT($codigo_plan, $nombre, $nivel, $codigo){
         
-        $dec = "INSERT INTO FAM_ASIGNATURA_MAESTRA VALUES("
-                . "'".$codigo_plan."',"
+        $dec = "INSERT INTO ASIGNATURA VALUES("
+                . "'".$codigo."',"
                 . "'".$nombre."',"
-                .$nivel.","
-				. "'".$codigo."')";
+                . "'".$codigo_plan."',"
+				.$nivel.")";
 				
-        
-		//echo "<pre>"; var_dump($dec); echo "</pre>";
-        
         $stmt = odbc_exec($this->conn,$dec);
         
         if( $stmt === false )

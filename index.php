@@ -60,21 +60,21 @@
                 <table id="example_asignaturas" class="table table-striped table-bordered">
                     <thead>
                         <tr>
-                            <th>Código</th><th>Nombre</th><th>AñoSemestre</th><th>Plan Estudio</th><th>Ver Asignatura</th>
+                            <th>Código</th><th>Nombre</th><th>Plan Estudio</th><th>Ver Asignatura</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach($asignaturas as $asig): ?>
                             <tr>
                                 <td><?php echo $asig['COD_ASIGNATURA']; ?></td><td><?php echo $asig['NOM_ASIGNATURA']; ?></td>
-                                <td><?php echo $asig['SEMESTRE_COD_SEMESTRE']; ?></td><td><?php echo $asig['PLANESTUDIO_COD_PLANESTUDIO']; ?></td>
+                                <td><?php echo $asig['PLANESTUDIO_COD_PLANESTUDIO']; ?></td>
                                 <td><input type="button" class="btn btn-info" value="Ver" onclick="Javascript: selectAsignatura('<?php echo $asig['COD_ASIGNATURA']; ?>');" ></td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th>Código</th><th>Nombre</th><th>AñoSemestre</th><th>Plan Estudio</th><th>Ver Asignatura</th>
+                            <th>Código</th><th>Nombre</th><th>Plan Estudio</th><th>Ver Asignatura</th>
                         </tr>
                     </tfoot>
                 </table>
