@@ -427,6 +427,22 @@ class Database {
 		}
 	}
 	
+	function FAM_INSERT_NOTA($rut_alum, $cod_ramo, $_seccion, $ano_ramo, $sem_ramo, $estado_A){
+		
+		$dec = "INSERT INTO NOTA VALUES("
+				. "'".$nom_completo."',"
+				. "'".$rut."',"
+				. "'".$pln."',"
+				. "'REGULAR')";				
+				
+		$stmt = odbc_exec($this->conn,$dec);
+		if( $stmt === false )
+		{
+			echo "Error al ejecutar procedimiento.\n";
+			die( print_r( odbc_error(), true));
+		}
+		odbc_free_result( $stmt);
+	}
 }
 
 ?>
