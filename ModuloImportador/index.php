@@ -11,18 +11,43 @@
 	ini_set('xdebug.var_display_max_depth', -1);
 	ini_set('xdebug.var_display_max_children', -1);
 	ini_set('xdebug.var_display_max_data', -1);
-
+	date_default_timezone_set('America/Santiago');
     
 	$db = new Database();
     $debug = new helpers();
     require 'vendor/autoload.php';
+	
+	if(isset($_GET['malas'])){
+		$malas = unserialize($_GET['malas']);
+	}
+	
 	
 	
 	if(isset($_GET['imported'])){
 		if($_GET['imported'] == 'ok'){
 			$importe_exitoso = "IMPORTE DE INFORMACIÓN EXITOSA";
 		}else{
-			$importe_exitoso = "ERROR : PLAN DE ESTUDIO YA EXISTE CON ESE CÓDIGO, ELIMINAR ANTERIOR Y VOLVER A IMPORTAR.";
+			if($_GET['imported'] == 'ramoX') {
+				$importe_exitoso = "ERROR : LAS SIGUIENTES ASIGNATURAS NO EXISTEN EN BD: <br>";
+				foreach($malas as $mala){
+					$importe_exitoso .= $mala."<br>";
+				}
+			}else{
+				if($_GET['imported'] == 'errorO'){
+					$importe_exitoso = "ERROR : OFERTA YA EXISTE PARA ESE AÑO Y SEMESTRE, ELIMINAR Y VOLVER A IMPORTAR.";
+				}else{
+					$importe_exitoso = "ERROR : PLAN DE ESTUDIO YA EXISTE CON ESE CÓDIGO, ELIMINAR ANTERIOR Y VOLVER A IMPORTAR.";
+				}
+			}
+		}
+	}
+	
+	if(isset($_GET['acta'])){
+		$alumnos_no_insertados = unserialize($_GET['no_importados']);
+		
+		$importe_exitoso = "IMPORTE DE INFORMACIÓN EXITOSA, LOS SIGUIENTES ALUMNOS NO FUERON INSERTADOS YA QUE EXISTÍAN:<br>";
+		foreach($alumnos_no_insertados as $rut){
+			$importe_exitoso .= "-".$rut."<br>";
 		}
 	}
     
@@ -85,6 +110,10 @@
 					echo "<div class='alert alert-danger' role='alert'>".$importe_exitoso."</div>";
 				}
 			}
+			
+			if(isset($_GET['acta'])){
+				echo "<div class='alert alert-success' role='alert'>".$importe_exitoso."</div>";
+			}
 		
 		
 		?>
@@ -125,7 +154,10 @@
                     $conA = 1;
                     $conAs = 1;
                     ?>
+					
+					
                     <form method="post" action="import.php" id='importar'>
+						<input type='hidden' name='acta' value='0'>
                         <input type='submit' value='IMPORTAR DATOS' class='btn btn-success btn-lg center-block col-md-12' style='display:hidden' /><br><br>
         
                         <h3 class='col-md-12 text-center' >RESUMEN DE DATOS A IMPORTAR <small><em>Presione IMPORTAR cuando este seguro de los datos.</em></small></h3><br><br><br><br>
@@ -136,34 +168,33 @@
                                 <tr class='info'>
                                     <th class='center'>N°</th>
                                     <th class='center'>Nombre</th><th class='center'>Apellido Paterno</th><th class='center'>Apellido Materno</th><th class='center'>Rut</th>
-                                    <th class='center'>Plan</th><th class='center'>Importar</th>
+                                    <th class='center'>Plan</th>
                                 </tr>
-                                <tr class='accordion-toggle success' data-toggle="collapse" data-target=".demo1"><th colspan='7' class='center'>Presione aquí para ocultar o expandir.</th></tr>
+                                <tr class='accordion-toggle success' data-toggle="collapse" data-target=".demo1"><th colspan='6' class='center'>Presione aquí para ocultar o expandir.</th></tr>
                             </thead>
                 
                             <tbody class="accordian-body collapse demo1">
-                                <?php foreach($resultado_acta['alumnos'] as $alumno): ?>
+                                <?php foreach($resultado_acta['alumnos'] as $key => $alumno): ?>
                                 <tr>
                                     <!-- VERIFICA SI ALUMNO LLEGO CON PROBLEMAS POR NOMBRE O APELLIDO COMPUESTO-->
                                     <?php if(!preg_match('#[0-9]#',$alumno->rut)): ?>
                                         <td class='center'><?php echo $conA; ?></td>
-                                        <td class='center'><input type='text' name='alumnoNom<?php echo $conAlumnos; ?>' style='background-color: lightsteelblue' placeholder='<?php echo $alumno->nombre; ?>' required></td>
-                                        <td class='center'><input type='text' name='alumnoApePat<?php echo $conAlumnos; ?>' style='background-color: lightsteelblue;' placeholder='<?php echo $alumno->apellidoPaterno; ?>' required></td>
-                                        <td class='center'><input type='text' name='alumnoApeMat<?php echo $conAlumnos; ?>' style='background-color: lightsteelblue;' placeholder='<?php echo $alumno->apellidoMaterno; ?>' required></td>
-                                        <td class='center'><input type='text' name='alumnoRut<?php echo $conAlumnos; ?>' style='background-color: lightsteelblue;' placeholder='<?php echo $alumno->rut; ?>' required></td>
-                                        <td class='center'><input type='text' name='alumnoPlan<?php echo $conAlumnos; $conAlumnos++; ?>' style='background-color: lightsteelblue;' placeholder='<?php echo $alumno->plan; ?>' required></td>
+                                        <td class='center'><input type='text' name='alumno-<?php echo $key; ?>[]' style='background-color: lightsteelblue' placeholder='<?php echo $alumno->nombre; ?>' required></td>
+                                        <td class='center'><input type='text' name='alumno-<?php echo $key; ?>[]' style='background-color: lightsteelblue;' placeholder='<?php echo $alumno->apellidoPaterno; ?>' required></td>
+                                        <td class='center'><input type='text' name='alumno-<?php echo $key; ?>[]' style='background-color: lightsteelblue;' placeholder='<?php echo $alumno->apellidoMaterno; ?>' required></td>
+                                        <td class='center'><input type='text' name='alumno-<?php echo $key; ?>[]' style='background-color: lightsteelblue;' placeholder='<?php echo $alumno->rut; ?>' required></td>
+                                        <td class='center'><input type='text' name='alumno-<?php echo $key; $conAlumnos++; ?>[]' style='background-color: lightsteelblue;' placeholder='<?php echo $alumno->plan; ?>' required></td>
                                         <td class='center'><label class='text-danger'>
                                                 <a href="#alumnoRut<?php echo $conAlumnos; ?>" id="alumnoRut<?php echo $conAlumnos; ?>back"><img width='20%' height='19%' src='../Imagenes/new-go-down.png'></a>
                                                 <a target='_blank' href="Documentos/<?php echo $_GET['name']; ?>"><img width='20%' height='19%' src='../Imagenes/Pdf.png'></a>
                                             </label></td>
                                     <?php else: ?>
                                         <td class='center'><?php echo $conA; ?></td>
-                                        <td class='center'><?php echo $alumno->nombre; ?></td>
-                                        <td class='center'><?php echo $alumno->apellidoPaterno; ?></td>
-                                        <td class='center'><?php echo $alumno->apellidoMaterno; ?></td>
-                                        <td class='center'><?php echo $alumno->rut; ?></td>
-                                        <td class='center'><?php echo $alumno->plan; ?></td>
-                                        <td class='center'><input name='<?php echo $alumno->rut; ?>' type='checkbox' checked /></td>
+                                        <td class='center'><input type='text' class='form-control' name='alumno-<?php echo $key; ?>[]' value='<?php echo $alumno->nombre; ?>' ></td>
+                                        <td class='center'><input type='text' class='form-control' name='alumno-<?php echo $key; ?>[]' value='<?php echo $alumno->apellidoPaterno; ?>' ></td>
+                                        <td class='center'><input type='text' class='form-control' name='alumno-<?php echo $key; ?>[]' value='<?php echo $alumno->apellidoMaterno; ?>' ></td>
+                                        <td class='center'><input type='text' class='form-control' name='alumno-<?php echo $key; ?>[]' value='<?php echo $alumno->rut; ?>' ></td>
+                                        <td class='center'><input type='text' class='form-control' name='alumno-<?php echo $key; ?>[]' value='<?php echo $alumno->plan; ?>' ></td>
                                     <?php endif; ?>
                                 </tr>
                                 <?php $conA++;?>
@@ -186,7 +217,6 @@
                                     <th class='center' >Profesor</th>
                                     <th clasS='center' >Año</th>
                                     <th class='center' >Semestre</th>
-                                    <th class='center' >Importar</th>
                                 </tr>
                             </thead>    
                                 <?php foreach($resultado_acta['asignaturas'] as $asignatura): ?>
@@ -194,54 +224,59 @@
                             <tbody class="accordian-body collapse demo2">
                                 <tr>
                                     <td class='center' data-toggle="tooltip" data-placement="top" data-container="body" title="N°"><?php echo $conAs; ?></td>
-                                    <td class='center' data-toggle="tooltip" data-placement="top" data-container="body" title="Código"><?php echo $asignatura->codigo; ?></td><td class='center' data-toggle="tooltip" data-container="body" data-placement="top" title="Sección"><?php echo $asignatura->seccion; ?></td>
-                                    <td class='center' data-toggle="tooltip" data-placement="top" data-container="body" title="Nombre"><?php echo $asignatura->nombre; ?></td><td class='center' data-toggle="tooltip" data-container="body" data-placement="top" title="Profesor"><?php echo $asignatura->profesor; ?></td>
-                                    <td class='center' data-toggle="tooltip" data-placement="top" data-container="body" title="Año"><?php echo $asignatura->año; ?></td><td class='center' data-toggle="tooltip" data-container="body" data-placement="top" title="Semestre"><?php echo $asignatura->semestre; ?></td>
-                                    <td class='center' data-toggle="tooltip" data-placement="top" data-container="body" title="Importar"><input type='checkbox' checked name="<?php echo $asignatura->codigo ." ". $asignatura->seccion; ?>[]" /></td>
-                                </tr>
+                                    <td class='center' data-toggle="tooltip" data-placement="top" data-container="body" title="Código"><?php echo $asignatura->codigo; ?></td>
+									
+									<td class='center' data-toggle="tooltip" data-container="body" data-placement="top" title="Sección"><?php echo $asignatura->seccion; ?></td>
+									 
+                                    <td class='center' data-toggle="tooltip" data-placement="top" data-container="body" title="Nombre"><?php echo $asignatura->nombre; ?></td>
+									<td class='center' data-toggle="tooltip" data-container="body" data-placement="top" title="Profesor"><?php echo $asignatura->profesor; ?></td>
+                                    <td class='center' data-toggle="tooltip" data-placement="top" data-container="body" title="Año"><?php echo $asignatura->año; ?></td>
+									
+									<td class='center' data-toggle="tooltip" data-container="body" data-placement="top" title="Semestre"><?php echo $asignatura->semestre; ?></td>
+									
+                                    </tr>
                                 <tr class="info"><td colspan='8' class='center'><strong>ALUMNOS</strong> (Presionar columna estado para notas.)</td></tr>
                                     <?php foreach($asignatura->alumnos as $notas): ?>
                                         <tr class="info">
-                                            <th class='center' colspan='3'>Rut</th><th class='center' colspan='5'>Estado</th>
+                                            <th class='center' colspan='3'>Rut</th><th class='center' colspan='4'>Estado</th>
                                         </tr>
                                         <?php if(!preg_match('#[0-9]#',$notas['rut'])): ?>
                                         <tr class="info">
                                                 <td colspan='3' class="center">
-                                                    <input type='text' id="alumnoRut<?php $conNotas++; echo $conNotas; ?>" name='alumnoNotRut<?php echo $conNotas; ?>' style='background-color: lightsteelblue;' placeholder='<?php echo $notas['rut']; ?>' required>
+                                                    <input type='text' id="alumnoRut<?php $conNotas++; echo $conNotas; ?>" style='background-color: lightsteelblue;' placeholder='<?php echo $notas['rut']; ?>' required>
                                                     <a href="#alumnoRut<?php echo $conNotas; ?>back"><img src='../Imagenes/old-go-up.png' widht='22%' height="22%"></a>
-                                                </td>
+												</td>
                                             <?php else: ?>
-                                            <tr class="info">
-                                                <td class="center" colspan='3'><?php echo $notas['rut']; ?></td>
-                                                <input type='hidden' value='<?php echo $notas['rut']; ?>' name="<?php echo $asignatura->codigo ." ". $asignatura->seccion; ?>[]">
+                                                <td class="center" colspan='3'><?php echo $notas['rut']; ?></td> 
                                             <?php endif; ?>
-                                            <td colspan='5' class="center accordion-toggle" data-target=".nota<?php echo $notas['rut']; ?> " data-toggle="collapse"><?php echo $notas['estado']; ?></td>
+                                            <td colspan='4' class="center accordion-toggle" data-target=".nota<?php echo $notas['rut']; ?> " data-toggle="collapse"><?php echo $notas['estado']; ?></td>
                                             <tr class="info accordion-toggle collapse info nota<?php echo $notas['rut']; ?> ">
                                                 <th class='center' colspan='2'>Nota</th><th colspan='2' class='center'>Ponderación</th>
                                                 <th class='center' colspan='2'>Porcentaje</th><th class='center' colspan='2'>Tipo</th>
                                             </tr>
-                                            <?php foreach($notas['notas'] as $nota): ?>
+                                            <?php foreach($notas['notas'] as $key => $nota): ?>
                                             <tr class="accordion-toggle collapse nota<?php echo $notas['rut']; ?> ">
-                                                <td class='center' colspan='2'><?php echo $nota->nota; ?></td>
-                                                <td class='center' colspan='2'><?php echo $nota->nota_ponderada; ?></td>
-                                                <td class='center' colspan='2'><?php echo $nota->porcentaje; ?></td>
-                                                <td class='center' colspan='2'><?php echo $nota->tipo; ?></td>
+                                                <td class='center' colspan='2'>
+													<input type='text' value='<?php echo $nota->nota; ?>' class='form-control' name='<?php echo $notas['rut'].'-'.$asignatura->codigo.'-'.$asignatura->seccion.'-'.$asignatura->año.'-'.$asignatura->semestre.'-'.$notas['estado']; ?>[]' >
+												</td>
+                                                <td class='center' colspan='2'>
+													<input type='text' value='<?php echo $nota->nota_ponderada; ?>' class='form-control' name='<?php echo $notas['rut'].'-'.$asignatura->codigo.'-'.$asignatura->seccion.'-'.$asignatura->año.'-'.$asignatura->semestre.'-'.$notas['estado']; ?>[]' >
+												</td>
+                                                <td class='center' colspan='2'>
+													<input type='text' value='<?php echo $nota->porcentaje; ?>' class='form-control' name='<?php echo $notas['rut'].'-'.$asignatura->codigo.'-'.$asignatura->seccion.'-'.$asignatura->año.'-'.$asignatura->semestre.'-'.$notas['estado']; ?>[]' >
+												</td>
+                                                <td class='center' colspan='2'>
+													<input type='text' value='<?php echo $nota->tipo; ?>' class='form-control' name='<?php echo $notas['rut'].'-'.$asignatura->codigo.'-'.$asignatura->seccion.'-'.$asignatura->año.'-'.$asignatura->semestre.'-'.$notas['estado']; ?>[]' >
+												</td>
                                             </tr>
                                             <?php endforeach;?>
-<!--                                            <tr class="info accordion-toggle info ">
-                                                <th class='center' colspan='2'>Nota</th><th colspan='2' class='center'>Ponderación</th>
-                                                <th class='center' colspan='2'>Porcentaje</th><th class='center'>Tipo</th>
-                                            </tr>-->
                                         </tr>
                                     <?php endforeach;?>
                                         </tbody>
                                     <?php $conA++;?>
                                 <?php endforeach;?>
-
                         </table>
                         <br>
-                        <input type='hidden' name='archivo' value='Documentos/<?php echo $_GET['name']; ?>' />
-                        <input type='hidden' name='conAlumnos' value='<?php echo $conAlumnos; ?>' />
                     </form>
                     <?php
                     
@@ -342,8 +377,6 @@
 							$resultado_oferta = $oferta->leerPaginas($inputFileName);
 							
 							?>
-							
-							
 							<form method="post" action="import.php" id='importar'>
 					
 								<input type='submit' value='IMPORTAR DATOS' class='btn btn-success btn-lg center-block col-md-12' style='display:hidden' /><br><br>
@@ -352,9 +385,19 @@
 					
 								<legend style='color: green'>Oferta Académica (<?php echo count($resultado_oferta); ?>)</legend>
 								<label for='año'>Año</label>
-								<input type='text' name='año' class='form-control' placeholder='2015' size='1' required>
+								<select name='año' class='form-control' required>
+									<option value=''>Seleccione...</option>
+									<option value='<?php echo date('Y')-1; ?>'><?php echo date('Y')-1; ?></option>
+									<option value='<?php echo date('Y'); ?>'><?php echo date('Y'); ?></option>
+									<option value='<?php echo date('Y')+1; ?>'><?php echo date('Y')+1; ?></option>
+								</select>
 								<label for='semestre'>Semestre</label>
-								<input type='text' name='semestre' class='form-control' placeholder='2' size='1' required><br>
+								<select name='semestre' class='form-control' required>
+									<option value=''>Seleccione...</option>
+									<option value='1'>Primer semestre</option>
+									<option value='2'>Segundo semestre</option>
+								</select><br>
+								
 								<table class="table table-striped">
 									<thead>
 										<tr>
@@ -362,10 +405,9 @@
 										</tr>
 									</thead>
 									<tbody>
-									<?php $con = 1;?>
 									<?php foreach($resultado_oferta as $key => $asignatura): ?>
-										<tr>
-											<td><?php echo $con; ?></td>
+										<tr><?php $key++; ?>
+											<td><?php echo $key; ?></td>
 											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo $asignatura->getNombre(); ?>' class="form-control" placeholder='Nombre Curso...' /></td>
 											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo $asignatura->getCodigo(); ?>' class="form-control" required /></td>
 											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo $asignatura->getSeccion(); ?>' size='1' class="form-control" required /></td>
@@ -377,9 +419,8 @@
 											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo $asignatura->getInicio(); ?>' class="form-control" required /></td>
 											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo $asignatura->getTermino(); ?>' class="form-control" required /></td>
 											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo ($asignatura->getDia() != null ? utf8_encode($asignatura->getDia()) : 'N/A'); ?>' class="form-control" required /></td>
-											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo ($asignatura->getModalidad() != 'ONLINE' ? $asignatura->getSala() : 'N/A'); ?>' class="form-control" /></td>
+											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo ($asignatura->getSala() != null ? $asignatura->getSala() : 'N/A'); ?>' class="form-control" /></td>
 										</tr>
-									<?php $con++;?>
 									<?php endforeach;?>
 									</tbody>
 									<tfoot>
@@ -389,17 +430,9 @@
 									</tfoot>
 								</table>
 							</form>
-							
-							
-							
 							<?php
 							//var_dump($resultado_oferta);
-							
-							
 
-
-
-							
 							/**
 							* FIN PROCESO OFERTA
 							*/
@@ -411,35 +444,5 @@
                 echo "<input type='hidden' name='import' value='true' />";
             ?>
             
-    </div> <!-- /container -->
-    
-<?php
-    if(isset($_POST['import'])){
-        $alumnos_importar = array();
-        $asignaturas_importar = array();
-        $archivo = $_POST['archivo'];
-        $alumnos_error = $_POST['conAlumnos'];
-        unset($_POST['import']);
-        unset($_POST['archivo']);
-        unset($_POST['conAlumnos']);
-        foreach($_POST as $key => $dato){
-            if(strpos($key, "_") != false){
-                if($dato[0] == "on"){
-                    $asignaturas_importar[] = $key;
-                }
-            }else{
-                if($dato == "on"){
-                    $alumnos_importar[] = $key;
-                } 
-            }
-        }
-        //echo "<pre>"; var_dump($alumnos_importar); echo "</pre>";
-        //echo "<pre>"; var_dump($asignaturas_importar); echo "</pre>";
-        //echo "<pre>"; var_dump($_POST); echo "</pre>";
-    }
-    //echo "<pre>"; var_dump($resultado_acta); echo "</pre>";
-
-
-
-?>  
+    </div> <!-- /container -->  
 <?php include("../templates/footer.php"); ?> 

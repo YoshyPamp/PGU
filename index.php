@@ -31,21 +31,21 @@
                         <table id="example_alumnos" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
-                                    <th>Rut</th><th>Matrícula</th><th>Nombre</th><th>Régimen</th><th>Plan Estudio</th><th>Cod. Plan</th><th>Estado</th><th>Ver Alumno</th>
+                                    <th>Rut</th><th>Matrícula</th><th>Nombre</th><th>Cod. Plan</th><th>Estado</th><th>Ver Alumno</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php foreach($alumnos as $alumno): ?>
                                     <tr>
-                                        <td class="rut"><?php echo $alumno['RUT']; ?></td><td><?php echo $alumno['N_MATRICULA']; ?></td><td><?php echo $alumno['NOMBRES']; ?></td>
-                                        <td><?php echo $alumno['REGIMEN']; ?></td><td><?php echo $alumno['PLAN_ESTUDIO']; ?></td><td><?php echo $alumno['CODIGO_PLAN']; ?></td>
+                                        <td class="rut"><?php echo $alumno['RUT']; ?></td><td><?php echo $alumno['N_MATRICULA']; ?></td><td><?php echo utf8_decode($alumno['NOMBRES']); ?></td>
+                                        <td><?php echo $alumno['CODIGO_PLAN']; ?></td>
                                         <td><?php echo $alumno['ESTADO_ESTUDIO']; ?></td><td><input type="button" class="btn btn-info" value="Ver" onclick="Javascript: selectAlumno('<?php echo $alumno['RUT']; ?>');" ></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th>Rut</th><th>Matrícula</th><th>Nombre</th><th>Régimen</th><th>Plan Estudio</th><th>Cod. Plan</th><th>Estado</th><th>Ver Alumno</th>
+                                    <th>Rut</th><th>Matrícula</th><th>Nombre</th><th>Cod. Plan</th><th>Estado</th><th>Ver Alumno</th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -66,7 +66,7 @@
                     <tbody>
                         <?php foreach($asignaturas as $asig): ?>
                             <tr>
-                                <td><?php echo $asig['COD_ASIGNATURA']; ?></td><td><?php echo $asig['NOM_ASIGNATURA']; ?></td>
+                                <td><?php echo $asig['COD_ASIGNATURA']; ?></td><td><?php echo utf8_decode($asig['NOM_ASIGNATURA']); ?></td>
                                 <td><?php echo $asig['PLANESTUDIO_COD_PLANESTUDIO']; ?></td>
                                 <td><input type="button" class="btn btn-info" value="Ver" onclick="Javascript: selectAsignatura('<?php echo $asig['COD_ASIGNATURA']; ?>');" ></td>
                             </tr>

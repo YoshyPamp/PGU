@@ -55,7 +55,7 @@
 			$sheetData = $objPHPExcel->getActiveSheet()->toArray(null,true,true,true);
 			
 			$resultado = array();
-			
+
 			foreach($sheetData as $asignatura){
 				$OA = new OfertaAsignatura();
 				

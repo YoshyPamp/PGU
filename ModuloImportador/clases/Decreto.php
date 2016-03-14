@@ -109,7 +109,7 @@ class Decreto {
             foreach($asignaturas_linea as $asignatura){
                 
                 //Solo si el nivel esta entre el primero y el ultimo para no tomar los ramos electivos
-                if(intval(substr($asignatura,0,2)) >= $contador_nivel){
+                //if(intval(substr($asignatura,0,2)) >= $contador_nivel){
                     $ramo = new AsignaturaPlan();
                     $ramo->setNivel(substr($asignatura,0,2));
                     $ramo->setCodigo(substr($asignatura,3,8));
@@ -120,7 +120,7 @@ class Decreto {
                     $ramo->setNombre($nombre[0]);
                     $decreto_lineas[] = $ramo;
                     $contador_nivel = intval(substr($asignatura,0,2));
-                }
+                //}
             }
         }
         $plan_con_ramos['RAMOS'] = $decreto_lineas;

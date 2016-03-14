@@ -52,14 +52,114 @@
     }
 	
 	//Procesamiento para Acta
-	if(isset($_POST['hola'])){
-		
+	$alumnos_malos = array(); //Arreglo que vincula alumno malo con el rut que le corresponde
+	$alumnos_no_insertados = array();
+	if(isset($_POST['acta'])){
+		foreach($_POST as $key => $arreglo_interno){
+			//No toma el primer campo ya que es auxiliar.
+			if($key != 'acta'){
+				//Para filtrar entre importe de alumnos y de notas
+				//ALUMNOS
+				if(substr($key,0,6) == 'alumno'){
+					//realiza un proceso si es de los que venían con problemas.
+					if(!is_numeric(substr($key,7,8))){
+						$alumnos_malos[] = $arreglo_interno[3]."-".substr($key,7,100);
+					}
+					
+					$nom = $arreglo_interno[0];
+					$ap1 = $arreglo_interno[1];
+					$ap2 = $arreglo_interno[2];
+					$rut = $arreglo_interno[3];
+					$pln = $arreglo_interno[4];
+					
+					if(!$db->FAM_INSERT_ALUMNO($nom, $ap1, $ap2, $rut, $pln)){
+						$alumnos_no_insertados[] = $nom." ".$ap1." ".$ap2;
+					}
+					
+				}else{
+					//NOTAS
+					$datos = explode('-',$key);
+					
+					if(!is_numeric($datos[0])){
+						foreach($alumnos_malos as $alumno){
+							$rut_id = explode("-",$alumno);
+							if($rut_id[1] == $datos[0]){
+								$datos[0] = $rut_id[0];
+							}
+						}
+					}
+					
+					$rut_alum = $datos[0];
+					$cod_ramo = $datos[1];
+					$_seccion = $datos[2];
+					$ano_ramo = $datos[3];
+					$sem_ramo = $datos[4];
+					$estado_A = $datos[5];
+					
+					//$db->FAM_INSERT_NOTA($rut_alum, $cod_ramo, $_seccion, $ano_ramo, $sem_ramo, $estado_A);
+				}
+			}
+		}
+		$alumnos_no_insertados = serialize($alumnos_no_insertados);
+		echo "<script>window.location='index.php?acta=ok&no_importados=".$alumnos_no_insertados."'</script>";
 	}
 	
+	
 	//Procesamiento para Oferta
-	if(isset($_POST['año'])){
-		$debug->ecc($_POST);
+	try {
+		$asignaturas_malas = array();
+		
+		if(isset($_POST['año'])){
+			//$debug->ecc($_POST);
+			$año = $_POST['año'];
+			$semestre = $_POST['semestre'];
+			$total = count($_POST) - 2;
+			
+			if(!$db->VERIFICAR_OFERTA_EXISTENTE($año, $semestre)){
+				$id_oferta = $db->FAM_OFERTA_INSERT($año,$semestre);
+		
+				for($i = 1; $i <= $total; $i++) {
+					//VARIABLES POR ASIGNATURA
+					$nombre = $_POST[$i][0];
+					$codigo = $_POST[$i][1];
+					$seccion = $_POST[$i][2];
+					$profesor = $_POST[$i][3];
+					$inscritos = $_POST[$i][5];
+					$cupos = $_POST[$i][6];
+					$capacidad = $_POST[$i][7];
+					$sala = $_POST[$i][11];
+					$dia = $_POST[$i][10];
+					$inicio = $_POST[$i][8];
+					$termino = $_POST[$i][9];
+					$modalidad = $_POST[$i][4];
+				
+					$id_seccion = $db->FAM_SECCION_INSERT($codigo, $seccion, $profesor, $id_oferta, $inscritos, $cupos, $capacidad, $sala,
+															$dia, $inicio, $termino, $modalidad);
+					if($id_seccion != 0){
+						
+					}else{
+						$asignaturas_malas[] = $nombre.'-'.$codigo;
+					}
+					
+				}
+			}else{
+				echo "<script>window.location='index.php?imported=errorO'</script>";
+			}
+			
+			if(count($asignaturas_malas) == 0){
+				echo "<script>window.location='index.php?imported=ok'</script>";
+			} else {
+				$asignaturas_malas = serialize($asignaturas_malas);
+				echo "<script>window.location='index.php?imported=ramoX&malas=".$asignaturas_malas."'</script>";
+			}
+		}	
 	}
+	catch(Exception $e) {
+		echo "<script>console.log($e);</script>";
+	    echo "<script>window.location='index.php?imported=error'</script>";
+	}
+	
+	
 	
 	?>
 	
