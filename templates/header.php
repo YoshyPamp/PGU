@@ -3,6 +3,7 @@
 <?php 
     $debug = new helpers();
     $db = new Database();
+	date_default_timezone_set('America/Santiago');
 ?>
 
 <!DOCTYPE html>
@@ -18,9 +19,9 @@
     <!-- Bootstrap Core CSS -->
     <link href="librerias/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <script src="librerias/bootstrap/js/jquery.js"></script>
-    <link href="//cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="//cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" rel="stylesheet">
     <script src="librerias/bootstrap/js/bootstrap.min.js"></script>
-    <script src="//cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
     <script src="js/datatables.js"></script>
     <!-- Custom CSS -->
     <link href="css/styles.css" rel="stylesheet">

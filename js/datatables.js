@@ -6,7 +6,7 @@
 $(document).ready(function() {
     $('#example_alumnos').DataTable( {
         "pagingType": "full_numbers",
-        "order": [[ 3, "desc" ]],
+        "order": [[ 1, "desc" ]],
         "language": {
         "lengthMenu": "Mostrando _MENU_ datos por página.",
         "zeroRecords": "No se encuentran registros.",
@@ -22,29 +22,7 @@ $(document).ready(function() {
         "infoFiltered": "(Filtrado de _MAX_ registros totales.)"
         }
     } );
-    
-    $('#alumnos_import').DataTable( {
-        "pagingType": "full_numbers",
-        "order": [[ 3, "desc" ]],
-        "language": {
-        "lengthMenu": "Mostrando _MENU_ datos por página.",
-        "zeroRecords": "No se encuentran registros.",
-        "info": "Mostrando página _PAGE_ de _PAGES_",
-        "search": "Buscar:",
-        "paginate": {
-            "first":      "Primera",
-            "last":       "Última",
-            "next":       "Siguiente",
-            "previous":   "Anterior"
-        },
-        "infoEmpty": "No hay registros disponibles.",
-        "infoFiltered": "(Filtrado de _MAX_ registros totales.)"
-        }
-    } );
-    
-    
-    
-        
+       
     $('#example_asignaturas').DataTable( {
         "pagingType": "full_numbers",
         "order": [[ 2, "desc" ]],

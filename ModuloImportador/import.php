@@ -53,7 +53,9 @@
 	
 	//Procesamiento para Acta
 	$alumnos_malos = array(); //Arreglo que vincula alumno malo con el rut que le corresponde
-	$alumnos_no_insertados = array();
+	$alumnos_insertados = array();
+	$ramos_sin_oferta = array();
+	$con_nada = 0;
 	if(isset($_POST['acta'])){
 		foreach($_POST as $key => $arreglo_interno){
 			//No toma el primer campo ya que es auxiliar.
@@ -72,8 +74,8 @@
 					$rut = $arreglo_interno[3];
 					$pln = $arreglo_interno[4];
 					
-					if(!$db->FAM_INSERT_ALUMNO($nom, $ap1, $ap2, $rut, $pln)){
-						$alumnos_no_insertados[] = $nom." ".$ap1." ".$ap2;
+					if($db->FAM_INSERT_ALUMNO($nom, $ap1, $ap2, $rut, $pln)){
+						$alumnos_insertados[] = $nom." ".$ap1." ".$ap2;
 					}
 					
 				}else{
@@ -96,12 +98,47 @@
 					$sem_ramo = $datos[4];
 					$estado_A = $datos[5];
 					
-					//$db->FAM_INSERT_NOTA($rut_alum, $cod_ramo, $_seccion, $ano_ramo, $sem_ramo, $estado_A);
+					$id_seccion = 'nada';
+					if(!$db->VERIFICAR_NOTAS_EXISTENTES($rut_alum, $ano_ramo, $sem_ramo, $cod_ramo, $_seccion)){
+						
+						$cantd_notas = count($arreglo_interno);
+						$notas = 0;
+						
+						while($notas < $cantd_notas){
+							$nota = $arreglo_interno[$notas];
+							$pond = $arreglo_interno[$notas+1];
+							$porc = $arreglo_interno[$notas+2];
+							$tipo = $arreglo_interno[$notas+3];
+							$notas = $notas + 4;
+
+							$id_seccion = $db->FAM_INSERT_NOTA($rut_alum, $cod_ramo, $_seccion, $ano_ramo, $sem_ramo,
+													$nota, $pond, $porc, $tipo);
+							if($id_seccion == null){
+								if(!in_array($cod_ramo."-".$_seccion,$ramos_sin_oferta)){
+									$ramos_sin_oferta[] = $cod_ramo."-".$_seccion;
+								}
+							}
+						}
+						
+						if($id_seccion != null){
+							$db->FAM_INSERT_ALUM_SECC($rut_alum, $id_seccion);
+						}
+						$con_nada++;
+					}
 				}
 			}
 		}
-		$alumnos_no_insertados = serialize($alumnos_no_insertados);
-		echo "<script>window.location='index.php?acta=ok&no_importados=".$alumnos_no_insertados."'</script>";
+		
+		if($id_seccion == 'nada' && $con_nada == 0){
+			echo "<script>window.location='index.php?acta=ok&num=".count($alumnos_insertados)."&notas=on'</script>";
+		}else{
+			if(count($ramos_sin_oferta) >= 1){
+				$ramos_sin_oferta = serialize($ramos_sin_oferta);
+				echo "<script>window.location='index.php?acta=ok&num=".count($alumnos_insertados)."&notas=yes&ramos=".$ramos_sin_oferta."'</script>";
+			}else{
+				echo "<script>window.location='index.php?acta=ok&num=".count($alumnos_insertados)."&notas=ok200'</script>";
+			}
+		}
 	}
 	
 	

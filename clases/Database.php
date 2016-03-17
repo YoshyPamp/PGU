@@ -163,6 +163,25 @@ class Database {
         return $result;
 		
 	}
+	
+	function SELECT_SECCION_NOTA_BYRUT($rut){
+		
+		$dec = "FAM_SELECT_SECCIONES_BYRUT";
+		$secciones = array();
+		$stmt = odbc_exec($this->conn, "{CALL FAM_SELECT_SECCIONES_BYRUT('$rut')}");
+		
+		while($row = odbc_fetch_array($stmt)){
+			
+			if((float) $row['NOTA'] > 4.0){
+				$row['ESTADO'] = 'APROBADO';
+			}else{
+				$row['ESTADO'] = 'REPROBADO';
+			}
+			$secciones[] = $row;
+		}
+		
+		return $secciones;
+	}
     
     function FAM_PLAN_INSERT($codigo, $tipo, $facultad, $escuela,
             $sede, $grd_bach, $grd_acad, $titulo, $nombre, $jornada,$duracion){
@@ -252,6 +271,58 @@ class Database {
 		}
 		
 		odbc_free_result( $stmt);
+	}
+	
+	function VERIFICAR_SECCION_EXISTENTES($año, $semestre, $cod_ramo, $_seccion){
+		
+		//Selecciona a la oferta que corresponde la seccion que se vinculará
+		$dec = "SELECT id_oferta FROM OFERTA WHERE ANO = '".$año."' AND SEMESTRE = '".$semestre."'";
+		$stmt = odbc_exec($this->conn,$dec);
+		if( $stmt === false ){
+			echo "Error al ejecutar procedimiento.\n";
+			die( print_r( odbc_error(), true));
+		}else{
+			$row = odbc_fetch_array($stmt);
+			$id_oferta = $row['id_oferta'];
+		}
+		odbc_free_result( $stmt);
+		
+		$ramo = $cod_ramo.'-'.$_seccion;
+		//Selecciona la ID de la seccion que se vinculara con la nota
+		$dec = "SELECT * FROM SECCION WHERE COD_SECCION = '".$ramo."' AND OFERTA_ID = '".$id_oferta."'";
+		
+		$stmt = odbc_exec($this->conn,$dec);
+		if( $stmt === false ){
+			echo "Error al ejecutar procedimiento.\n";
+			die( print_r( odbc_error(), true));
+		}else{
+			$row = odbc_fetch_array($stmt);
+			$id_seccion = $row['ID_SECCION'];
+		}
+		odbc_free_result( $stmt);
+		
+		return $id_seccion;
+	}
+	
+	function VERIFICAR_NOTAS_EXISTENTES($rut, $año, $semestre, $cod_ramo, $_seccion){
+		
+		$id_seccion = $this->VERIFICAR_SECCION_EXISTENTES($año, $semestre, $cod_ramo, $_seccion);
+		
+		$dec = "SELECT * FROM NOTA WHERE SEMESTRE = '".$semestre."' AND ANO = '".$año."' AND ID_SECCION = '".$id_seccion."' AND RUT_ALUMNO = '".$rut."'";
+		
+		$stmt = odbc_exec($this->conn,$dec);
+		if( $stmt === false ){
+			echo "Error al ejecutar procedimiento.\n";
+			die( print_r( odbc_error(), true));
+		}
+		
+		if(odbc_num_rows($stmt) > 0){
+			odbc_free_result( $stmt);
+			return true;
+		}else{
+			odbc_free_result( $stmt);
+			return false;
+		}
 	}
 	
 	function FAM_OFERTA_INSERT($año, $semestre){
@@ -390,6 +461,7 @@ class Database {
 		
 		//Busca si existe un alumno con ese rut
 		$dec = "SELECT * FROM ALUMNO WHERE RUT = '".$rut."'";
+		
 		$stmt = odbc_exec($this->conn,$dec);
 		if( $stmt === false )
 		{
@@ -415,7 +487,7 @@ class Database {
 				. "'".$rut."',"
 				. "'".$pln."',"
 				. "'REGULAR')";				
-				
+			
 			$stmt = odbc_exec($this->conn,$dec);
 			if( $stmt === false )
 			{
@@ -427,13 +499,25 @@ class Database {
 		}
 	}
 	
-	function FAM_INSERT_NOTA($rut_alum, $cod_ramo, $_seccion, $ano_ramo, $sem_ramo, $estado_A){
+	function FAM_INSERT_NOTA($rut_alum, $cod_ramo, $_seccion, $ano_ramo, $sem_ramo, $nota, $pond, $porc, $tipo){
 		
+		$id_seccion = $this->VERIFICAR_SECCION_EXISTENTES($ano_ramo, $sem_ramo, $cod_ramo, $_seccion);
+		
+		if($id_seccion === null){
+			return false;
+		}
+		
+		$porc = trim($porc,"%");
+		//Inserta la nota correspondiente
 		$dec = "INSERT INTO NOTA VALUES("
-				. "'".$nom_completo."',"
-				. "'".$rut."',"
-				. "'".$pln."',"
-				. "'REGULAR')";				
+				. "'".$rut_alum."',"
+				. "'".$ano_ramo."',"
+				. "'".$sem_ramo."',"
+				. "'".$id_seccion."',"
+				. "'".$nota."',"
+				. "'".$porc."',"
+				. "'".$pond."',"
+				. "'".$tipo."')";					
 				
 		$stmt = odbc_exec($this->conn,$dec);
 		if( $stmt === false )
@@ -441,6 +525,24 @@ class Database {
 			echo "Error al ejecutar procedimiento.\n";
 			die( print_r( odbc_error(), true));
 		}
+		odbc_free_result( $stmt);
+		return $id_seccion;
+	}
+	
+	function FAM_INSERT_ALUM_SECC($rut_alum, $id_seccion){
+		
+		//INGRESA EL VINCULO
+		$dec = "INSERT INTO ALUMNOSECCION VALUES("
+				. "'".$id_seccion."',"
+				. "'".$rut_alum."')";
+		
+		$stmt = odbc_exec($this->conn,$dec);
+		
+		if( $stmt === false ){
+			echo "Error al ejecutar procedimiento.\n";
+			die( print_r( odbc_error(), true));
+		}
+		
 		odbc_free_result( $stmt);
 	}
 }

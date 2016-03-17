@@ -91,7 +91,7 @@ class Decreto {
         //Recorre cada página del decreto y va creando una asignatura y agregandola en el arreglo general
         for($i = 0;$i < $decreto['cantidad'];$i++){
             //Deja solo el cuerpo con las asignaturas de cada página.
-            $decreto_body = substr($decreto[$i], 1263);
+            $decreto_body = substr($decreto[$i], 1229);
             
             //Separa el string por \n y los guarda en un arreglo
             $pagina_body_espacios = explode("\n",$decreto_body);
@@ -124,6 +124,7 @@ class Decreto {
             }
         }
         $plan_con_ramos['RAMOS'] = $decreto_lineas;
+		
         return $plan_con_ramos;
     }
 }

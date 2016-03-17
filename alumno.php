@@ -1,6 +1,13 @@
 <?php include("templates/header.php"); ?>
 <?php include("templates/navbar.php"); ?>
 <?php
+
+	foreach (glob("/ModuloImportador/clases/*.php") as $filename)
+    {
+        include $filename;
+    }
+	
+	
     if(isset($_GET['rut'])){
         $alumno = $db->select_alumno_rut($_GET['rut']);
         $nombreCompleto = explode(",",$alumno['NOMBRES']);
@@ -13,16 +20,24 @@
 	//var_dump($alumno);
 	
 	$asignaturas = $db->SELECT_ASIGNATURAS_BYPLAN($alumno['CODIGO_PLAN']);
-	//var_dump($asignaturas);
+	$historico = $db->SELECT_SECCION_NOTA_BYRUT($_GET['rut']);
+	
 	$duracion = $asignaturas['DURACION'];
+	$ramos_FG = array();
+
 	unset($asignaturas['DURACION']);
-	$width = floor(100 / $duracion);
+	if($duracion > 0){
+		$width = floor(100 / $duracion);
+	}else{
+		echo "<div class='alert alert-danger' role='alert'>ERROR: NO EXISTE PLAN DE ESTUDIO: <b>".$alumno['CODIGO_PLAN']."</b> EN BASE DE DATOS.</div>";
+	}
+
+	//var_dump($historico);
+
 
 	
 	
 ?>
-
-
 
 <div class="col-md-3"></div>
 <div class="panel panel-default col-md-6">
@@ -98,16 +113,39 @@
 				
 				<tbody>
 					<?php foreach($ramos as $ramo): ?>
+					<?php 	if(substr($ramo[1],0,2) == 'FG'):?>
+					<?php 		$ramos_FG[] = $ramo ?>
+					<?php 	else:?>
 						<tr class="info">
 							<td style=" font-family: 'Courier';">
 								<?php echo $ramo[0]; ?><br>
 								<em><?php echo $ramo[1]; ?></em>
 							</td>
 						</tr>
+					<?php 	endif;?>
 					<?php endforeach;?>
 				</tbody>
 			</table>
 	   <?php endforeach;?>
+	   <?php if(count($ramos_FG) > 0):?>
+		<div>
+			<table class="table table-responsive">
+				<thead>
+					<tr><th>Electivos de Formación General</th></tr>
+				</thead>
+				<tbody>
+					<tr class="info">
+					<?php foreach($ramos_FG as $ramo): ?>
+						<td style=" font-family: 'Courier'; float: left; border: solid light-grey 1px; ">
+							<?php echo $ramo[0]; ?><br>
+							<em><?php echo $ramo[1]; ?></em>
+						</td>
+					<?php endforeach;?>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<?php endif;?>
   </div>
 </div>
 
@@ -116,26 +154,35 @@
         <h2 class="panel-title">Histórico</h2>
     </div>
   <div class="panel-body collapse" id='collapseHistorico'>
-    <table class="table table-condensed">
-        <th>Código</th><th>Nombre</th><th>Semestre</th><th>Estado</th><th>Año</th><th>Nota Final</th>
-        <tr>
-            <td>ICF2230</td><td>Biología</td><td>001</td><td>Aprobado</td><td>2011</td><td>5.0</td>
-        </tr>
-        <tr>
-            <td>ICF2256</td><td>Algebra</td><td>001</td><td>Aprobado</td><td>2011</td><td>4.5</td>
-        </tr>
-        <tr>
-            <td>ICF2430</td><td>Programación</td><td>001</td><td>Reprobado</td><td>2011</td><td>7.0</td>
-        </tr>
-        <tr>
-            <td>ICF2280</td><td>Kendo</td><td>001</td><td>Aprobado</td><td>2011</td><td>4.5</td>
-        </tr>  
+    <table class="table table-striped table-bordered" id="historico_alumno">
+		<thead>
+			<tr>
+				<th>Código</th><th>Nombre</th><th>Semestre</th><th>Año</th><th>Nivel</th><th>Nota Final</th><th>Estado</th><th>VER</th>
+			</tr>
+		</thead>
+		<tfoot>
+			<tr>
+				<th>Código</th><th>Nombre</th><th>Semestre</th><th>Año</th><th>Nivel</th><th>Nota Final</th><th>Estado</th><th>VER</th>
+				
+			</tr>
+		</tfoot>
+        <tbody>
+			<tr>
+				<?php foreach($historico as $seccion):?>
+					<td><?php echo $seccion['COD_SECCION']; ?></td>
+					<td><?php echo $seccion['NOM_ASIGNATURA']; ?></td>
+					<td><?php echo $seccion['SEMESTRE']; ?></td>
+					<td><?php echo $seccion['ANO']; ?></td>
+					<td><?php echo $seccion['NIVEL'];?></td>
+					<td><?php echo round($seccion['NOTA'],1); ?></td>
+					<td><?php echo $seccion['ESTADO']; ?></td>
+					<td><input type='button' class='btn btn-info' value='IR'></td>
+				<?php endforeach;?>
+			</tr>
+		</tbody>
     </table>
   </div>
 </div>
-
-
-
 
 
 

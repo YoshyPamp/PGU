@@ -127,10 +127,20 @@ class Acta {
                         unset($body_temporal[$key]);
                     }
                 }
+			
                //Elimina numero de alumno y rut
                $body_temporal = array_values($body_temporal);
+			   
                unset($body_temporal[0]);
-               unset($body_temporal[1]);
+			   
+			   //Si el campo del rut corresponde a una nota por el hecho de que el rUT haya sido -K, no lo elimina
+			   if(count($body_temporal) != 0){
+					if(strlen($body_temporal[1]) != 3){
+						unset($body_temporal[1]);
+					}
+			   }
+			   
+               
                $body_temporal = array_values($body_temporal);
                
                //Chequea si alumno tiene notas, sino guarda directamente el rut del alumno con el estado NA

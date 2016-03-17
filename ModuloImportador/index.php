@@ -22,7 +22,6 @@
 	}
 	
 	
-	
 	if(isset($_GET['imported'])){
 		if($_GET['imported'] == 'ok'){
 			$importe_exitoso = "IMPORTE DE INFORMACIÓN EXITOSA";
@@ -43,11 +42,22 @@
 	}
 	
 	if(isset($_GET['acta'])){
-		$alumnos_no_insertados = unserialize($_GET['no_importados']);
+		$num = $_GET['num'];
 		
-		$importe_exitoso = "IMPORTE DE INFORMACIÓN EXITOSA, LOS SIGUIENTES ALUMNOS NO FUERON INSERTADOS YA QUE EXISTÍAN:<br>";
-		foreach($alumnos_no_insertados as $rut){
-			$importe_exitoso .= "-".$rut."<br>";
+		$importe_exitoso = "PROCESO DE ALUMNOS EXITOSO <b>$num</b> IMPORTADOS <br>";
+		if(isset($_GET['notas'])){
+			
+			if($_GET['notas'] == 'on'){
+				$importe_fallido = "YA EXISTEN NOTAS PARA ALGUNA O TODAS LAS SECCIONES IMPORTADAS";
+			}else if($_GET['notas'] == 'ok200'){
+				$importe_correcto = "IMPORTE DE NOTAS EXITOSO";
+			}else if($_GET['notas'] == 'yes'){
+				$ramos_sin_oferta = unserialize($_GET['ramos']);
+				$importe_correcto = "ALGUNAS O TODAS LAS SECCIONES NO EXISTEN EN OFERTA:<br>";
+				foreach($ramos_sin_oferta as $oferta){
+					$importe_correcto .= $oferta."<br>";
+				}
+			}
 		}
 	}
     
@@ -79,7 +89,8 @@
     $(window).load(function() {
         $(".loader").fadeOut("slow");
     })
-    
+	
+	
 
 </script>
 <style>
@@ -113,6 +124,13 @@
 			
 			if(isset($_GET['acta'])){
 				echo "<div class='alert alert-success' role='alert'>".$importe_exitoso."</div>";
+				if($_GET['notas'] == 'on'){
+					echo "<div class='alert alert-danger' role='alert'>".$importe_fallido."</div>";
+				}else if($_GET['notas'] == 'ok200'){
+					echo "<div class='alert alert-success' role='alert'>".$importe_correcto."</div>";
+				}elseif($_GET['notas'] == 'yes'){
+					echo "<div class='alert alert-warning' role='alert'>".$importe_correcto."</div>";
+				}
 			}
 		
 		
@@ -221,7 +239,7 @@
                             </thead>    
                                 <?php foreach($resultado_acta['asignaturas'] as $asignatura): ?>
                             
-                            <tbody class="accordian-body collapse demo2">
+                            <tbody class="accordian-body demo2">
                                 <tr>
                                     <td class='center' data-toggle="tooltip" data-placement="top" data-container="body" title="N°"><?php echo $conAs; ?></td>
                                     <td class='center' data-toggle="tooltip" data-placement="top" data-container="body" title="Código"><?php echo $asignatura->codigo; ?></td>

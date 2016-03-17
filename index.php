@@ -89,20 +89,20 @@
             </h4>
             <hr>
             <ul class="list-group">
-                <li class="list-group-item"><button class="btn btn-default">Ver Reporte</button>  -Registro de homlogaciones de asignaturas.</li>
-                <li class="list-group-item"><button class="btn btn-default">Ver Reporte</button>  -Emisión de informes de asignaturas rendidos, incluye homologación.</li>
+                <li class="list-group-item"><a class="btn btn-default" href='ModuloReportes/HomologacionAsignaturas.php'>Ver Reporte</a>  -Registro de homlogaciones de asignaturas.</li>
+                <li class="list-group-item"><a class="btn btn-default" href='ModuloReportes/ReporteAsignaturasRendidas.php'>Ver Reporte</a>  -Emisión de informes de asignaturas rendidos, incluye homologación.</li>
             </ul>
             <h4>
                 Informe General
             </h4>
             <hr>
             <ul class="list-group">
-                <li class="list-group-item"><button class="btn btn-default">Ver Reporte</button>  -Emisión de proyección de asignaturas a dictar.</li>
-                <li class="list-group-item"><button class="btn btn-default">Ver Reporte</button>  -Tasa de aprobación y reprobación.</li>
-                <li class="list-group-item"><button class="btn btn-default">Ver Reporte</button>  -Administración y centralización de práctica.</li>
-                <li class="list-group-item"><button class="btn btn-default">Ver Reporte</button>  -Informe de no reprobación semestral.</li>
-                <li class="list-group-item"><button class="btn btn-default">Ver Reporte</button>  -Informe de cumplimiento de Bachiller y licenciatura.</li>
-                <li class="list-group-item"><button class="btn btn-default">Ver Reporte</button>  -Informe estadístico por sexo.</li>
+                <li class="list-group-item"><a class="btn btn-default" href='ModuloReportes/ProyeccionAsignaturas.php'>Ver Reporte</a>  -Emisión de proyección de asignaturas a dictar.</li>
+                <li class="list-group-item"><a class="btn btn-default" href='#'>Ver Reporte</a>  -Tasa de aprobación y reprobación.</li>
+                <li class="list-group-item"><a class="btn btn-default" href='ModuloReportes/AdminyCentPractica.php'>Ver Reporte</a>  -Administración y centralización de práctica.</li>
+                <li class="list-group-item"><a class="btn btn-default" href='ModuloReportes/AprobacionSemestral.php'>Ver Reporte</a>  -Informe de no reprobación semestral.</li>
+                <li class="list-group-item"><a class="btn btn-default" href='#'>Ver Reporte</a>  -Informe de cumplimiento de Bachiller y licenciatura.</li>
+                <li class="list-group-item"><a class="btn btn-default" href='#'>Ver Reporte</a>  -Informe estadístico por sexo.</li>
             </ul>
              </div>
                 <div class="col-md-2 barra"></div>
