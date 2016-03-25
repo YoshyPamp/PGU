@@ -17,25 +17,21 @@
         $apellidoMat = trim($apellidos[1]);     
     }
     
-	//var_dump($alumno);
+	if($db->VERIFICAR_PLAN_EXISTENTE($alumno['CODIGO_PLAN'])){
+		
+		$asignaturas = $db->SELECT_ASIGNATURAS_BYPLAN($alumno['CODIGO_PLAN']);
+		$historico = $db->SELECT_SECCION_NOTA_BYRUT($_GET['rut']);
 	
-	$asignaturas = $db->SELECT_ASIGNATURAS_BYPLAN($alumno['CODIGO_PLAN']);
-	$historico = $db->SELECT_SECCION_NOTA_BYRUT($_GET['rut']);
-	
-	$duracion = $asignaturas['DURACION'];
-	$ramos_FG = array();
-
-	unset($asignaturas['DURACION']);
-	if($duracion > 0){
+		$duracion = $asignaturas['DURACION'];
+		$ramos_FG = array();
+		
+		unset($asignaturas['DURACION']);
+		$existe = true;
 		$width = floor(100 / $duracion);
 	}else{
+		$existe = false;
 		echo "<div class='alert alert-danger' role='alert'>ERROR: NO EXISTE PLAN DE ESTUDIO: <b>".$alumno['CODIGO_PLAN']."</b> EN BASE DE DATOS.</div>";
 	}
-
-	//var_dump($historico);
-
-
-	
 	
 ?>
 
@@ -103,6 +99,7 @@
         <h2 class="panel-title">Plan de Estudio</h2>
     </div>
   <div class="panel-body collapse" id='collapsePlan'>
+	   <?php if($existe): ?>
        <?php foreach($asignaturas as $nivel => $ramos): ?>
 			<table class="table table-condensed" style=" float: left; width: <?php echo $width; ?>%;">
 				<thead>
@@ -146,6 +143,7 @@
 			</table>
 		</div>
 		<?php endif;?>
+		<?php endif;?>
   </div>
 </div>
 
@@ -168,6 +166,7 @@
 		</tfoot>
         <tbody>
 			<tr>
+				<?php if($existe):?>
 				<?php foreach($historico as $seccion):?>
 					<td><?php echo $seccion['COD_SECCION']; ?></td>
 					<td><?php echo $seccion['NOM_ASIGNATURA']; ?></td>
@@ -178,6 +177,7 @@
 					<td><?php echo $seccion['ESTADO']; ?></td>
 					<td><input type='button' class='btn btn-info' value='IR'></td>
 				<?php endforeach;?>
+				<?php endif;?>
 			</tr>
 		</tbody>
     </table>
