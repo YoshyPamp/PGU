@@ -32,6 +32,10 @@
 		$existe = false;
 		echo "<div class='alert alert-danger' role='alert'>ERROR: NO EXISTE PLAN DE ESTUDIO: <b>".$alumno['CODIGO_PLAN']."</b> EN BASE DE DATOS.</div>";
 	}
+        
+        //xdebug_dump_superglobals();
+        //var_dump($historico);
+      
 	
 ?>
 
@@ -113,7 +117,8 @@
 					<?php 	if(substr($ramo[1],0,2) == 'FG'):?>
 					<?php 		$ramos_FG[] = $ramo ?>
 					<?php 	else:?>
-						<tr class="info">
+                                        <?php $estado = $db->FAM_SELECT_ESTADO_ASIGNATURA_BY_RUT($alumno['RUT'],$ramo[1].'%');?>
+						<tr class="<?php echo $estado; ?>">
 							<td style=" font-family: 'Courier';">
 								<?php echo $ramo[0]; ?><br>
 								<em><?php echo $ramo[1]; ?></em>
@@ -165,9 +170,10 @@
 			</tr>
 		</tfoot>
         <tbody>
-			<tr>
+			
 				<?php if($existe):?>
 				<?php foreach($historico as $seccion):?>
+                                    <tr>
 					<td><?php echo $seccion['COD_SECCION']; ?></td>
 					<td><?php echo $seccion['NOM_ASIGNATURA']; ?></td>
 					<td><?php echo $seccion['SEMESTRE']; ?></td>
@@ -176,9 +182,10 @@
 					<td><?php echo round($seccion['NOTA'],1); ?></td>
 					<td><?php echo $seccion['ESTADO']; ?></td>
 					<td><input type='button' class='btn btn-info' value='IR'></td>
+                                    </tr>
 				<?php endforeach;?>
 				<?php endif;?>
-			</tr>
+			
 		</tbody>
     </table>
   </div>

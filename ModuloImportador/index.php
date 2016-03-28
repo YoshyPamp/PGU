@@ -53,7 +53,7 @@
 		if(isset($_GET['notas'])){
 			
 			if($_GET['notas'] == 'on'){
-				$importe_fallido = "YA EXISTEN NOTAS PARA ALGUNA O TODAS LAS SECCIONES IMPORTADAS";
+				$importe_fallido = $_GET['men'];
 			}else if($_GET['notas'] == 'ok200'){
 				$importe_correcto = "IMPORTE DE NOTAS EXITOSO";
 			}else if($_GET['notas'] == 'yes'){
@@ -489,6 +489,5 @@
             }
                 echo "<input type='hidden' name='import' value='true' />";
             ?>
-            
     </div> <!-- /container -->  
 <?php include("../templates/footer.php"); ?> 

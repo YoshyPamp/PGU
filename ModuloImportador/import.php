@@ -66,6 +66,7 @@
 				//Para filtrar entre importe de alumnos y de notas
 				//ALUMNOS
 				if(substr($key,0,6) == 'alumno'){
+                                    
 					//realiza un proceso si es de los que venían con problemas.
 					if(!is_numeric(substr($key,7,8))){
 						$alumnos_malos[] = $arreglo_interno[3]."-".substr($key,7,100);
@@ -84,7 +85,7 @@
 				}else{
 					
 					if(!isset($_POST['vacia'])){
-						//NOTAS
+                                             	//NOTAS
 						$datos = explode('-',$key);
 						
 						if(!is_numeric($datos[0])){
@@ -96,40 +97,61 @@
 							}
 						}
 						
-						$rut_alum = $datos[0];
-						$cod_ramo = $datos[1];
-						$_seccion = $datos[2];
-						$ano_ramo = $datos[3];
-						$sem_ramo = $datos[4];
-						$estado_A = $datos[5];
-						
-						if(!$db->VERIFICAR_NOTAS_EXISTENTES($rut_alum, $ano_ramo, $sem_ramo, $cod_ramo, $_seccion)){
-							
-							$cantd_notas = count($arreglo_interno);
-							$notas = 0;
-							
-							while($notas < $cantd_notas){
-								$nota = $arreglo_interno[$notas];
-								$pond = $arreglo_interno[$notas+1];
-								$porc = $arreglo_interno[$notas+2];
-								$tipo = $arreglo_interno[$notas+3];
-								$notas = $notas + 4;
+                                                if(count($datos) > 1){
+                                                    
+                                                    $rut_alum = $datos[0];
+                                                    $cod_ramo = $datos[1];
+                                                    $_seccion = $datos[2];
+                                                    $ano_ramo = $datos[3];
+                                                    $sem_ramo = $datos[4];
+                                                    $estado_A = $datos[5];
 
-								$id_seccion = $db->FAM_INSERT_NOTA($rut_alum, $cod_ramo, $_seccion, $ano_ramo, $sem_ramo,
-														$nota, $pond, $porc, $tipo);
-								if($id_seccion == null){
-									if(!in_array($cod_ramo."-".$_seccion,$ramos_sin_oferta)){
-										$ramos_sin_oferta[] = $cod_ramo."-".$_seccion;
-									}
-								}
-							}
-							
-							if($id_seccion != null){
-								$db->FAM_INSERT_ALUM_SECC($rut_alum, $id_seccion);
-							}
-							$con_nada++;
-						}
-						$acta_sin_notas = false;
+
+
+                                                    switch($db->VERIFICAR_NOTAS_EXISTENTES($rut_alum, $ano_ramo, $sem_ramo, $cod_ramo, $_seccion)){
+                                                        case 0:
+                                                            $cantd_notas = count($arreglo_interno);
+                                                            $notas = 0;
+
+                                                            while($notas < $cantd_notas){
+                                                                    $nota = $arreglo_interno[$notas];
+                                                                    $pond = $arreglo_interno[$notas+1];
+                                                                    $porc = $arreglo_interno[$notas+2];
+                                                                    $tipo = $arreglo_interno[$notas+3];
+                                                                    $notas = $notas + 4;
+                                                              
+                                                                    $id_seccion = $db->FAM_INSERT_NOTA($rut_alum, $cod_ramo, $_seccion, $ano_ramo, $sem_ramo,
+                                                                                                                    $nota, $pond, $porc, $tipo);
+                                                                    if($id_seccion == null){
+                                                                            if(!in_array($cod_ramo."-".$_seccion,$ramos_sin_oferta)){
+                                                                                    $ramos_sin_oferta[] = $cod_ramo."-".$_seccion;
+                                                                            }
+                                                                    }
+                                                            }
+
+                                                            $con_nada++;
+                                                            break;
+                                                        case -1:
+                                                            $mensaje = 'YA EXISTEN NOTAS PARA ALGUNAS SECCIONES DE ESA OFERTA';
+                                                            break;
+                                                        case -2:
+                                                            $mensaje = 'ALGUNA SECCION NO EXISTE EN OFERTA PARA ESE AÑO';
+                                                            break;
+                                                    }
+                                                    $acta_sin_notas = false;
+                                                }else{
+                                                    //Para los alumnos sin notas en acta
+                                                    $rut_alum = $datos[0];
+                                                    
+                                                    $ramo = explode("-",$arreglo_interno);
+                                                    $cod_ramo = $ramo[0];
+                                                    $_seccion = $ramo[1];
+                                                    $ano_ramo = $ramo[2];
+                                                    $sem_ramo = $ramo[3];
+                                                    
+                                                    $db->FAM_INSERT_NOTA($rut_alum, $cod_ramo, $_seccion, $ano_ramo, $sem_ramo, 0, 0, 0, "S/N");
+                                                }
+                                                
 					}else{
 						//Procesamiento cuando la acta viene vacía de notas
 						$datos = explode('-',$arreglo_interno);
@@ -159,7 +181,7 @@
 					echo "<script>window.location='index.php?acta=ok&num=".count($alumnos_insertados)."&notas=sin&sinoferta=".$ramos_sin_oferta."'</script>";
 				}
 			}else{
-				echo "<script>window.location='index.php?acta=ok&num=".count($alumnos_insertados)."&notas=on'</script>";
+				echo "<script>window.location='index.php?acta=ok&num=".count($alumnos_insertados)."&notas=on&men=".$mensaje."'</script>";
 			}
 			
 		}else{

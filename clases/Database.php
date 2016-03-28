@@ -20,46 +20,46 @@ class Database {
     private $connectionInfo;
     public $conn;
     
-    function __construct() {
+        function __construct() {
 		$this->DB_NAME = "FAM";
 	//PRD
-        //$this->DB_USER = "sa";
-        //$this->DB_PASS = "informatica.2015*";
-        //$this->DB_SERVER = "172.16.22.8";
+        $this->DB_USER = "fam";
+        $this->DB_PASS = "roco";
+        $this->DB_SERVER = "localhost";
 
 	//QAS
-        $this->DB_USER = "valentys_sql";
-        $this->DB_PASS = "valentys.2012*";
-        $this->DB_SERVER = "172.16.39.64";
+        //$this->DB_USER = "valentys_sql";
+        //$this->DB_PASS = "valentys.2012*";
+        //$this->DB_SERVER = "172.16.39.64";
 		
         $this->conection();
     }
     
-    function conection(){
+        function conection(){
     
 		try{
 			$this->conn = new PDO (
-					"odbc:Driver={SQL Server Native Client 10.0};Server=".$this->DB_SERVER.";Port:1433;dbname=".$this->DB_NAME,
+					"odbc:Driver={SQL Server Native Client 11.0};Server=".$this->DB_SERVER.";Port:1433;dbname=".$this->DB_NAME,
 					$this->DB_USER,
 					$this->DB_PASS
 					);
 					
 			$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		}catch(PDOException $ex){
-			echo 'Connection failed: ' . $ex->getCode();
+			echo 'Connection failed: ' . $ex->getMessage();
 		}
     }
     
-    function select_alumnos(){
+        function select_alumnos(){
         
 		try{
-			$result = array();
 			$sql = "SELECT * FROM FAM.dbo.ALUMNO";
 		
 			$stmt = $this->conn->prepare($sql);
 			$stmt->execute();
 			
 			$result = $stmt->fetchAll();
+                        
 		}catch(PDOException $ex){
 			echo 'Error en sentencia: ' . $ex->getMessage();
 		} 
@@ -67,7 +67,7 @@ class Database {
         return $result;
     }
     
-    function select_asignaturas(){
+        function select_asignaturas(){
         
 		try{
 			$asignaturas = array();
@@ -90,7 +90,7 @@ class Database {
         return $asignaturas;
     }
     
-    function select_alumno_rut($rut){
+        function select_alumno_rut($rut){
 		
 		try{
 			$alumno = array();
@@ -117,7 +117,7 @@ class Database {
         return $alumno;
     }
 	
-	function SELECT_ASIGNATURAS_BYPLAN($codigo) {
+        function SELECT_ASIGNATURAS_BYPLAN($codigo) {
 		
 		try{
 			
@@ -161,7 +161,7 @@ class Database {
         return $salida;
 	}
 	
-	function SELECT_SECCION_NOTA_BYRUT($rut){
+        function SELECT_SECCION_NOTA_BYRUT($rut){
 		
 		try{
 			
@@ -190,7 +190,7 @@ class Database {
 		return $secciones;
 	}
 	
-	function FAM_VINCULAR_ALUM_SECC($codigo, $seccio, $año, $sem, $rut){
+        function FAM_VINCULAR_ALUM_SECC($codigo, $seccio, $año, $sem, $rut){
 		
 		try{
 			$codigo_completo = $codigo."-".$seccio;
@@ -212,7 +212,7 @@ class Database {
 		}
 	}
     
-    function FAM_PLAN_INSERT($codigo, $tipo, $facultad, $escuela,
+        function FAM_PLAN_INSERT($codigo, $tipo, $facultad, $escuela,
             $sede, $grd_bach, $grd_acad, $titulo, $nombre, $jornada,$duracion){
         
 		try{
@@ -249,7 +249,7 @@ class Database {
 		}
     }  
 	
-	function FAM_ASIGNATURA_INSERT($codigo_plan, $nombre, $nivel, $codigo){
+        function FAM_ASIGNATURA_INSERT($codigo_plan, $nombre, $nivel, $codigo){
         
 		try{
 			$sql = "INSERT INTO FAM.dbo.ASIGNATURA(COD_ASIGNATURA,NOM_ASIGNATURA,PLANESTUDIO_COD_PLANESTUDIO,NIVEL)
@@ -267,7 +267,7 @@ class Database {
 		}
     }  
 	
-	function VERIFICAR_PLAN_EXISTENTE($codigo){
+        function VERIFICAR_PLAN_EXISTENTE($codigo){
 		
 		try{
 			
@@ -290,7 +290,7 @@ class Database {
 		}
 	}
 	
-	function VERIFICAR_OFERTA_EXISTENTE($año, $semestre){
+        function VERIFICAR_OFERTA_EXISTENTE($año, $semestre){
 		
 		try{
 			$sql = "SELECT * FROM FAM.dbo.OFERTA WHERE ANO = :ANO AND SEMESTRE = :SEMESTRE";
@@ -313,59 +313,75 @@ class Database {
 		}
 	}
 	
-	function VERIFICAR_SECCION_EXISTENTES($año, $semestre, $cod_ramo, $_seccion){
+        function VERIFICAR_SECCION_EXISTENTES($año, $semestre, $cod_ramo, $_seccion){
 		
-		//Selecciona a la oferta que corresponde la seccion que se vinculará
-		$dec = "SELECT id_oferta FROM OFERTA WHERE ANO = '".$año."' AND SEMESTRE = '".$semestre."'";
-		$stmt = odbc_exec($this->conn,$dec);
-		if( $stmt === false ){
-			echo "Error al ejecutar procedimiento.\n";
-			die( print_r( odbc_error(), true));
-		}else{
-			$row = odbc_fetch_array($stmt);
-			$id_oferta = $row['id_oferta'];
-		}
-		odbc_free_result( $stmt);
-		
-		$ramo = $cod_ramo.'-'.$_seccion;
-		//Selecciona la ID de la seccion que se vinculara con la nota
-		$dec = "SELECT * FROM SECCION WHERE COD_SECCION = '".$ramo."' AND OFERTA_ID = '".$id_oferta."'";
-		
-		$stmt = odbc_exec($this->conn,$dec);
-		if( $stmt === false ){
-			echo "Error al ejecutar procedimiento.\n";
-			die( print_r( odbc_error(), true));
-		}else{
-			$row = odbc_fetch_array($stmt);
-			$id_seccion = $row['ID_SECCION'];
-		}
-		odbc_free_result( $stmt);
-		
+            $id_seccion = 1;
+                try{
+                    //Selecciona a la oferta que corresponde la seccion que se vinculará
+                    $ramo = $cod_ramo.'-'.$_seccion;
+                    
+                    $sql = "SELECT id_oferta FROM FAM.dbo.OFERTA WHERE ANO = :ANO AND SEMESTRE = :SEMESTRE";
+                    
+                    $stmt = $this->conn->prepare($sql);
+                    $stmt->bindParam(":ANO", $año, PDO::PARAM_INT);
+                    $stmt->bindParam(":SEMESTRE", $semestre, PDO::PARAM_INT);
+                    $stmt->execute();
+                    
+                    $result = $stmt->fetchAll();
+		    $id_oferta = $result[0]['id_oferta'];
+                    
+                    //Selecciona la ID de la seccion que se vinculara con la nota
+                    $sql = "SELECT id_seccion FROM FAM.dbo.SECCION WHERE COD_SECCION = :COD_SECCION AND OFERTA_ID = :OFERTA_ID";
+                    
+                    $stmt = $this->conn->prepare($sql);
+                    $stmt->bindParam(":COD_SECCION", $ramo, PDO::PARAM_STR);
+                    $stmt->bindParam(":OFERTA_ID", $id_oferta, PDO::PARAM_INT);
+                    $stmt->execute();
+                    
+                    $result = $stmt->fetchAll();
+                    if(count($result) > 0){
+                        $id_seccion = $result[0]['id_seccion'];
+                    }else{
+                        $id_seccion = 0;
+                    } 
+                } catch (PDOException $ex) {
+                    echo 'Error en sentencia: ' . $ex->getMessage()."<br>";
+                }
+   
 		return $id_seccion;
 	}
 	
-	function VERIFICAR_NOTAS_EXISTENTES($rut, $año, $semestre, $cod_ramo, $_seccion){
+        function VERIFICAR_NOTAS_EXISTENTES($rut, $año, $semestre, $cod_ramo, $_seccion){
 		
-		$id_seccion = $this->VERIFICAR_SECCION_EXISTENTES($año, $semestre, $cod_ramo, $_seccion);
-		
-		$dec = "SELECT * FROM NOTA WHERE SEMESTRE = '".$semestre."' AND ANO = '".$año."' AND ID_SECCION = '".$id_seccion."' AND RUT_ALUMNO = '".$rut."'";
-		
-		$stmt = odbc_exec($this->conn,$dec);
-		if( $stmt === false ){
-			echo "Error al ejecutar procedimiento.\n";
-			die( print_r( odbc_error(), true));
-		}
-		
-		if(odbc_num_rows($stmt) > 0){
-			odbc_free_result( $stmt);
-			return true;
-		}else{
-			odbc_free_result( $stmt);
-			return false;
-		}
+            try{
+                $id_seccion = $this->VERIFICAR_SECCION_EXISTENTES($año, $semestre, $cod_ramo, $_seccion);
+                
+                if($id_seccion == 0){
+                    return -2;
+                }else{
+                    $sql = "SELECT * FROM NOTA WHERE SEMESTRE = :SEMESTRE AND ANO = :ANO AND ID_SECCION = :ID_SECCION AND RUT_ALUMNO = :RUT_ALUMNO";
+                    
+                    $stmt = $this->conn->prepare($sql);
+                    $stmt->bindParam(":SEMESTRE", $semestre, PDO::PARAM_INT);
+                    $stmt->bindParam(":ANO", $año, PDO::PARAM_INT);
+                    $stmt->bindParam(":ID_SECCION", $id_seccion, PDO::PARAM_INT);
+                    $stmt->bindParam(":RUT_ALUMNO", $rut, PDO::PARAM_STR);
+                    $stmt->execute();
+                    
+                    $result = $stmt->fetchAll();
+                    if(count($result) > 0){
+                        return -1;
+                    }else{
+                        return 0;
+                    } 
+                }
+            
+            } catch (PDOException $ex) {
+                echo 'Error en sentencia: ' . $ex->getMessage()."<br>";
+            }
 	}
 	
-	function FAM_OFERTA_INSERT($año, $semestre){
+        function FAM_OFERTA_INSERT($año, $semestre){
 		
 		try{
 			$sql = "INSERT INTO FAM.dbo.OFERTA(ANO,SEMESTRE) OUTPUT Inserted.ID_OFERTA 
@@ -385,7 +401,7 @@ class Database {
 		return $id_oferta;
 	}
 	
-	function FAM_SECCION_INSERT($codigo, $seccion, $profesor, $oferta_id, $inscritos, $cupos, $capacidad, $sala,
+        function FAM_SECCION_INSERT($codigo, $seccion, $profesor, $oferta_id, $inscritos, $cupos, $capacidad, $sala,
 			$dia, $inicio, $termino, $modalidad){
 		
 			$id_seccion = 0;
@@ -473,8 +489,8 @@ class Database {
 		return $id_seccion;		
 	}
 	
-	function FAM_INSERT_ALUMNO($nom, $ap1, $ap2, $rut, $pln){
-		
+        function FAM_INSERT_ALUMNO($nom, $ap1, $ap2, $rut, $pln){
+        
 		try{
 			//Busca si existe un alumno con ese rut
 			$sql = "SELECT * FROM FAM.dbo.ALUMNO WHERE RUT = :RUT";
@@ -483,9 +499,9 @@ class Database {
 			$stmt->bindParam(':RUT', $rut, PDO::PARAM_STR);
 			$stmt->execute();
 			
-			$result = $stmt->fetch(PDO::FETCH_ASSOC);
-			
-			if(count($result) > 0){
+			$result = $stmt->fetchAll();
+
+			if(!empty($result)){
 				return false;
 			}else{
 				$no_existe = true;
@@ -494,10 +510,10 @@ class Database {
 			//Si no existe lo inserta
 			if($no_existe){
 			
-				$nom_completo = $ap1." ".$ap2.", ".$nom;
+				$nom_completo = utf8_encode($ap1." ".$ap2.", ".$nom);
 				$estado = "REGULAR";
-				
-				$dec = "INSERT INTO FAM.dbo.ALUMNO (NOMBRES, RUT, CODIGO_PLAN, ESTADO_ESTUDIO) 
+
+				$sql = "INSERT INTO FAM.dbo.ALUMNO (NOMBRES, RUT, CODIGO_PLAN, ESTADO_ESTUDIO) 
 				VALUES(:NOMBRES, :RUT, :CODIGO_PLAN, :ESTADO_ESTUDIO)";			
 				
 				$stmt = $this->conn->prepare($sql);
@@ -511,56 +527,121 @@ class Database {
 			}
 			
 		}catch(PDOException $ex){
+			'Error en sentencia: ' . $ex->getCode();
+		}
+	}
+	
+        function FAM_INSERT_NOTA($rut_alum, $cod_ramo, $_seccion, $ano_ramo, $sem_ramo, $nota, $pond, $porc, $tipo){
+		
+            try{
+                $id_seccion = $this->VERIFICAR_SECCION_EXISTENTES($ano_ramo, $sem_ramo, $cod_ramo, $_seccion);
+                $porc = trim($porc,"%");
+                //Inserta la nota correspondiente
+		$sql = "INSERT INTO FAM.dbo.NOTA (RUT_ALUMNO,ANO,SEMESTRE,ID_SECCION,NOTA,PORCENTAJE,NOTA_PONDERADA,TIPO_NOTA) "
+                        . "VALUES(:RUT_ALUMNO,:ANO,:SEMESTRE,:ID_SECCION,:NOTA,:PORCENTAJE,:NOTA_PONDERADA,:TIPO_NOTA)";
+                
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindParam(":RUT_ALUMNO",$rut_alum, PDO::PARAM_STR);
+                $stmt->bindParam(":ANO",$ano_ramo, PDO::PARAM_INT);
+                $stmt->bindParam(":SEMESTRE",$sem_ramo, PDO::PARAM_INT);
+                $stmt->bindParam(":ID_SECCION",$id_seccion, PDO::PARAM_INT);
+                $stmt->bindParam(":NOTA",$nota, PDO::PARAM_INT);
+                $stmt->bindParam(":PORCENTAJE",$porc, PDO::PARAM_INT);
+                $stmt->bindParam(":NOTA_PONDERADA",$pond, PDO::PARAM_INT);
+                $stmt->bindParam(":TIPO_NOTA",$tipo, PDO::PARAM_STR);
+                $stmt->execute();
+                
+                if($tipo == 'NF'){
+                    if($nota >= 4){
+                        $tipo = 'A';
+                    }else{
+                        $tipo = 'S/N';
+                    }
+                }
+                
+                switch($tipo){
+                    case 'A':
+                        $sql = "UPDATE FAM.dbo.ALUMNOSECCION SET ESTADO = 'APROBADO' WHERE ID_SECCION = :ID_SECCION AND ALUMNO_RUT = :ALUMNO_RUT";
+                        
+                        $stmt = $this->conn->prepare($sql);
+                        $stmt->bindParam(":ID_SECCION", $id_seccion, PDO::PARAM_INT);
+                        $stmt->bindParam(":ALUMNO_RUT", $rut_alum, PDO::PARAM_STR);
+                        break;
+                    case 'S/N':
+                        $sql = "UPDATE FAM.dbo.ALUMNOSECCION SET ESTADO = 'REPROBADO' WHERE ID_SECCION = :ID_SECCION AND ALUMNO_RUT = :ALUMNO_RUT";
+                        
+                        $stmt = $this->conn->prepare($sql);
+                        $stmt->bindParam(":ID_SECCION", $id_seccion, PDO::PARAM_INT);
+                        $stmt->bindParam(":ALUMNO_RUT", $rut_alum, PDO::PARAM_STR);
+                        $stmt->execute();
+                        break;
+                    default:
+                        break;
+                }
+                            	
+                
+            } catch (PDOException $ex) {
+                'Error en sentencia: ' . $ex->getCode();
+            }
+		
+            return $id_seccion;
+	}
+	
+        function FAM_INSERT_ALUM_SECC($rut_alum, $id_seccion){
+		
+            try{
+                //INGRESA EL VINCULO
+		$sql = "INSERT INTO FAM.dbo.ALUMNOSECCION(ID_SECCION, ALUMNO_RUT) VALUES(:ID_SECCION, :ALUMNO_RUT)";
+                
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindParam(":ID_SECCION", $id_seccion, PDO::PARAM_INT);
+                $stmt->bindParam(":ALUMNO_RUT", $rut_alum, PDO::PARAM_STR);
+                $stmt->execute();
+                
+            } catch (Exception $ex) {
+                 'Error en sentencia: ' . $ex->getCode();
+            }
+	}
+        
+        function FAM_SELECT_ESTADO_ASIGNATURA_BY_RUT($rut, $asig){
+            try{
+                $sql = "{CALL FAM.dbo.FAM_SELECT_ESTADO_ASIGNATURA_BY_RUT(?,?)}";
+                
+                $stmt = $this->conn->prepare($sql);
+			$stmt->bindParam(1, $rut, PDO::PARAM_STR);
+                        $stmt->bindParam(2, $asig, PDO::PARAM_STR);
+			$stmt->execute();
 			
-		}
-	}
-	
-	function FAM_INSERT_NOTA($rut_alum, $cod_ramo, $_seccion, $ano_ramo, $sem_ramo, $nota, $pond, $porc, $tipo){
-		
-		$id_seccion = $this->VERIFICAR_SECCION_EXISTENTES($ano_ramo, $sem_ramo, $cod_ramo, $_seccion);
-		
-		if($id_seccion === null){
-			return false;
-		}
-		
-		$porc = trim($porc,"%");
-		//Inserta la nota correspondiente
-		$dec = "INSERT INTO NOTA VALUES("
-				. "'".$rut_alum."',"
-				. "'".$ano_ramo."',"
-				. "'".$sem_ramo."',"
-				. "'".$id_seccion."',"
-				. "'".$nota."',"
-				. "'".$porc."',"
-				. "'".$pond."',"
-				. "'".$tipo."')";					
-				
-		$stmt = odbc_exec($this->conn,$dec);
-		if( $stmt === false )
-		{
-			echo "Error al ejecutar procedimiento.\n";
-			die( print_r( odbc_error(), true));
-		}
-		odbc_free_result( $stmt);
-		return $id_seccion;
-	}
-	
-	function FAM_INSERT_ALUM_SECC($rut_alum, $id_seccion){
-		
-		//INGRESA EL VINCULO
-		$dec = "INSERT INTO ALUMNOSECCION VALUES("
-				. "'".$id_seccion."',"
-				. "'".$rut_alum."')";
-		
-		$stmt = odbc_exec($this->conn,$dec);
-		
-		if( $stmt === false ){
-			echo "Error al ejecutar procedimiento.\n";
-			die( print_r( odbc_error(), true));
-		}
-		
-		odbc_free_result( $stmt);
-	}
+			$result = $stmt->fetchAll();
+                        if(count($result) > 0){
+                            $estado = $result[0]['ESTADO'];
+                        }else{
+                            $estado = '';
+                        }
+                        
+                        switch($estado){
+                            case 'REPROBADO':
+                                $estado = 'danger';
+                                break;
+                            case 'APROBADO':
+                                $estado = 'success';
+                                break;
+                            case 'INSCRITO':
+                                $estado = 'warning';
+                                break;
+                            default:
+                                $estado = 'info';
+                                break;
+                        }
+                        
+                        return $estado;
+                
+            } catch (Exception $ex) {
+                'Error en sentencia: ' . $ex->getCode();
+            }
+        }
+        
+        
 }
 
 ?>
