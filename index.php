@@ -18,7 +18,7 @@
     <ul class="nav nav-tabs" role="tablist">
       <li role="presentation" class="active"><a href="#alumno" aria-controls="alumno" role="tab" data-toggle="tab">Alumno</a></li>
       <li role="presentation"><a href="#asignatura" aria-controls="asignatura" role="tab" data-toggle="tab">Asignaturas</a></li>
-      <li role="presentation"><a href="#reporte" aria-controls="reporte" role="tab" data-toggle="tab">Reporte</a></li>
+      <li role="presentation"><a href="#reporte" aria-controls="reporte" role="tab" data-toggle="tab">Modulo Reportes</a></li>
       <li role="presentation"><a href="#administrador" aria-controls="administrador" role="tab" data-toggle="tab">Administrador</a></li>
       <li role="presentation"><a href="#importador" onclick="Javascript: window.location='ModuloImportador/index.php'" aria-controls="importador" role="tab" data-toggle="tab">Modulo Importador</a></li>
     </ul>
@@ -57,7 +57,7 @@
         
         <div role="tabpanel" class="tab-pane content" id="asignatura">
             <div class="col-md-12">
-                <table id="example_asignaturas" class="table table-striped table-bordered">
+                <table id="example_asignaturas" class="table table-striped table-bordered" width="100%">
                     <thead>
                         <tr>
                             <th>Código</th><th>Nombre</th><th>Plan Estudio</th><th>Ver Asignatura</th>
@@ -66,7 +66,7 @@
                     <tbody>
                         <?php foreach($asignaturas as $asig): ?>
                             <tr>
-                                <td><?php echo $asig['COD_ASIGNATURA']; ?></td><td><?php echo utf8_decode($asig['NOM_ASIGNATURA']); ?></td>
+                                <td><?php echo $asig['COD_ASIGNATURA']; ?></td><td><?php echo $asig['NOM_ASIGNATURA']; ?></td>
                                 <td><?php echo $asig['PLANESTUDIO_COD_PLANESTUDIO']; ?></td>
                                 <td><input type="button" class="btn btn-info" value="Ver" onclick="Javascript: selectAsignatura('<?php echo $asig['COD_ASIGNATURA']; ?>');" ></td>
                             </tr>
@@ -130,8 +130,6 @@
         <!-- Tab panes end -->
   
 </div>
-
-
 
 
   

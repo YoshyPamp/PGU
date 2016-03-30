@@ -15,7 +15,7 @@
 	date_default_timezone_set('America/Santiago');
     
 	$db = new Database();
-    $debug = new helpers();
+
     require 'vendor/autoload.php';
 	
 	if(isset($_GET['malas'])){
@@ -163,7 +163,7 @@
             <option value="">Seleccione tipo de documento...</option>
             <option value="1">Acta</option>
             <option value="2">Decreto</option>
-			<option value="3">Oferta</option>
+            <option value="3">Oferta</option>
         </select><br>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Leer Documento</button>
       </form>
@@ -197,7 +197,7 @@
 					
 					
                     <form method="post" action="import.php" id='importar'>
-						<input type='hidden' name='acta' value='0'>
+			<input type='hidden' name='acta' value='0'>
                         <input type='submit' value='IMPORTAR DATOS' class='btn btn-success btn-lg center-block col-md-12' style='display:hidden' /><br><br>
         
                         <h3 class='col-md-12 text-center' >RESUMEN DE DATOS A IMPORTAR <small><em>Presione IMPORTAR cuando este seguro de los datos.</em></small></h3><br><br><br><br>
@@ -210,10 +210,10 @@
                                     <th class='center'>Nombre</th><th class='center'>Apellido Paterno</th><th class='center'>Apellido Materno</th><th class='center'>Rut</th>
                                     <th class='center'>Plan</th>
                                 </tr>
-                                <tr class='accordion-toggle success' data-toggle="collapse" data-target=".demo1"><th colspan='6' class='center'>Presione aquí para ocultar o expandir.</th></tr>
+                                <tr class='accordion-toggle success'><th colspan='6' class='center'>Presione aquí para ocultar o expandir.</th></tr>
                             </thead>
                 
-                            <tbody class="accordian-body collapse demo1">
+                            <tbody class="accordian-body demo1">
                                 <?php foreach($resultado_acta['alumnos'] as $key => $alumno): ?>
                                 <tr>
                                     <!-- VERIFICA SI ALUMNO LLEGO CON PROBLEMAS POR NOMBRE O APELLIDO COMPUESTO-->

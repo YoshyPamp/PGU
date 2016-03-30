@@ -23,14 +23,14 @@ class Database {
         function __construct() {
 		$this->DB_NAME = "FAM";
 	//PRD
-        $this->DB_USER = "fam";
-        $this->DB_PASS = "roco";
-        $this->DB_SERVER = "localhost";
+        //$this->DB_USER = "fam";
+        //$this->DB_PASS = "roco";
+        //$this->DB_SERVER = "localhost";
 
 	//QAS
-        //$this->DB_USER = "valentys_sql";
-        //$this->DB_PASS = "valentys.2012*";
-        //$this->DB_SERVER = "172.16.39.64";
+        $this->DB_USER = "valentys_sql";
+        $this->DB_PASS = "valentys.2012*";
+        $this->DB_SERVER = "172.16.39.64";
 		
         $this->conection();
     }
@@ -39,7 +39,7 @@ class Database {
     
 		try{
 			$this->conn = new PDO (
-					"odbc:Driver={SQL Server Native Client 11.0};Server=".$this->DB_SERVER.";Port:1433;dbname=".$this->DB_NAME,
+					"odbc:Driver={SQL Server Native Client 10.0};Server=".$this->DB_SERVER.";Port:1433;dbname=".$this->DB_NAME,
 					$this->DB_USER,
 					$this->DB_PASS
 					);
@@ -359,7 +359,7 @@ class Database {
                 if($id_seccion == 0){
                     return -2;
                 }else{
-                    $sql = "SELECT * FROM NOTA WHERE SEMESTRE = :SEMESTRE AND ANO = :ANO AND ID_SECCION = :ID_SECCION AND RUT_ALUMNO = :RUT_ALUMNO";
+                    $sql = "SELECT * FROM FAM.dbo.NOTA WHERE SEMESTRE = :SEMESTRE AND ANO = :ANO AND ID_SECCION = :ID_SECCION AND RUT_ALUMNO = :RUT_ALUMNO";
                     
                     $stmt = $this->conn->prepare($sql);
                     $stmt->bindParam(":SEMESTRE", $semestre, PDO::PARAM_INT);
@@ -527,7 +527,7 @@ class Database {
 			}
 			
 		}catch(PDOException $ex){
-			'Error en sentencia: ' . $ex->getCode();
+			echo 'Error en sentencia: ' . $ex->getCode();
 		}
 	}
 	
@@ -566,6 +566,7 @@ class Database {
                         $stmt = $this->conn->prepare($sql);
                         $stmt->bindParam(":ID_SECCION", $id_seccion, PDO::PARAM_INT);
                         $stmt->bindParam(":ALUMNO_RUT", $rut_alum, PDO::PARAM_STR);
+                        $stmt->execute();
                         break;
                     case 'S/N':
                         $sql = "UPDATE FAM.dbo.ALUMNOSECCION SET ESTADO = 'REPROBADO' WHERE ID_SECCION = :ID_SECCION AND ALUMNO_RUT = :ALUMNO_RUT";
@@ -581,35 +582,20 @@ class Database {
                             	
                 
             } catch (PDOException $ex) {
-                'Error en sentencia: ' . $ex->getCode();
+                echo 'Error en sentencia: ' . $ex->getCode();
             }
 		
             return $id_seccion;
 	}
-	
-        function FAM_INSERT_ALUM_SECC($rut_alum, $id_seccion){
-		
-            try{
-                //INGRESA EL VINCULO
-		$sql = "INSERT INTO FAM.dbo.ALUMNOSECCION(ID_SECCION, ALUMNO_RUT) VALUES(:ID_SECCION, :ALUMNO_RUT)";
-                
-                $stmt = $this->conn->prepare($sql);
-                $stmt->bindParam(":ID_SECCION", $id_seccion, PDO::PARAM_INT);
-                $stmt->bindParam(":ALUMNO_RUT", $rut_alum, PDO::PARAM_STR);
-                $stmt->execute();
-                
-            } catch (Exception $ex) {
-                 'Error en sentencia: ' . $ex->getCode();
-            }
-	}
         
-        function FAM_SELECT_ESTADO_ASIGNATURA_BY_RUT($rut, $asig){
+        function FAM_SELECT_ESTADO_ASIGNATURA_BY_RUT($rut, $asig, $asig_nom){
             try{
-                $sql = "{CALL FAM.dbo.FAM_SELECT_ESTADO_ASIGNATURA_BY_RUT(?,?)}";
+                $sql = "{CALL FAM.dbo.FAM_SELECT_ESTADO_ASIGNATURA_BY_RUT(?,?,?)}";
                 
                 $stmt = $this->conn->prepare($sql);
 			$stmt->bindParam(1, $rut, PDO::PARAM_STR);
                         $stmt->bindParam(2, $asig, PDO::PARAM_STR);
+                        $stmt->bindParam(3, $asig_nom, PDO::PARAM_STR);
 			$stmt->execute();
 			
 			$result = $stmt->fetchAll();
@@ -635,6 +621,43 @@ class Database {
                         }
                         
                         return $estado;
+                
+            } catch (Exception $ex) {
+                'Error en sentencia: ' . $ex->getCode();
+            }
+        }
+        
+        function FAM_SELECT_NOTAS_SECCION_BY_RUT($seccion, $rut){
+            
+            try{
+                $sql = "{CALL FAM.dbo.FAM_SELECT_NOTAS_SECCION_BY_RUT(?,?)}";
+                
+                $stmt = $this->conn->prepare($sql);
+			$stmt->bindParam(1, $rut, PDO::PARAM_STR);
+                        $stmt->bindParam(2, $seccion, PDO::PARAM_INT);
+			$stmt->execute();
+			
+			$result = $stmt->fetchAll();
+                        return $result;
+                
+            } catch (Exception $ex) {
+                'Error en sentencia: ' . $ex->getCode();
+            }
+        }
+        
+        function FAM_SELECT_SECCIONES_BY_RUT_OFERTA($rut, $año, $sem){
+          $año = '2015';
+            try{
+                $sql = "{CALL FAM.dbo.FAM_SELECT_SECCIONES_BY_RUT_OFERTA(?,?,?)}";
+                
+                $stmt = $this->conn->prepare($sql);
+			$stmt->bindParam(1, $rut, PDO::PARAM_STR);
+                        $stmt->bindParam(2, $año, PDO::PARAM_INT);
+                        $stmt->bindParam(3, $sem, PDO::PARAM_INT);
+			$stmt->execute();
+			
+			$result = $stmt->fetchAll();
+                        return $result;
                 
             } catch (Exception $ex) {
                 'Error en sentencia: ' . $ex->getCode();

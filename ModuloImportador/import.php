@@ -15,7 +15,6 @@
         include $filename;
     }
     
-    $debug = new helpers();
     $db = new Database();
     
     //$debug->ecc($_POST);
@@ -37,12 +36,12 @@
 		$existe = $db->VERIFICAR_PLAN_EXISTENTE($codigo);
 		
 		if(!$existe){
-			$db->FAM_PLAN_INSERT($codigo, $tipo, $facultad, $escuela, $sede,
-            $grado_bach, $grado_acad, $titulo, $nombre, $jornada, $duracion);
+			$db->FAM_PLAN_INSERT($codigo, $tipo, utf8_decode($facultad), utf8_decode($escuela), $sede,
+            utf8_decode($grado_bach), utf8_decode($grado_acad), utf8_decode($titulo), utf8_decode($nombre), $jornada, $duracion);
 			
 			foreach($_POST as $value){
 				if(is_array($value)){
-					$db->FAM_ASIGNATURA_INSERT($codigo, $value[2], $value[0], $value[1]);
+					$db->FAM_ASIGNATURA_INSERT($codigo, utf8_decode($value[2]), $value[0], $value[1]);
 				}
 			}
 			echo "<script>window.location='index.php?imported=ok'</script>";
@@ -223,8 +222,8 @@
 					$termino = $_POST[$i][9];
 					$modalidad = $_POST[$i][4];
 				
-					$id_seccion = $db->FAM_SECCION_INSERT($codigo, $seccion, $profesor, $id_oferta, $inscritos, $cupos, $capacidad, $sala,
-															$dia, $inicio, $termino, $modalidad);
+					$id_seccion = $db->FAM_SECCION_INSERT($codigo, $seccion, utf8_decode($profesor), $id_oferta, $inscritos, $cupos, $capacidad, $sala,
+															utf8_decode($dia), $inicio, $termino, $modalidad);
 															
 					
 					if($id_seccion != 0){
