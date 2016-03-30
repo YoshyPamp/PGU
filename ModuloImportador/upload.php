@@ -1,10 +1,11 @@
 <?php
 date_default_timezone_set("America/Santiago");
 
-$target_dir = "C:/inetpub/wwwroot/PGU/ModuloImportador/Documentos/";
+$target_dir = $_SERVER['DOCUMENT_ROOT']."/ModuloImportador/Documentos/";
+$_FILES["fileToUpload"]["name"] = str_replace('.',',',$_FILES["fileToUpload"]["name"]);
+$_FILES["fileToUpload"]["name"] = preg_replace('/,(?=.*,)/', '_', $_FILES["fileToUpload"]["name"]);
 
-//$target_dir = "D:/Users/joshe.onate/Documents/NetBeansProjects/ProyectoPractica/ProyectoPractica/PGU/ModuloImportador/Documentos/";
-$temp = explode(".",$_FILES["fileToUpload"]["name"]);
+$temp = explode(",",$_FILES["fileToUpload"]["name"]);
 $nameFile = $temp[0]."_".date("Y_m_d_H_i").".".$temp[1];
 $target_file = $target_dir . basename($nameFile);
 $uploadOk = 1;
@@ -33,11 +34,11 @@ if (file_exists($target_file)) {
 
 // Check if $uploadOk is set to 0 by an error
 if ($uploadOk == 0) {
-    echo "Sorry, your file was not uploaded.";
+    echo "<script>alert('El archivo no fue subido.');</script>";
 // if everything is ok, try to upload file
 } else {
     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-        echo "<script>alert('The file '". basename($nameFile). " 'has been uploaded.);</script>";
+        echo "<script>alert('The file '". basename($nameFile). " 'has been uploaded.');</script>";
     } else {
         echo "Sorry, there was an error uploading your file.";
     }

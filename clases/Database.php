@@ -1,4 +1,5 @@
 <?php
+include($_SERVER['DOCUMENT_ROOT']."\Config\Configuracion.php");
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -21,17 +22,11 @@ class Database {
     public $conn;
     
         function __construct() {
-		$this->DB_NAME = "FAM";
-	//PRD
-		$this->DB_NAME = "FAM_PRD";
-        $this->DB_USER = "sa";
-        $this->DB_PASS = "informatica.2015*";
-        $this->DB_SERVER = "172.16.22.8";
-
-	//QAS
-        //$this->DB_USER = "valentys_sql";
-        //$this->DB_PASS = "valentys.2012*";
-        //$this->DB_SERVER = "172.16.39.64";
+            
+	$this->DB_NAME = Configuracion::$DB_NAME;
+        $this->DB_USER = Configuracion::$DB_USER;
+        $this->DB_PASS = Configuracion::$DB_PASS;
+        $this->DB_SERVER = Configuracion::$DB_SERVER;
 		
         $this->conection();
     }
@@ -54,7 +49,7 @@ class Database {
         function select_alumnos(){
         
 		try{
-			$sql = "SELECT * FROM FAM.dbo.ALUMNO";
+			$sql = "SELECT * FROM $this->DB_NAME.dbo.ALUMNO";
 		
 			$stmt = $this->conn->prepare($sql);
 			$stmt->execute();
@@ -72,7 +67,7 @@ class Database {
         
 		try{
 			$asignaturas = array();
-			$sql = 'SELECT * FROM FAM.dbo.ASIGNATURA ORDER BY NOM_ASIGNATURA';
+			$sql = "SELECT * FROM $this->DB_NAME.dbo.ASIGNATURA ORDER BY NOM_ASIGNATURA";
 			
 			$stmt = $this->conn->prepare($sql);
 			$stmt->execute();
@@ -95,7 +90,7 @@ class Database {
 		
 		try{
 			$alumno = array();
-			$sql = "{CALL FAM.dbo.select_alumno_rut(?)}";
+			$sql = "{CALL $this->DB_NAME.dbo.select_alumno_rut(?)}";
 			
 			$stmt = $this->conn->prepare($sql);
 			$stmt->bindParam(1, $rut, PDO::PARAM_STR);
@@ -123,7 +118,7 @@ class Database {
 		try{
 			
 			$salida = array();
-			$sql = "SELECT * FROM FAM.dbo.ASIGNATURA WHERE PLANESTUDIO_COD_PLANESTUDIO = :PLANESTUDIO_COD_PLANESTUDIO";
+			$sql = "SELECT * FROM $this->DB_NAME.dbo.ASIGNATURA WHERE PLANESTUDIO_COD_PLANESTUDIO = :PLANESTUDIO_COD_PLANESTUDIO";
 			
 			$stmt = $this->conn->prepare($sql);
 			$stmt->bindParam(':PLANESTUDIO_COD_PLANESTUDIO', $codigo, PDO::PARAM_STR);
@@ -131,7 +126,7 @@ class Database {
 			
 			$asignaturas = $stmt->fetchAll();
 			
-			$sql = "SELECT DURACION FROM FAM.dbo.PLANESTUDIO WHERE COD_PLANESTUDIO = :COD_PLANESTUDIO";
+			$sql = "SELECT DURACION FROM $this->DB_NAME.dbo.PLANESTUDIO WHERE COD_PLANESTUDIO = :COD_PLANESTUDIO";
 			
 			$stmt = $this->conn->prepare($sql);
 			$stmt->bindParam(':COD_PLANESTUDIO', $codigo, PDO::PARAM_STR);
@@ -167,7 +162,7 @@ class Database {
 		try{
 			
 			$secciones = array();
-			$sql = "{CALL FAM.dbo.FAM_SELECT_SECCIONES_BYRUT(?)}";
+			$sql = "{CALL $this->DB_NAME.dbo.FAM_SELECT_SECCIONES_BYRUT(?)}";
 			
 			$stmt = $this->conn->prepare($sql);
 			$stmt->bindParam(1, $rut, PDO::PARAM_STR);
@@ -196,7 +191,7 @@ class Database {
 		try{
 			$codigo_completo = $codigo."-".$seccio;
 			$return = 1;
-			$sql = '{CALL FAM.dbo.FAM_VINCULAR_ALUM_SECC(?,?,?,?,?)}';
+			$sql = "{CALL $this->DB_NAME.dbo.FAM_VINCULAR_ALUM_SECC(?,?,?,?,?)}";
 			
 			$stmt = $this->conn->prepare($sql);
 			$stmt->bindParam(1, $rut, PDO::PARAM_STR);
@@ -219,7 +214,7 @@ class Database {
 		try{
 			
 			$escuela = 'ICC-01';
-			$sql = "INSERT INTO FAM.dbo.CARRERA(NOM_CARRERA, JORNADA_CARRERA, ESCUELAUMAYOR_COD_ESCUELA) OUTPUT INSERTED.COD_CARRERA
+			$sql = "INSERT INTO $this->DB_NAME.dbo.CARRERA(NOM_CARRERA, JORNADA_CARRERA, ESCUELAUMAYOR_COD_ESCUELA) OUTPUT INSERTED.COD_CARRERA
 			VALUES(:NOM_CARRERA,:JORNADA_CARRERA,:ESCUELAUMAYOR_COD_ESCUELA)";
 			
 			$stmt = $this->conn->prepare($sql);
@@ -231,7 +226,7 @@ class Database {
 			$result = $stmt->fetch(PDO::FETCH_ASSOC);
 			$id_carrera = $result['COD_CARRERA'];
 			
-			$sql = "INSERT INTO FAM.dbo.PLANESTUDIO(COD_PLANESTUDIO,CARRERA_COD_CARRERA,NOM_PLANESTUDIO,TIPO_PLAN,GRD_BACH,GRD_ACAD,TITULO,DURACION) 
+			$sql = "INSERT INTO $this->DB_NAME.dbo.PLANESTUDIO(COD_PLANESTUDIO,CARRERA_COD_CARRERA,NOM_PLANESTUDIO,TIPO_PLAN,GRD_BACH,GRD_ACAD,TITULO,DURACION) 
 			VALUES(:COD_PLANESTUDIO,:CARRERA_COD_CARRERA,:NOM_PLANESTUDIO,:TIPO_PLAN,:GRD_BACH,:GRD_ACAD,:TITULO,:DURACION)";
 						
 			$stmt = $this->conn->prepare($sql);
@@ -253,7 +248,7 @@ class Database {
         function FAM_ASIGNATURA_INSERT($codigo_plan, $nombre, $nivel, $codigo){
         
 		try{
-			$sql = "INSERT INTO FAM.dbo.ASIGNATURA(COD_ASIGNATURA,NOM_ASIGNATURA,PLANESTUDIO_COD_PLANESTUDIO,NIVEL)
+			$sql = "INSERT INTO $this->DB_NAME.dbo.ASIGNATURA(COD_ASIGNATURA,NOM_ASIGNATURA,PLANESTUDIO_COD_PLANESTUDIO,NIVEL)
 			VALUES(:COD_ASIGNATURA,:NOM_ASIGNATURA,:PLANESTUDIO_COD_PLANESTUDIO,:NIVEL)";
 			
 			$stmt = $this->conn->prepare($sql);
@@ -272,7 +267,7 @@ class Database {
 		
 		try{
 			
-			$sql = "SELECT * FROM FAM.dbo.PLANESTUDIO WHERE COD_PLANESTUDIO = :COD_PLANESTUDIO";
+			$sql = "SELECT * FROM $this->DB_NAME.dbo.PLANESTUDIO WHERE COD_PLANESTUDIO = :COD_PLANESTUDIO";
 
 			$stmt = $this->conn->prepare($sql);
 			$stmt->bindParam(':COD_PLANESTUDIO', $codigo, PDO::PARAM_STR);
@@ -294,7 +289,7 @@ class Database {
         function VERIFICAR_OFERTA_EXISTENTE($ano, $semestre){
 		
 		try{
-			$sql = "SELECT * FROM FAM.dbo.OFERTA WHERE ANO = :ANO AND SEMESTRE = :SEMESTRE";
+			$sql = "SELECT * FROM $this->DB_NAME.dbo.OFERTA WHERE ANO = :ANO AND SEMESTRE = :SEMESTRE";
 
 			$stmt = $this->conn->prepare($sql);
 			$stmt->bindParam(':ANO', $ano, PDO::PARAM_INT);
@@ -321,7 +316,7 @@ class Database {
                     //Selecciona a la oferta que corresponde la seccion que se vinculará
                     $ramo = $cod_ramo.'-'.$_seccion;
                     
-                    $sql = "SELECT id_oferta FROM FAM.dbo.OFERTA WHERE ANO = :ANO AND SEMESTRE = :SEMESTRE";
+                    $sql = "SELECT id_oferta FROM $this->DB_NAME.dbo.OFERTA WHERE ANO = :ANO AND SEMESTRE = :SEMESTRE";
                     
                     $stmt = $this->conn->prepare($sql);
                     $stmt->bindParam(":ANO", $ano, PDO::PARAM_INT);
@@ -332,7 +327,7 @@ class Database {
 		    $id_oferta = $result[0]['id_oferta'];
                     
                     //Selecciona la ID de la seccion que se vinculara con la nota
-                    $sql = "SELECT id_seccion FROM FAM.dbo.SECCION WHERE COD_SECCION = :COD_SECCION AND OFERTA_ID = :OFERTA_ID";
+                    $sql = "SELECT id_seccion FROM $this->DB_NAME.dbo.SECCION WHERE COD_SECCION = :COD_SECCION AND OFERTA_ID = :OFERTA_ID";
                     
                     $stmt = $this->conn->prepare($sql);
                     $stmt->bindParam(":COD_SECCION", $ramo, PDO::PARAM_STR);
@@ -360,7 +355,7 @@ class Database {
                 if($id_seccion == 0){
                     return -2;
                 }else{
-                    $sql = "SELECT * FROM FAM.dbo.NOTA WHERE SEMESTRE = :SEMESTRE AND ANO = :ANO AND ID_SECCION = :ID_SECCION AND RUT_ALUMNO = :RUT_ALUMNO";
+                    $sql = "SELECT * FROM $this->DB_NAME.dbo.NOTA WHERE SEMESTRE = :SEMESTRE AND ANO = :ANO AND ID_SECCION = :ID_SECCION AND RUT_ALUMNO = :RUT_ALUMNO";
                     
                     $stmt = $this->conn->prepare($sql);
                     $stmt->bindParam(":SEMESTRE", $semestre, PDO::PARAM_INT);
@@ -385,7 +380,7 @@ class Database {
         function FAM_OFERTA_INSERT($ano, $semestre){
 		
 		try{
-			$sql = "INSERT INTO FAM.dbo.OFERTA(ANO,SEMESTRE) OUTPUT Inserted.ID_OFERTA 
+			$sql = "INSERT INTO $this->DB_NAME.dbo.OFERTA(ANO,SEMESTRE) OUTPUT Inserted.ID_OFERTA 
 			VALUES(:ANO,:SEMESTRE)";
 			
 			$stmt = $this->conn->prepare($sql);
@@ -410,7 +405,7 @@ class Database {
 			/*
 			*SELECCIONA ID DE ASIGNATURA SEGUN CODIGO la seccion correspondiente
 			*/
-			$sql = "SELECT ID_ASIGNATURA FROM FAM.dbo.ASIGNATURA WHERE COD_ASIGNATURA = :COD_ASIGNATURA";
+			$sql = "SELECT ID_ASIGNATURA FROM $this->DB_NAME.dbo.ASIGNATURA WHERE COD_ASIGNATURA = :COD_ASIGNATURA";
 			
 			$stmt = $this->conn->prepare($sql);
 			$stmt->bindParam(':COD_ASIGNATURA', $codigo, PDO::PARAM_STR);
@@ -424,7 +419,7 @@ class Database {
 				/*
 				*Inserta la seccion correspondiente
 				*/
-				$sql = "INSERT INTO FAM.dbo.SECCION(COD_SECCION,PROFESOR_NOMBRE,OFERTA_ID,INSCRITOS,CUPOS,CAPACIDAD,DIA,INICIO,TERMINO,MODALIDAD) OUTPUT Inserted.ID_SECCION
+				$sql = "INSERT INTO $this->DB_NAME.dbo.SECCION(COD_SECCION,PROFESOR_NOMBRE,OFERTA_ID,INSCRITOS,CUPOS,CAPACIDAD,DIA,INICIO,TERMINO,MODALIDAD) OUTPUT Inserted.ID_SECCION
 				VALUES(:COD_SECCION,:PROFESOR_NOMBRE,:OFERTA_ID,:INSCRITOS,:CUPOS,:CAPACIDAD,:DIA,:INICIO,:TERMINO,:MODALIDAD)";
 				
 				$codigo_sec = $codigo."-".$seccion;
@@ -449,7 +444,7 @@ class Database {
 				/*
 				*Inserta la sala de clases correspondiente
 				*/
-				$sql = "INSERT INTO FAM.dbo.SALACLASES(COD_SALA,CANTIDAD_ALUMNOS) OUTPUT Inserted.ID_SALA
+				$sql = "INSERT INTO $this->DB_NAME.dbo.SALACLASES(COD_SALA,CANTIDAD_ALUMNOS) OUTPUT Inserted.ID_SALA
 				VALUES(:COD_SALA,:CANTIDAD_ALUMNOS)";
 				
 				$stmt = $this->conn->prepare($sql);
@@ -463,7 +458,7 @@ class Database {
 				/*
 				*Inserta la salaseccion correspondiente
 				*/
-				$sql = "INSERT INTO FAM.dbo.SALASECCION(SECCION_COD_SECCION,ID_SALA)
+				$sql = "INSERT INTO $this->DB_NAME.dbo.SALASECCION(SECCION_COD_SECCION,ID_SALA)
 				VALUES(:SECCION_COD_SECCION,:ID_SALA)";
 				
 				$stmt = $this->conn->prepare($sql);
@@ -474,7 +469,7 @@ class Database {
 				/*
 				*Inserta la seccion asignatura correspondiente
 				*/
-				$sql = "INSERT INTO FAM.dbo.SECCIONASIG(ID_SECCION,ID_ASIGNATURA)
+				$sql = "INSERT INTO $this->DB_NAME.dbo.SECCIONASIG(ID_SECCION,ID_ASIGNATURA)
 				VALUES(:ID_SECCION,:ID_ASIGNATURA)";
 				
 				$stmt = $this->conn->prepare($sql);
@@ -494,7 +489,7 @@ class Database {
         
 		try{
 			//Busca si existe un alumno con ese rut
-			$sql = "SELECT * FROM FAM.dbo.ALUMNO WHERE RUT = :RUT";
+			$sql = "SELECT * FROM $this->DB_NAME.dbo.ALUMNO WHERE RUT = :RUT";
 			
 			$stmt = $this->conn->prepare($sql);
 			$stmt->bindParam(':RUT', $rut, PDO::PARAM_STR);
@@ -514,7 +509,7 @@ class Database {
 				$nom_completo = utf8_encode($ap1." ".$ap2.", ".$nom);
 				$estado = "REGULAR";
 
-				$sql = "INSERT INTO FAM.dbo.ALUMNO (NOMBRES, RUT, CODIGO_PLAN, ESTADO_ESTUDIO) 
+				$sql = "INSERT INTO $this->DB_NAME.dbo.ALUMNO (NOMBRES, RUT, CODIGO_PLAN, ESTADO_ESTUDIO) 
 				VALUES(:NOMBRES, :RUT, :CODIGO_PLAN, :ESTADO_ESTUDIO)";			
 				
 				$stmt = $this->conn->prepare($sql);
@@ -538,7 +533,7 @@ class Database {
                 $id_seccion = $this->VERIFICAR_SECCION_EXISTENTES($ano_ramo, $sem_ramo, $cod_ramo, $_seccion);
                 $porc = trim($porc,"%");
                 //Inserta la nota correspondiente
-		$sql = "INSERT INTO FAM.dbo.NOTA (RUT_ALUMNO,ANO,SEMESTRE,ID_SECCION,NOTA,PORCENTAJE,NOTA_PONDERADA,TIPO_NOTA) "
+		$sql = "INSERT INTO $this->DB_NAME.dbo.NOTA (RUT_ALUMNO,ANO,SEMESTRE,ID_SECCION,NOTA,PORCENTAJE,NOTA_PONDERADA,TIPO_NOTA) "
                         . "VALUES(:RUT_ALUMNO,:ANO,:SEMESTRE,:ID_SECCION,:NOTA,:PORCENTAJE,:NOTA_PONDERADA,:TIPO_NOTA)";
                 
                 $stmt = $this->conn->prepare($sql);
@@ -562,7 +557,7 @@ class Database {
                 
                 switch($tipo){
                     case 'A':
-                        $sql = "UPDATE FAM.dbo.ALUMNOSECCION SET ESTADO = 'APROBADO' WHERE ID_SECCION = :ID_SECCION AND ALUMNO_RUT = :ALUMNO_RUT";
+                        $sql = "UPDATE $this->DB_NAME.dbo.ALUMNOSECCION SET ESTADO = 'APROBADO' WHERE ID_SECCION = :ID_SECCION AND ALUMNO_RUT = :ALUMNO_RUT";
                         
                         $stmt = $this->conn->prepare($sql);
                         $stmt->bindParam(":ID_SECCION", $id_seccion, PDO::PARAM_INT);
@@ -570,7 +565,7 @@ class Database {
                         $stmt->execute();
                         break;
                     case 'S/N':
-                        $sql = "UPDATE FAM.dbo.ALUMNOSECCION SET ESTADO = 'REPROBADO' WHERE ID_SECCION = :ID_SECCION AND ALUMNO_RUT = :ALUMNO_RUT";
+                        $sql = "UPDATE $this->DB_NAME.dbo.ALUMNOSECCION SET ESTADO = 'REPROBADO' WHERE ID_SECCION = :ID_SECCION AND ALUMNO_RUT = :ALUMNO_RUT";
                         
                         $stmt = $this->conn->prepare($sql);
                         $stmt->bindParam(":ID_SECCION", $id_seccion, PDO::PARAM_INT);
@@ -591,7 +586,7 @@ class Database {
         
         function FAM_SELECT_ESTADO_ASIGNATURA_BY_RUT($rut, $asig, $asig_nom){
             try{
-                $sql = "{CALL FAM.dbo.FAM_SELECT_ESTADO_ASIGNATURA_BY_RUT(?,?,?)}";
+                $sql = "{CALL $this->DB_NAME.dbo.FAM_SELECT_ESTADO_ASIGNATURA_BY_RUT(?,?,?)}";
                 
                 $stmt = $this->conn->prepare($sql);
 			$stmt->bindParam(1, $rut, PDO::PARAM_STR);
@@ -631,7 +626,7 @@ class Database {
         function FAM_SELECT_NOTAS_SECCION_BY_RUT($seccion, $rut){
             
             try{
-                $sql = "{CALL FAM.dbo.FAM_SELECT_NOTAS_SECCION_BY_RUT(?,?)}";
+                $sql = "{CALL $this->DB_NAME.dbo.FAM_SELECT_NOTAS_SECCION_BY_RUT(?,?)}";
                 
                 $stmt = $this->conn->prepare($sql);
 			$stmt->bindParam(1, $rut, PDO::PARAM_STR);
@@ -649,7 +644,7 @@ class Database {
         function FAM_SELECT_SECCIONES_BY_RUT_OFERTA($rut, $año, $sem){
           $año = '2015';
             try{
-                $sql = "{CALL FAM.dbo.FAM_SELECT_SECCIONES_BY_RUT_OFERTA(?,?,?)}";
+                $sql = "{CALL $this->DB_NAME.dbo.FAM_SELECT_SECCIONES_BY_RUT_OFERTA(?,?,?)}";
                 
                 $stmt = $this->conn->prepare($sql);
 			$stmt->bindParam(1, $rut, PDO::PARAM_STR);
