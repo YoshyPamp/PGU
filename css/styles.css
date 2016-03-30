@@ -50,8 +50,6 @@ body {
 	width: 250px;
 }
 
-
-
-
-
-
+.panel-title{
+    cursor: pointer;
+}

@@ -1,4 +1,5 @@
 <?php
+	
     foreach (glob("clases/*.php") as $filename)
     {
         include $filename;
@@ -14,7 +15,7 @@
 	date_default_timezone_set('America/Santiago');
     
 	$db = new Database();
-    $debug = new helpers();
+
     require 'vendor/autoload.php';
 	
 	if(isset($_GET['malas'])){
@@ -33,13 +34,17 @@
 				}
 			}else{
 				if($_GET['imported'] == 'errorO'){
-					$importe_exitoso = "ERROR : OFERTA YA EXISTE PARA ESE AÑO Y SEMESTRE, ELIMINAR Y VOLVER A IMPORTAR.";
+					$importe_fallido = "ERROR : OFERTA YA EXISTE PARA ESE AÑO Y SEMESTRE, ELIMINAR Y VOLVER A IMPORTAR.";
 				}else{
-					$importe_exitoso = "ERROR : PLAN DE ESTUDIO YA EXISTE CON ESE CÓDIGO, ELIMINAR ANTERIOR Y VOLVER A IMPORTAR.";
+					if($_GET['imported'] == 'error'){
+						$importe_fallido = "ERROR : PLAN DE ESTUDIO YA EXISTE CON ESE CÓDIGO, ELIMINAR ANTERIOR Y VOLVER A IMPORTAR.";
+					}
+					
 				}
 			}
 		}
 	}
+	
 	
 	if(isset($_GET['acta'])){
 		$num = $_GET['num'];
@@ -48,7 +53,7 @@
 		if(isset($_GET['notas'])){
 			
 			if($_GET['notas'] == 'on'){
-				$importe_fallido = "YA EXISTEN NOTAS PARA ALGUNA O TODAS LAS SECCIONES IMPORTADAS";
+				$importe_fallido = $_GET['men'];
 			}else if($_GET['notas'] == 'ok200'){
 				$importe_correcto = "IMPORTE DE NOTAS EXITOSO";
 			}else if($_GET['notas'] == 'yes'){
@@ -56,6 +61,14 @@
 				$importe_correcto = "ALGUNAS O TODAS LAS SECCIONES NO EXISTEN EN OFERTA:<br>";
 				foreach($ramos_sin_oferta as $oferta){
 					$importe_correcto .= $oferta."<br>";
+				}
+			}else if($_GET['notas'] == 'sin' && !isset($_GET['sinoferta'])){
+				$acta_vacia_correcta = "VINCULO DE SECCIONES EXITOSO.";
+			}else if($_GET['notas'] == 'sin' && isset($_GET['sinoferta'])){
+				$acta_vacia_incorrecta = "ALGUNAS SECCIONES NO FUERON VINCULADAS POR QUE NO EXISTEN EN OFERTA:<br>";
+				$ramos_sin_oferta = unserialize($_GET['sinoferta']);
+				foreach($ramos_sin_oferta as $ramo){
+					$acta_vacia_incorrecta .= "- ".$ramo."<br>";
 				}
 			}
 		}
@@ -118,7 +131,11 @@
 				if($_GET['imported'] == "ok"){
 					echo "<div class='alert alert-success' role='alert'>".$importe_exitoso."</div>";
 				}else{
-					echo "<div class='alert alert-danger' role='alert'>".$importe_exitoso."</div>";
+					if($_GET['imported'] == "ramoX"){
+						echo "<div class='alert alert-danger' role='alert'>".$importe_exitoso."</div>";
+					}else{
+						echo "<div class='alert alert-danger' role='alert'>".$importe_fallido."</div>";
+					}
 				}
 			}
 			
@@ -130,6 +147,10 @@
 					echo "<div class='alert alert-success' role='alert'>".$importe_correcto."</div>";
 				}elseif($_GET['notas'] == 'yes'){
 					echo "<div class='alert alert-warning' role='alert'>".$importe_correcto."</div>";
+				}elseif($_GET['notas'] == 'sin' && !isset($_GET['sinoferta'])){
+					echo "<div class='alert alert-success' role='alert'>".$acta_vacia_correcta."</div>";
+				}elseif($_GET['notas'] == 'sin' && isset($_GET['sinoferta'])){
+					echo "<div class='alert alert-warning' role='alert'>".$acta_vacia_incorrecta."</div>";
 				}
 			}
 		
@@ -142,7 +163,7 @@
             <option value="">Seleccione tipo de documento...</option>
             <option value="1">Acta</option>
             <option value="2">Decreto</option>
-			<option value="3">Oferta</option>
+            <option value="3">Oferta</option>
         </select><br>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Leer Documento</button>
       </form>
@@ -164,6 +185,7 @@
                     $acta = new Acta();
                     $resultado_acta = $acta->mapearPaginas("Documentos/".$_GET['name']);
                     $total_alumnos = count($resultado_acta['alumnos']);
+					$alumnos_sin_nota = $total_alumnos; //Se utilizara para ir restando los alumnos sin notas, si llega a 0 es pq es acta vacía.
                     $total_asignaturas = count($resultado_acta['asignaturas']);
                 
                     //Contadores por modificaciones    
@@ -175,7 +197,7 @@
 					
 					
                     <form method="post" action="import.php" id='importar'>
-						<input type='hidden' name='acta' value='0'>
+			<input type='hidden' name='acta' value='0'>
                         <input type='submit' value='IMPORTAR DATOS' class='btn btn-success btn-lg center-block col-md-12' style='display:hidden' /><br><br>
         
                         <h3 class='col-md-12 text-center' >RESUMEN DE DATOS A IMPORTAR <small><em>Presione IMPORTAR cuando este seguro de los datos.</em></small></h3><br><br><br><br>
@@ -188,10 +210,10 @@
                                     <th class='center'>Nombre</th><th class='center'>Apellido Paterno</th><th class='center'>Apellido Materno</th><th class='center'>Rut</th>
                                     <th class='center'>Plan</th>
                                 </tr>
-                                <tr class='accordion-toggle success' data-toggle="collapse" data-target=".demo1"><th colspan='6' class='center'>Presione aquí para ocultar o expandir.</th></tr>
+                                <tr class='accordion-toggle success'><th colspan='6' class='center'>Presione aquí para ocultar o expandir.</th></tr>
                             </thead>
                 
-                            <tbody class="accordian-body collapse demo1">
+                            <tbody class="accordian-body demo1">
                                 <?php foreach($resultado_acta['alumnos'] as $key => $alumno): ?>
                                 <tr>
                                     <!-- VERIFICA SI ALUMNO LLEGO CON PROBLEMAS POR NOMBRE O APELLIDO COMPUESTO-->
@@ -237,8 +259,7 @@
                                     <th class='center' >Semestre</th>
                                 </tr>
                             </thead>    
-                                <?php foreach($resultado_acta['asignaturas'] as $asignatura): ?>
-                            
+                                <?php foreach($resultado_acta['asignaturas'] as $asignatura): ?> 
                             <tbody class="accordian-body demo2">
                                 <tr>
                                     <td class='center' data-toggle="tooltip" data-placement="top" data-container="body" title="N°"><?php echo $conAs; ?></td>
@@ -272,6 +293,10 @@
                                                 <th class='center' colspan='2'>Nota</th><th colspan='2' class='center'>Ponderación</th>
                                                 <th class='center' colspan='2'>Porcentaje</th><th class='center' colspan='2'>Tipo</th>
                                             </tr>
+											<?php if(count($notas['notas']) == 0):?>
+											<?php $alumnos_sin_nota--;?>
+												<input type='hidden' name='<?php echo $notas['rut']; ?>' value='<?php echo $asignatura->codigo.'-'.$asignatura->seccion.'-'.$asignatura->año.'-'.$asignatura->semestre; ?>'>
+											<?php endif;?>
                                             <?php foreach($notas['notas'] as $key => $nota): ?>
                                             <tr class="accordion-toggle collapse nota<?php echo $notas['rut']; ?> ">
                                                 <td class='center' colspan='2'>
@@ -295,6 +320,9 @@
                                 <?php endforeach;?>
                         </table>
                         <br>
+						<?php if($alumnos_sin_nota == 0): ?>
+							<input type='hidden' value='1' name='vacia'>
+						<?php endif;?>
                     </form>
                     <?php
                     
@@ -429,11 +457,11 @@
 											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo $asignatura->getNombre(); ?>' class="form-control" placeholder='Nombre Curso...' /></td>
 											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo $asignatura->getCodigo(); ?>' class="form-control" required /></td>
 											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo $asignatura->getSeccion(); ?>' size='1' class="form-control" required /></td>
-											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo $asignatura->getProfesor(); ?>' class="form-control"/></td>
+											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo ($asignatura->getProfesor() != null ? $asignatura->getProfesor() : 'S/I'); ?>' class="form-control"/></td>
 											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo $asignatura->getModalidad(); ?>' class="form-control" required/></td>
-											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo $asignatura->getCapacidad(); ?>' size='1' class="form-control" /></td>
-											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo $asignatura->getLibres(); ?>' size='1' class="form-control" /></td>
-											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo $asignatura->getInscritos(); ?>' size='1' class="form-control" /></td>
+											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo ($asignatura->getCapacidad() != null ? $asignatura->getCapacidad() : 0); ?>' size='1' class="form-control" /></td>
+											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo ($asignatura->getLibres() != null ? $asignatura->getLibres() : 0); ?>' size='1' class="form-control" /></td>
+											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo ($asignatura->getInscritos() != null ? $asignatura->getInscritos() : 0); ?>' size='1' class="form-control" /></td>
 											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo $asignatura->getInicio(); ?>' class="form-control" required /></td>
 											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo $asignatura->getTermino(); ?>' class="form-control" required /></td>
 											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo ($asignatura->getDia() != null ? utf8_encode($asignatura->getDia()) : 'N/A'); ?>' class="form-control" required /></td>
@@ -461,6 +489,5 @@
             }
                 echo "<input type='hidden' name='import' value='true' />";
             ?>
-            
     </div> <!-- /container -->  
 <?php include("../templates/footer.php"); ?> 

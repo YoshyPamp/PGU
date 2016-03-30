@@ -4,3 +4,5 @@
 *.csv
 *.xls
 *.xlsx
+config.properties
+*.bkp

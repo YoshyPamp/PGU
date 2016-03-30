@@ -1,7 +1,6 @@
 <?php require "../clases/Database.php"; ?>
 <?php require "../clases/helpers.php"; ?>
 <?php 
-    $debug = new helpers();
     $db = new Database();
 	date_default_timezone_set('America/Santiago');
 ?>
