@@ -1,9 +1,9 @@
 <?php
 date_default_timezone_set("America/Santiago");
 
-//$target_dir = "C:/inetpub/wwwroot/PGU/ModuloImportador/Documentos/";
+$target_dir = "C:/inetpub/wwwroot/PGU/ModuloImportador/Documentos/";
 
-$target_dir = "D:/Users/joshe.onate/Documents/NetBeansProjects/ProyectoPractica/ProyectoPractica/PGU/ModuloImportador/Documentos/";
+//$target_dir = "D:/Users/joshe.onate/Documents/NetBeansProjects/ProyectoPractica/ProyectoPractica/PGU/ModuloImportador/Documentos/";
 $temp = explode(".",$_FILES["fileToUpload"]["name"]);
 $nameFile = $temp[0]."_".date("Y_m_d_H_i").".".$temp[1];
 $target_file = $target_dir . basename($nameFile);

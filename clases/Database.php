@@ -1,4 +1,4 @@
-ï»¿<?php
+<?php
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -22,16 +22,16 @@ class Database {
     
     function __construct() {
 	//PRD
-	//$this->DB_NAME = "FAM";
-    //    $this->DB_USER = "sa";
-    //    $this->DB_PASS = "informatica.2015*";
-    //    $this->DB_SERVER = "172.16.22.8";
+	$this->DB_NAME = "FAM_PRD";
+        $this->DB_USER = "sa";
+        $this->DB_PASS = "informatica.2015*";
+        $this->DB_SERVER = "172.16.22.8";
 
 	//QAS
-        $this->DB_NAME = "FAM";
-        $this->DB_USER = "valentys_sql";
-        $this->DB_PASS = "valentys.2012*";
-        $this->DB_SERVER = "172.16.39.64";
+        //$this->DB_NAME = "FAM";
+        //$this->DB_USER = "valentys_sql";
+        //$this->DB_PASS = "valentys.2012*";
+        //$this->DB_SERVER = "172.16.39.64";
         $this->connectionInfo = array("Database" => $this->DB_NAME,
                                       "UID" => $this->DB_USER,
                                       "PWD" => $this->DB_PASS);
@@ -39,12 +39,12 @@ class Database {
     }
     
     function conection(){
-        $this->conn = odbc_connect("FAM",
+        $this->conn = odbc_connect("FAM_PRD",
                 $this->DB_USER, $this->DB_PASS);
         if( $this->conn ) {
             
         }else{
-            echo "ConexiÃ³n no se pudo establecer.<br />";
+            echo "Conexión no se pudo establecer.<br />";
             die(print_r( odbc_error(), true));
         }
     }
@@ -253,9 +253,9 @@ class Database {
 		odbc_free_result( $stmt);
 	}
 	
-	function VERIFICAR_OFERTA_EXISTENTE($aÃ±o, $semestre){
+	function VERIFICAR_OFERTA_EXISTENTE($año, $semestre){
 		
-		$deg = "SELECT * FROM OFERTA WHERE SEMESTRE = ".$semestre." AND ANO = ".$aÃ±o;
+		$deg = "SELECT * FROM OFERTA WHERE SEMESTRE = ".$semestre." AND ANO = ".$año;
 		$stmt = odbc_exec($this->conn,$deg);
 		
 		if( $stmt === false )
@@ -273,10 +273,10 @@ class Database {
 		odbc_free_result( $stmt);
 	}
 	
-	function VERIFICAR_SECCION_EXISTENTES($aÃ±o, $semestre, $cod_ramo, $_seccion){
+	function VERIFICAR_SECCION_EXISTENTES($año, $semestre, $cod_ramo, $_seccion){
 		
-		//Selecciona a la oferta que corresponde la seccion que se vincularÃ¡
-		$dec = "SELECT id_oferta FROM OFERTA WHERE ANO = '".$aÃ±o."' AND SEMESTRE = '".$semestre."'";
+		//Selecciona a la oferta que corresponde la seccion que se vinculará
+		$dec = "SELECT id_oferta FROM OFERTA WHERE ANO = '".$año."' AND SEMESTRE = '".$semestre."'";
 		$stmt = odbc_exec($this->conn,$dec);
 		if( $stmt === false ){
 			echo "Error al ejecutar procedimiento.\n";
@@ -304,11 +304,11 @@ class Database {
 		return $id_seccion;
 	}
 	
-	function VERIFICAR_NOTAS_EXISTENTES($rut, $aÃ±o, $semestre, $cod_ramo, $_seccion){
+	function VERIFICAR_NOTAS_EXISTENTES($rut, $año, $semestre, $cod_ramo, $_seccion){
 		
-		$id_seccion = $this->VERIFICAR_SECCION_EXISTENTES($aÃ±o, $semestre, $cod_ramo, $_seccion);
+		$id_seccion = $this->VERIFICAR_SECCION_EXISTENTES($año, $semestre, $cod_ramo, $_seccion);
 		
-		$dec = "SELECT * FROM NOTA WHERE SEMESTRE = '".$semestre."' AND ANO = '".$aÃ±o."' AND ID_SECCION = '".$id_seccion."' AND RUT_ALUMNO = '".$rut."'";
+		$dec = "SELECT * FROM NOTA WHERE SEMESTRE = '".$semestre."' AND ANO = '".$año."' AND ID_SECCION = '".$id_seccion."' AND RUT_ALUMNO = '".$rut."'";
 		
 		$stmt = odbc_exec($this->conn,$dec);
 		if( $stmt === false ){
@@ -325,10 +325,10 @@ class Database {
 		}
 	}
 	
-	function FAM_OFERTA_INSERT($aÃ±o, $semestre){
+	function FAM_OFERTA_INSERT($año, $semestre){
 		
 		$dec = "INSERT INTO OFERTA OUTPUT Inserted.ID_OFERTA VALUES("
-                . "'".$aÃ±o."',"
+                . "'".$año."',"
                 . "'".$semestre."')";
 				
         $stmt = odbc_exec($this->conn,$dec);
