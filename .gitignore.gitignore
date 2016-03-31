@@ -4,6 +4,7 @@
 *.csv
 *.xls
 *.xlsx
+*.des
 config.properties
 *.bkp
 Configuracion.php
