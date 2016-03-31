@@ -1,5 +1,5 @@
 <?php
-include($_SERVER['DOCUMENT_ROOT']."\Config\Configuracion.php");
+include($_SERVER['DOCUMENT_ROOT']."\PGU\Config\Configuracion.php");
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -23,7 +23,7 @@ class Database {
     
         function __construct() {
             
-	$this->DB_NAME = Configuracion::$DB_NAME;
+		$this->DB_NAME = Configuracion::$DB_NAME;
         $this->DB_USER = Configuracion::$DB_USER;
         $this->DB_PASS = Configuracion::$DB_PASS;
         $this->DB_SERVER = Configuracion::$DB_SERVER;
