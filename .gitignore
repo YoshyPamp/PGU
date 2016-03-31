@@ -1,0 +1,7 @@
+*.pdf
+*.csv
+*.xls
+*.xlsx
+config.properties
+*.bkp
+Configuracion.php
