@@ -61,11 +61,10 @@
 				
 				if($asignatura['C'] != null && $asignatura['C'] != false && $asignatura['C'] != 'Paq.(abr.)'){
 					$OA->setNombre($asignatura['B']);
-				
 					$cod_sec = explode("-",$asignatura['C']);
 					
-					$OA->setCodigo($cod_sec[0]);
-					$OA->setSeccion($cod_sec[1]);
+                                        $OA->setCodigo($cod_sec[0]);
+                                        $OA->setSeccion($cod_sec[1]);					
 					
 					$OA->setProfesor($asignatura['I']);
 					$OA->setModalidad($asignatura['D']);
@@ -80,13 +79,13 @@
 					}elseif ($asignatura['O'] == 'X') {
 						$OA->setDia("Martes");
 					}elseif ($asignatura['Q'] == 'X') {
-						$OA->setDia("Miércoles");
+						$OA->setDia("Miï¿½rcoles");
 					}elseif ($asignatura['S'] == 'X') {
 						$OA->setDia("Jueves");
 					}elseif ($asignatura['U'] == 'X') {
 						$OA->setDia("Viernes");
 					}elseif ($asignatura['W'] == 'X') {
-						$OA->setDia("Sábado");
+						$OA->setDia("Sï¿½bado");
 					}else{
 						$OA->setDia(null);
 					}

@@ -642,7 +642,7 @@ class Database {
         }
         
         function FAM_SELECT_SECCIONES_BY_RUT_OFERTA($rut, $año, $sem){
-          $año = '2015';
+          
             try{
                 $sql = "{CALL $this->DB_NAME.dbo.FAM_SELECT_SECCIONES_BY_RUT_OFERTA(?,?,?)}";
                 
