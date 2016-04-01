@@ -1,5 +1,5 @@
 <?php
-include($_SERVER['DOCUMENT_ROOT']."\PGU\Config\Configuracion.php");
+include($_SERVER['DOCUMENT_ROOT']."\Config\Configuracion.php");
 
 /*
  * To change this license header, choose License Headers in Project Properties.
