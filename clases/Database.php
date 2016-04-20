@@ -14,7 +14,7 @@ include($_SERVER['DOCUMENT_ROOT']."\Config\Configuracion.php");
  */
 class Database {
     
-    private $DB_NAME;
+    public $DB_NAME;
     private $DB_USER;
     private $DB_PASS;
     private $DB_SERVER;
@@ -23,7 +23,7 @@ class Database {
     
         function __construct() {
             
-		$this->DB_NAME = Configuracion::$DB_NAME;
+	$this->DB_NAME = Configuracion::$DB_NAME;
         $this->DB_USER = Configuracion::$DB_USER;
         $this->DB_PASS = Configuracion::$DB_PASS;
         $this->DB_SERVER = Configuracion::$DB_SERVER;

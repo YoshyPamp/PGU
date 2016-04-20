@@ -7,28 +7,98 @@
         include $filename;
     }
     
-    $alumnos = $db->select_alumnos();
-    $asignaturas = $db->select_asignaturas();
-
+    //var_dump($_SESSION);
+   
+    /*
+     *  PERMISOS
+     *  NOMBRE - ID_PERMISO
+     *  
+     *  ADMINISTRADOR - 1
+     *  ALUMNO - 2
+     *  PROFESOR - 3
+     *  DIRECTOR - 4
+     * 
+     */
 ?>
+
 
 <div>
 
-    <!-- Nav tabs -->
+    <!-- Nav Con permisos por cada perfil -->
     <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="active"><a href="#alumno" aria-controls="alumno" role="tab" data-toggle="tab">Alumno</a></li>
-      <li role="presentation"><a href="#asignatura" aria-controls="asignatura" role="tab" data-toggle="tab">Asignaturas</a></li>
-      <li role="presentation"><a href="#reporte" aria-controls="reporte" role="tab" data-toggle="tab">Modulo Reportes</a></li>
-      <li role="presentation"><a href="#administrador" aria-controls="administrador" role="tab" data-toggle="tab">Administrador</a></li>
-      <li role="presentation"><a href="#importador" onclick="Javascript: window.location='ModuloImportador/index.php'" aria-controls="importador" role="tab" data-toggle="tab">Modulo Importador</a></li>
+        
+        <li role="presentation" class="active"><a href="#inicio" aria-control="inicio" role="tab" data-toggle="tab">INICIO</a></li>
+        
+      <?php if($_SESSION['perfil'] == 1 || $_SESSION['perfil'] == 2 || $_SESSION['perfil'] == 4): ?>
+        <li role="presentation"><a href="#alumno" aria-controls="alumno" role="tab" data-toggle="tab">Alumno</a></li>
+      <?php endif; ?>
+        
+      <?php if($_SESSION['perfil'] == 1 || $_SESSION['perfil'] == 4 || $_SESSION['perfil'] == 3): ?>
+        <li role="presentation"><a href="#asignatura" aria-controls="asignatura" role="tab" data-toggle="tab">Asignaturas</a></li>
+      <?php endif;?>
+        
+      <?php if($_SESSION['perfil'] == 1 || $_SESSION['perfil'] == 4): ?>
+        <li role="presentation"><a href="#reporte" aria-controls="reporte" role="tab" data-toggle="tab">Modulo Reportes</a></li>
+      <?php endif;?>
+        
+      <?php if($_SESSION['perfil'] == 1): ?>
+        <li role="presentation"><a href="#administrador" aria-controls="administrador" role="tab" data-toggle="tab">Administrador</a></li>
+      <?php endif;?>
+        
+      <?php if($_SESSION['perfil'] == 1 || $_SESSION['perfil'] == 4): ?>
+        <li role="presentation"><a href="#importador" onclick="Javascript: window.location='ModuloImportador/index.php'" aria-controls="importador" role="tab" data-toggle="tab">Modulo Importador</a></li>
+      <?php endif;?>
+        
+      <li ><a href="#" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-off"></span> Cerrar Sesión</a></li>
     </ul>
-
-        <!-- Tab panes -->
-    <div class="tab-content">
     
-            <div role="tabpanel" class="tab-pane active content" id="alumno">
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-sm">
+
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-body">
+              <p>¿Seguro que quiere cerrar sesión?</p>
+            </div>
+              <form action="Config/Login/logout.php" action="post">
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Cerrar Sesión</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+
+    
+    <div class="tab-content">
+        
+        <?php //INICIO ?>
+        <div role="tabpanel" class="tab-pane content active" id="inicio">
+            <div class="jumbotron text-center">
+                <h2>
+                    Bienvenidos al Sistema de Gestión Universitario <br> <label class="text-danger">Universidad</label> <label class="text-success">Mayor</label>
+                </h2>
+                <div class="well">
+                    <p>Usuario: <b><em><?php echo $_SESSION['usuario']; ?></em></b></p>
+                    <p>Perfil: <b><em><?php echo $_SESSION['nom_perfil']; ?></em></b></p>
+                </div>
+            </div>
+        </div>
+        
+            <?php //ALUMNO ?>
+    <?php if($_SESSION['perfil'] == 1 || $_SESSION['perfil'] == 2 || $_SESSION['perfil'] == 4): ?>
+        
+    <?php if($_SESSION['perfil'] != 2):?>
+    <?php   $alumnos = $db->select_alumnos(); ?>
+    <?php else: ?>
+    <?php   $alumnos[] = $db->select_alumno_rut($_SESSION['rut_alumno']); ?>
+    <?php endif;?>
+    
+            <div role="tabpanel" class="tab-pane content" id="alumno">
                 <div class="col-md-12">
-                        <table id="example_alumnos" class="table table-striped table-bordered">
+                        <table id="example_alumnos" width="100%" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
                                     <th>Rut</th><th>Matrícula</th><th>Nombre</th><th>Cod. Plan</th><th>Estado</th><th>Ver Alumno</th>
@@ -51,10 +121,18 @@
                         </table>
                 </div>
             </div>
+        <?php endif; ?>
         
             
             
-        
+        <?php //ASIGNATURA ?>
+        <?php if($_SESSION['perfil'] == 1 || $_SESSION['perfil'] == 4 || $_SESSION['perfil'] == 3): ?>
+ 
+        <?php if($_SESSION['perfil'] != 3):?>
+        <?php   $asignaturas = $db->select_asignaturas(); ?>
+        <?php else: ?>
+        <?php   $asignaturas[] = $db->select_asignaturas_profesor(); ?>
+        <?php endif;?>
         <div role="tabpanel" class="tab-pane content" id="asignatura">
             <div class="col-md-12">
                 <table id="example_asignaturas" class="table table-striped table-bordered" width="100%">
@@ -80,7 +158,11 @@
                 </table>
              </div>
         </div>
+        <?php endif; ?>
         
+        
+        <?php //REPORTES ?>
+        <?php if($_SESSION['perfil'] == 1 || $_SESSION['perfil'] == 4): ?>
         <div role="tabpanel" class="tab-pane content" id="reporte">
             <div class="col-md-2 barra"></div>
                 <div class="col-md-8 contenido">
@@ -107,7 +189,10 @@
              </div>
                 <div class="col-md-2 barra"></div>
         </div>
+        <?php endif; ?>
         
+        <?php //ADMINISTRADOR ?>
+        <?php if($_SESSION['perfil'] == 1): ?>
         <div role="tabpanel" class="tab-pane content" id="administrador">
             <div class="col-md-2 barra"></div>
                 <div class="col-md-8 contenido">
@@ -124,6 +209,7 @@
             </form>
         </div>
          </div>
+        <?php endif; ?>
                 <div class="col-md-2 barra"></div>
                      
     </div>

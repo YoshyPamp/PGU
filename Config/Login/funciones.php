@@ -2,24 +2,24 @@
 
 function login_check($db) {
     // Check if all session variables are set 
-    if (isset($_SESSION['user_id'], $_SESSION['username'], $_SESSION['login_string'])) {
- 
+    if (isset($_SESSION['user_id'], $_SESSION['usuario'], $_SESSION['login_string'])) {
+        
         $user_id = $_SESSION['user_id'];
         $login_string = $_SESSION['login_string'];
-        $username = $_SESSION['username'];
+        $username = $_SESSION['usuario'];
  
         // Get the user-agent string of the user.
         $user_browser = $_SERVER['HTTP_USER_AGENT'];
  
-        if ($stmt = $db->conn->prepare("SELECT CONTRASEÑA FROM $db->DB_NAME.dbo.SGU_USUARIO WHERE ID_USUARIO = :ID_USUARIO LIMIT 1")) {
+        if ($stmt = $db->conn->prepare("SELECT CONTRASENA FROM $db->DB_NAME.dbo.SGU_USUARIO WHERE ID_USUARIO = :ID_USUARIO")) {
             // Bind "$user_id" to parameter. 
-            $stmt->bind_param(':ID_USUARIO', $user_id, PDO::PARAM_INT);
+            $stmt->bindParam(':ID_USUARIO', $user_id, PDO::PARAM_INT);
             $stmt->execute();
             $resultado = $stmt->fetchAll();
  
             if (count($resultado) == 1) {
                 // If the user exists get variables from result.
-                $password = $resultado[0]['CONTRASEÑA'];
+                $password = $resultado[0]['CONTRASENA'];
                 $login_check = hash('sha512', $password . $user_browser);
  
                 if (hash_equals($login_check, $login_string) ){

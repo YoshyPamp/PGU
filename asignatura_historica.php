@@ -1,5 +1,11 @@
 <?php include("templates/header.php"); ?>
 <?php
+
+    if($_SESSION['perfil'] != 1 && $_SESSION['perfil'] != 2 && $_SESSION['perfil'] != 4){
+        header("location: index.php");
+    }
+
+
 $seccion = $_GET['id_sec'];
 $rut     = $_GET['rut'];
 $ramo    = $_GET['ramo'];

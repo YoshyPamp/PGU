@@ -1,21 +1,18 @@
-<?php require "clases/Database.php"; ?>
-<?php require "clases/helpers.php"; ?>
-<?php include_once "Config/Login/Autentificacion.php"; ?>
-<?php include_once "Config/Login/funciones.php"; ?>
+<?php include "clases/Database.php"; ?>
+<?php include "clases/helpers.php"; ?>
+<?php include "Config/Login/Autentificacion.php"; ?>
+<?php include "Config/Login/funciones.php"; ?>
 <?php 
     $db = new Database();
-    date_default_timezone_set('America/Santiago');
-    sec_session_start(); 
-    
+    session_start();
     if(basename($_SERVER['PHP_SELF']) != 'login.php'):
         if(login_check($db) == true) {
             // Add your protected page content here!
         } else { 
-                echo 'You are not authorized to access this page, please login.';
-                die();
+            echo 'No está autorizado para ingresar a esta página, favor logearse.';
+            die();
         }
     endif;
-    
      
 ?>
 

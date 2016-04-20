@@ -8,13 +8,33 @@
     {
         include $filename;
     }
-	
+?>
+<?php include_once "../Config/Login/Autentificacion.php"; ?>
+<?php include_once "../Config/Login/funciones.php"; ?>
+<?php
+        session_start();
+        
+        if($_SESSION['perfil'] != 1 && $_SESSION['perfil'] != 4){
+            header("location: /../index.php");
+        }
+        
+        
+        
+        $db = new Database();
+        if(basename($_SERVER['PHP_SELF']) != 'login.php'):
+            if(login_check($db) == true) {
+                // Add your protected page content here!
+            } else { 
+                    echo 'You are not authorized to access this page, please login.';
+                    die();
+            }
+        endif;
 	ini_set('xdebug.var_display_max_depth', -1);
 	ini_set('xdebug.var_display_max_children', -1);
 	ini_set('xdebug.var_display_max_data', -1);
 	date_default_timezone_set('America/Santiago');
     
-	$db = new Database();
+	
 
     require 'vendor/autoload.php';
 	

@@ -7,6 +7,10 @@
         include $filename;
     }
     
+    if($_SESSION['perfil'] != 1 && $_SESSION['perfil'] != 2 && $_SESSION['perfil'] != 4){
+        header("location: index.php");
+    }
+    
 	
     if(isset($_GET['rut'])){
         $alumno = $db->select_alumno_rut($_GET['rut']);
