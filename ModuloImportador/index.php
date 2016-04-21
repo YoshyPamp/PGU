@@ -433,80 +433,80 @@
                     /**
                      * FIN PROCESO DECRETO
                      */
-					}else{
-						if($_GET['tipo'] == 3){
-							/**
-							* INICIO PROCESO OFERTA
-							*/
-							$inputFileName = "Documentos/".$_GET['name'];
-							$oferta = new Oferta();
-							$resultado_oferta = $oferta->leerPaginas($inputFileName);
-							
-							?>
-							<form method="post" action="import.php" id='importar'>
-					
-								<input type='submit' value='IMPORTAR DATOS' class='btn btn-success btn-lg center-block col-md-12' style='display:hidden' /><br><br>
-							
-								<h3 class='col-md-12 text-center' >RESUMEN DE DATOS A IMPORTAR <small><em>Presione IMPORTAR cuando este seguro de los datos.</em></small></h3><br><br><br><br>
-					
-								<legend style='color: green'>Oferta Académica (<?php echo count($resultado_oferta); ?>)</legend>
-								<label for='año'>Año</label>
-								<select name='año' class='form-control' required>
-									<option value=''>Seleccione...</option>
-									<option value='<?php echo date('Y')-1; ?>'><?php echo date('Y')-1; ?></option>
-									<option value='<?php echo date('Y'); ?>'><?php echo date('Y'); ?></option>
-									<option value='<?php echo date('Y')+1; ?>'><?php echo date('Y')+1; ?></option>
-								</select>
-								<label for='semestre'>Semestre</label>
-								<select name='semestre' class='form-control' required>
-									<option value=''>Seleccione...</option>
-									<option value='1'>Primer semestre</option>
-									<option value='2'>Segundo semestre</option>
-								</select><br>
-								
-								<table class="table table-striped">
-									<thead>
-										<tr>
-											<th>Número</th><th>Nombre</th><th>Código</th><th>Sección</th><th>Profesor</th><th>Modalidad</th><th>Capacidad</th><th>Cupos</th><th>Inscritos</th><th>Inicio</th><th>Término</th><th>Día</th><th>Sala</th>
-										</tr>
-									</thead>
-									<tbody>
-									<?php foreach($resultado_oferta as $key => $asignatura): ?>
-										<tr><?php $key++; ?>
-											<td><?php echo $key; ?></td>
-											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo $asignatura->getNombre(); ?>' class="form-control" placeholder='Nombre Curso...' /></td>
-											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo $asignatura->getCodigo(); ?>' class="form-control" required /></td>
-											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo $asignatura->getSeccion(); ?>' size='1' class="form-control" required /></td>
-											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo ($asignatura->getProfesor() != null ? $asignatura->getProfesor() : 'S/I'); ?>' class="form-control"/></td>
-											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo $asignatura->getModalidad(); ?>' class="form-control" required/></td>
-											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo ($asignatura->getCapacidad() != null ? $asignatura->getCapacidad() : 0); ?>' size='1' class="form-control" /></td>
-											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo ($asignatura->getLibres() != null ? $asignatura->getLibres() : 0); ?>' size='1' class="form-control" /></td>
-											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo ($asignatura->getInscritos() != null ? $asignatura->getInscritos() : 0); ?>' size='1' class="form-control" /></td>
-											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo $asignatura->getInicio(); ?>' class="form-control" required /></td>
-											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo $asignatura->getTermino(); ?>' class="form-control" required /></td>
-											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo ($asignatura->getDia() != null ? utf8_encode($asignatura->getDia()) : 'N/A'); ?>' class="form-control" required /></td>
-											<td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo ($asignatura->getSala() != null ? $asignatura->getSala() : 'N/A'); ?>' class="form-control" /></td>
-										</tr>
-									<?php endforeach;?>
-									</tbody>
-									<tfoot>
-										<tr>
-											<th>Número</th><th>Nombre</th><th>Código</th><th>Sección</th><th>Profesor</th><th>Modalidad</th><th>Capacidad</th><th>Cupos</th><th>Inscritos</th><th>Inicio</th><th>Término</th><th>Día</th><th>Sala</th>
-										</tr>
-									</tfoot>
-								</table>
-							</form>
-							<?php
-							//var_dump($resultado_oferta);
+                    }else{
+                        if($_GET['tipo'] == 3){
+                                /**
+                                * INICIO PROCESO OFERTA
+                                */
+                                $inputFileName = "Documentos/".$_GET['name'];
+                                $oferta = new Oferta();
+                                $resultado_oferta = $oferta->leerPaginas($inputFileName);
 
-							/**
-							* FIN PROCESO OFERTA
-							*/
-						}
-					}
+                                ?>
+                                <form method="post" action="import.php" id='importar'>
+
+                                        <input type='submit' value='IMPORTAR DATOS' class='btn btn-success btn-lg center-block col-md-12' style='display:hidden' /><br><br>
+
+                                        <h3 class='col-md-12 text-center' >RESUMEN DE DATOS A IMPORTAR <small><em>Presione IMPORTAR cuando este seguro de los datos.</em></small></h3><br><br><br><br>
+
+                                        <legend style='color: green'>Oferta Académica (<?php echo count($resultado_oferta); ?>)</legend>
+                                        <label for='año'>Año</label>
+                                        <select name='año' class='form-control' required>
+                                                <option value=''>Seleccione...</option>
+                                                <option value='<?php echo date('Y')-1; ?>'><?php echo date('Y')-1; ?></option>
+                                                <option value='<?php echo date('Y'); ?>'><?php echo date('Y'); ?></option>
+                                                <option value='<?php echo date('Y')+1; ?>'><?php echo date('Y')+1; ?></option>
+                                        </select>
+                                        <label for='semestre'>Semestre</label>
+                                        <select name='semestre' class='form-control' required>
+                                                <option value=''>Seleccione...</option>
+                                                <option value='1'>Primer semestre</option>
+                                                <option value='2'>Segundo semestre</option>
+                                        </select><br>
+
+                                        <table class="table table-striped">
+                                                <thead>
+                                                        <tr>
+                                                                <th>Número</th><th>Nombre</th><th>Código</th><th>Sección</th><th>Profesor</th><th>Modalidad</th><th>Capacidad</th><th>Cupos</th><th>Inscritos</th><th>Inicio</th><th>Término</th><th>Día</th><th>Sala</th>
+                                                        </tr>
+                                                </thead>
+                                                <tbody>
+                                                <?php foreach($resultado_oferta as $key => $asignatura): ?>
+                                                        <tr><?php $key++; ?>
+                                                                <td><?php echo $key; ?></td>
+                                                                <td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo $asignatura->getNombre(); ?>' class="form-control" placeholder='Nombre Curso...' /></td>
+                                                                <td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo $asignatura->getCodigo(); ?>' class="form-control" required /></td>
+                                                                <td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo $asignatura->getSeccion(); ?>' size='1' class="form-control" required /></td>
+                                                                <td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo ($asignatura->getProfesor() != null ? $asignatura->getProfesor() : 'S/I'); ?>' class="form-control"/></td>
+                                                                <td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo $asignatura->getModalidad(); ?>' class="form-control" required/></td>
+                                                                <td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo ($asignatura->getCapacidad() != null ? $asignatura->getCapacidad() : 0); ?>' size='1' class="form-control" /></td>
+                                                                <td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo ($asignatura->getLibres() != null ? $asignatura->getLibres() : 0); ?>' size='1' class="form-control" /></td>
+                                                                <td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo ($asignatura->getInscritos() != null ? $asignatura->getInscritos() : 0); ?>' size='1' class="form-control" /></td>
+                                                                <td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo $asignatura->getInicio(); ?>' class="form-control" required /></td>
+                                                                <td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo $asignatura->getTermino(); ?>' class="form-control" required /></td>
+                                                                <td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo ($asignatura->getDia() != null ? utf8_encode($asignatura->getDia()) : 'N/A'); ?>' class="form-control" required /></td>
+                                                                <td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo ($asignatura->getSala() != null ? $asignatura->getSala() : 'N/A'); ?>' class="form-control" /></td>
+                                                        </tr>
+                                                <?php endforeach;?>
+                                                </tbody>
+                                                <tfoot>
+                                                        <tr>
+                                                                <th>Número</th><th>Nombre</th><th>Código</th><th>Sección</th><th>Profesor</th><th>Modalidad</th><th>Capacidad</th><th>Cupos</th><th>Inscritos</th><th>Inicio</th><th>Término</th><th>Día</th><th>Sala</th>
+                                                        </tr>
+                                                </tfoot>
+                                        </table>
+                                </form>
+                                <?php
+                                //var_dump($resultado_oferta);
+
+                                /**
+                                * FIN PROCESO OFERTA
+                                */
+                        }
+                }
                     
-                } 
-            }
+            } 
+        }
                 echo "<input type='hidden' name='import' value='true' />";
             ?>
     </div> <!-- /container -->  

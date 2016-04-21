@@ -7,27 +7,29 @@ include_once 'Config/login/funciones.php';
 $error_msg = "";
 $db = new Database();
 
-if (isset($_POST['dominio'], $_POST['email'], $_POST['p'], $_POST['tipo'] )) {
+if (isset($_POST['dominio'], $_POST['email'], $_POST['tipo'] )) {
     
-    $password = $_POST['p'];
     $usuario = $_POST['email'];
     $email = $_POST['email'].$_POST['dominio'];
-    $tipo = $_POST['tipo'];
+    $id_perfil = $_POST['tipo'];
     
-    if($tipo == 'ALUMNO'){
-        $id_perfil = 2;
+    if($id_perfil == 2){
         $rut_alum = $_POST['rut'];
     }else{
-        //ES PROFESOR
-        $id_perfil = 3;
         $rut_alum = null;
+    }
+    
+    if(!isset($_POST['p'])){
+        $password = "umayor2016";
+    }else{
+        $password = $_POST['p'];
     }
     
     
     if (strlen($password) < 6) {
         // The hashed pwd should be 128 characters long.
         // If it's not, something really odd has happened
-        $error_msg .= '<div class="alert alert-danger"><strong>Error!</strong> Configuración de contraseña incorrecta.</div>';
+        $error_msg .= '<div class="container alert alert-danger"><strong>Error!</strong> Configuración de contraseña incorrecta.</div>';
     }
  
     // Username validity and password validity have been checked client side.
@@ -45,7 +47,7 @@ if (isset($_POST['dominio'], $_POST['email'], $_POST['p'], $_POST['tipo'] )) {
     // check existing email  
     if (!empty($result)) {
         // A user with this email address already exists
-        $error_msg .= '<div class="alert alert-danger"><strong>Error!</strong> Usuario con ese correo ya existe.</div>';
+        $error_msg .= '<div class="container alert alert-danger"><strong>Error!</strong> Usuario con ese correo ya existe.</div>';
     }
     
  
@@ -72,9 +74,9 @@ if (isset($_POST['dominio'], $_POST['email'], $_POST['p'], $_POST['tipo'] )) {
             $insert_stmt->bindParam(':ID_PERFIL', $id_perfil, PDO::PARAM_INT);
 
             if (!$insert_stmt->execute()) {
-                $error_msg = '<div class="alert alert-danger"><strong>Error!</strong> Registro de usuario fallido.</div>';
+                $error_msg = '<div class="container alert alert-danger"><strong>Error!</strong> Registro de usuario fallido.</div>';
             }else{
-                $error_msg = '<div class="alert alert-success">Usuario registrado exitosamente.</div>';
+                $error_msg = '<div class="container alert alert-success">Usuario registrado exitosamente.</div>';
             }
         }catch(PDOException $ex){
             echo $ex->getMessage();
@@ -82,9 +84,17 @@ if (isset($_POST['dominio'], $_POST['email'], $_POST['p'], $_POST['tipo'] )) {
         
     }
 
-    echo "<script>window.location='login.php?msg=".$error_msg."'</script>";
+    if(isset($_POST['admin_registro'])){
+        echo "<script>window.location='ModuloAdministrador/admin_usuarios.php?msg=".$error_msg."'</script>";
+    }else{
+        echo "<script>window.location='login.php?msg=".$error_msg."'</script>";
+    }
     
 }else{
-    header("Location: login.php");
+    if(isset($_POST['admin_registro'])){
+        header("Location: ModuloAdministrador/admin_usuarios.php?msg='".$error_msg."'");
+    }else{
+        header("Location: login.php");
+    }
 }
 

@@ -79,13 +79,13 @@
 					}elseif ($asignatura['O'] == 'X') {
 						$OA->setDia("Martes");
 					}elseif ($asignatura['Q'] == 'X') {
-						$OA->setDia("Mi�rcoles");
+						$OA->setDia("Mi&eacute;rcoles");
 					}elseif ($asignatura['S'] == 'X') {
 						$OA->setDia("Jueves");
 					}elseif ($asignatura['U'] == 'X') {
 						$OA->setDia("Viernes");
 					}elseif ($asignatura['W'] == 'X') {
-						$OA->setDia("S�bado");
+						$OA->setDia("S&aacute;bado");
 					}else{
 						$OA->setDia(null);
 					}

@@ -49,9 +49,18 @@
         <li role="presentation"><a href="#importador" onclick="Javascript: window.location='ModuloImportador/index.php'" aria-controls="importador" role="tab" data-toggle="tab">Modulo Importador</a></li>
       <?php endif;?>
         
-      <li ><a href="#" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-off"></span> Cerrar Sesión</a></li>
+        <li ><a href="#" data-toggle="modal" data-target="#myModal"><b><span class="glyphicon glyphicon-off"></span> Cerrar Sesión</b></a></li>
+      <li ><a href="#" data-toggle="modal" data-target="#cambiar_clave"><b><span class="glyphicon glyphicon-wrench"></span> Cambiar Contraseña</b></a></li>
     </ul>
     
+    <!-- MODAL PARA CERRAR SESIÓN -->
+    <div id="cambiar_clave" class="modal fade" role="dialog">
+        <!-- TO DO -->
+    </div>
+    <!-- FINAL MODAL PARA CERRAR SESIÓN -->
+    
+    
+    <!-- MODAL PARA CERRAR SESIÓN -->
     <div id="myModal" class="modal fade" role="dialog">
         <div class="modal-dialog modal-sm">
 
@@ -67,9 +76,9 @@
                 </div>
             </form>
           </div>
-
         </div>
       </div>
+    <!-- FINAL MODAL PARA CERRAR SESIÓN -->
 
     
     <div class="tab-content">
@@ -78,7 +87,7 @@
         <div role="tabpanel" class="tab-pane content active" id="inicio">
             <div class="jumbotron text-center">
                 <h2>
-                    Bienvenidos al Sistema de Gestión Universitario <br> <label class="text-danger">Universidad</label> <label class="text-success">Mayor</label>
+                    Bienvenido al Sistema de Gestión Universitario <br> <label class="text-danger">Universidad</label> <label class="text-success">Mayor</label>
                 </h2>
                 <div class="well">
                     <p>Usuario: <b><em><?php echo $_SESSION['usuario']; ?></em></b></p>
@@ -196,18 +205,35 @@
         <div role="tabpanel" class="tab-pane content" id="administrador">
             <div class="col-md-2 barra"></div>
                 <div class="col-md-8 contenido">
-            <form action="#" method="post" name="loginAdmin" class="loginAdmin">
-                <div class="form-group">
-                    <label for="usuario">Usuario</label>
-                    <input type="text" class="form-control" id="usuario" placeholder="Usuario">
+                    <legend>Opciones de Administrador</legend>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <h3>
+                                <a class="btn btn-info form-control" href="ModuloAdministrador/admin_usuarios.php">Usuarios del Sistema</a>
+                            </h3>
+                        </li>
+                        <li class="list-group-item">
+                            <h3>
+                                <a class="btn btn-info form-control" href="ModuloAdministrador/admin_planesdeestudio.php">Planes de Estudio</a>
+                            </h3>
+                        </li>
+                        <li class="list-group-item">
+                            <h3>
+                                <a class="btn btn-info form-control" href="ModuloAdministrador/admin_ofertas.php">Ofertas</a>
+                            </h3>
+                        </li>
+                        <li class="list-group-item">
+                            <h3>
+                                <a class="btn btn-info form-control" href="ModuloAdministrador/admin_secciones.php">Secciones</a>
+                            </h3>
+                        </li>
+                        <li class="list-group-item">
+                            <h3>
+                                <a class="btn btn-info form-control" href="ModuloAdministrador/admin_alumnos.php">Alumnos</a>
+                            </h3>
+                        </li>
+                    </ul>
                 </div>
-                <div class="form-group">
-                    <label for="contraseña">Contraseña</label>
-                    <input type="password" class="form-control" id="contraseña" placeholder="Contraseña">
-                </div>
-                <button type="submit" class="btn btn-success">Ingresar</button>
-            </form>
-        </div>
          </div>
         <?php endif; ?>
                 <div class="col-md-2 barra"></div>

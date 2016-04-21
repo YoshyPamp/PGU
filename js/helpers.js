@@ -16,6 +16,10 @@ window.onload = function() {
     }
 }
 
+$(window).load(function() {
+    $(".loader").fadeOut("slow");
+})
+
 
 
 

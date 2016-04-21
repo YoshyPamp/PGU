@@ -16,7 +16,7 @@
                 $perfil = $resultado['ID_PERFIL'];
                 if (checkbrute($user_id, $db) == true) {
                     // Cuenta esta bloqueada 
-                    // Envía correo a usuario diciendo que cuenta esta bloqueada.
+                    // Envía mensaje a usuario diciendo que cuenta esta bloqueada.
                     return -2;
                 } else {
                     
@@ -41,7 +41,7 @@
                         $_SESSION['nom_perfil'] = $resultado_perfil['NOMBRE_PERFIL'];
                         
                         // XSS protection as we might print this value
-                        $resultado['USUARIO'] = preg_replace("/[^a-zA-Z0-9_\-]+/", "", $resultado['USUARIO']);
+                        $resultado['USUARIO'] = preg_replace("/[^a-zA-Z0-9_\-. ]+/", "", $resultado['USUARIO']);
                         $_SESSION['usuario'] = $resultado['USUARIO'];
                         $_SESSION['login_string'] = hash('sha512', $resultado['CONTRASENA'] . $user_browser);
                         // Login successful.

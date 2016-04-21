@@ -11,13 +11,6 @@ if (login_check($db) == true) {
 }
 ?>
 <script>
-    function activar_alumno(value){
-        if(value === 'ALUMNO'){
-            $('#rut').removeAttr('disabled');
-        }else{
-            $('#rut').attr('disabled','disabled');
-        }
-    }
 
     function validatePassword(){
         
@@ -99,9 +92,9 @@ if (login_check($db) == true) {
                         </div>
                         <div class="col-sm-10">
                             <label class="control-label col-sm-2" for="tipo">Tipo Usuario:</label>
-                            <select class="form-control" onchange="activar_alumno(this.value);" name="tipo" id="tipo" required>
+                            <select class="form-control" name="tipo" id="tipo" required>
                                 <option value="">Seleccione opción...</option>
-                                <option value="ALUMNO">Alumno</option>
+                                <option value="2">Alumno</option>
                             </select>
                             <div class="col-md-12" style="height: 15px;"></div>
                             <label class="control-label col-sm-2" for="p">Contraseña:</label>
@@ -112,7 +105,7 @@ if (login_check($db) == true) {
                         <div class="col-md-12" style="height: 15px;"></div>
                         <div class="col-sm-10">
                             <label class="control-label col-sm-6" for="rut">Rut:</label>
-                            <input type="text" class="form-control" name="rut" id="rut" placeholder="Ej: 168956537" disabled required>
+                            <input type="text" class="form-control" name="rut" id="rut" placeholder="Ej: 168956537" required>
                             <div class="col-md-12" style="height: 15px;"></div>
                             <button type="submit" onclick="validatePassword(event);" class="btn btn-info">Registrar</button>
                         </div>
