@@ -26,6 +26,21 @@
                 "bFilter": false
         } );
     });
+    
+    function desbloquear_cuenta(id, event){
+        event.preventDefault();
+        $.ajax({
+            method: "GET",
+            url: "procesos_ajax/ajax_desbloquear_usuario.php",
+            data: { id: id }
+            })
+            .done(function( msg ) {
+                alert(msg);
+            })
+            .fail(function() {
+                alert( "Error en solicitud a servidor.");
+            });
+    }
    
 </script>
 
@@ -118,7 +133,7 @@
     <table id="usuarios" class="table table-bordered">
         <thead>
             <tr>
-                <th>ID</th><th>USUARIO</th><th>CORREO</th><th>RUT ALUMNO</th><th>PERFIL</th>
+                <th>ID</th><th>USUARIO</th><th>CORREO</th><th>RUT ALUMNO</th><th>PERFIL</th><th>DESBLOQUEAR</th>
             </tr>
         </thead>
         <tbody>
@@ -130,13 +145,16 @@
                         <td><input type="text" name="<?php echo $usuario['ID_USUARIO'] ?>[]" class="form-control" value="<?php echo $usuario['EMAIL'] ?>"></td>
                         <td><input type="text" name="<?php echo $usuario['ID_USUARIO'] ?>[]" class="form-control" value="<?php echo $usuario['RUT_ALUMNO'] ?>"></td>
                         <td><input type="text" name="<?php echo $usuario['ID_USUARIO'] ?>[]" class="form-control" value="<?php echo $usuario['ID_PERFIL'] ?>"></td>
+                        <td class="text-center">
+                            <button class="btn btn-info" onclick="desbloquear_cuenta(<?php echo $usuario['ID_USUARIO'] ?>,event);"><span class="glyphicon glyphicon-lock"></span></button>
+                        </td>
                     </tr>
                 <?php endforeach;?>
             <?php endif;?>
         </tbody>
         <tfoot>
             <tr>
-                <th>ID</th><th>USUARIO</th><th>CORREO</th><th>RUT ALUMNO</th><th>PERFIL</th>
+                <th>ID</th><th>USUARIO</th><th>CORREO</th><th>RUT ALUMNO</th><th>PERFIL</th><th>DESBLOQUEAR</th>
             </tr>
         </tfoot>
     </table>

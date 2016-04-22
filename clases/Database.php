@@ -921,6 +921,21 @@ class Database {
             }
         }
         
+        function FAM_DESBLOQUEAR_USUARIO($id_usuario){
+            try{
+                $sql = "{CALL $this->DB_NAME.dbo.FAM_DESBLOQUEAR_USUARIO(?)}";
+                
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindParam(1, $id_usuario, PDO::PARAM_INT);
+                $stmt->execute();
+                
+                return 0;
+                
+            } catch (Exception $ex) {
+                echo 'Error en sentencia delete: ' . $ex->getCode();
+            }
+        }
+        
         
         
         
