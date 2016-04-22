@@ -30,7 +30,11 @@ if (isset($_POST['correo'], $_POST['p'])) {
             break;
     }
 } else {
-    // The correct POST variables were not sent to this page. 
+    
+    if(isset($_POST['pass1']))
+    
+    
+    // Las variables no fueron enviadas por POST. 
     echo 'Invalid Request';
 }
 

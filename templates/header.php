@@ -33,6 +33,7 @@
     <script src="librerias/bootstrap/js/bootstrap.min.js"></script>
     <script src="//cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
     <script src="js/datatables.js"></script>
+    <script src="js/helpers.js"></script>
     <!-- Custom CSS -->
     <link href="css/styles.css" rel="stylesheet">
 </head>

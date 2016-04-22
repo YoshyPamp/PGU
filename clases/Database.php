@@ -846,6 +846,42 @@ class Database {
             }
         }
         
+        //PROCESAMIENTO DE AUTETIFICACIÓN
+        function FAM_CAMBIAR_CONTRASEÑA($pass_n, $user){
+            try{
+                $sql = "{CALL $this->DB_NAME.dbo.FAM_CAMBIAR_CONTRASENA(?,?)}";
+                
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindParam(1, $pass_n, PDO::PARAM_STR);
+                $stmt->bindParam(2, $user, PDO::PARAM_INT);
+                $stmt->execute();
+                
+                return 0;
+                
+            } catch (Exception $ex) {
+                echo 'Error en sentencia update: ' . $ex->getCode();
+            }
+        }
+        
+        function FAM_SELECT_DATOS_USUARIO($user_id){
+            try{
+                $sql = "SELECT * FROM $this->DB_NAME.dbo.SGU_USUARIO WHERE ID_USUARIO = :ID_USUARIO";
+                
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindParam(':ID_USUARIO', $user_id, PDO::PARAM_INT);
+                $stmt->execute();
+                
+                $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+                
+                return $resultado;
+                
+            } catch (Exception $ex) {
+                echo 'Error en sentencia select: ' . $ex->getCode();
+            }
+        }
+        
+        
+        
         
         
         

@@ -21,6 +21,8 @@
      */
 ?>
 
+<div class="container alert alert-danger" id="error" style="display: none;"></div>
+<div class="container alert alert-success" id="success" style="display: none;"></div>
 
 <div>
 
@@ -53,11 +55,32 @@
       <li ><a href="#" data-toggle="modal" data-target="#cambiar_clave"><b><span class="glyphicon glyphicon-wrench"></span> Cambiar Contraseña</b></a></li>
     </ul>
     
-    <!-- MODAL PARA CERRAR SESIÓN -->
+    
+    
+    <!-- MODAL PARA CAMBIAR CLAVE -->
     <div id="cambiar_clave" class="modal fade" role="dialog">
-        <!-- TO DO -->
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>CAMBIAR CONTRASEÑA DE USUARIO</h4>
+                </div>
+                <div class="modal-body">
+                    <legend>Ingrese Datos</legend>
+                    <label for="pass1">Contraseña Anterior</label>
+                    <input type="password" name="pass1" id="pass1" class="form-control"><br>
+                    <label for="pass2" >Contraseña Nueva</label>
+                    <input type="password" name="pass2" id="pass2" class="form-control"><br>
+                    <label for="pass3">Contraseña Nueva Confirmación</label>
+                    <input type="password" name="pass3" id="pass3" class="form-control"><br><br>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" onclick="ajax_cambiar_pass();">Cambiar Contraseña</button>
+                    <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- FINAL MODAL PARA CERRAR SESIÓN -->
+    <!-- FINAL MODAL PARA CAMBIAR CLAVE -->
     
     
     <!-- MODAL PARA CERRAR SESIÓN -->
@@ -243,6 +266,9 @@
   
 </div>
 
+<?php if(isset($_SESSION['user_id'])): ?>
+    <input type="hidden" id="user_id" value="<?php echo $_SESSION['user_id']; ?>">
+<?php endif;?>
 
   
 <?php include("templates/footer.php"); ?> 

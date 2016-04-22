@@ -98,7 +98,7 @@
               </form>
           </div>
           <div class="modal-footer">
-              <button type="submit" onclick="$('#newuser').submit();" class="btn btn-success">CREAR</button>
+              <button type="submit" onclick="$('#newuser').submit();" class="btn btn-success">Crear</button>
               <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
           </div>
       </div>
