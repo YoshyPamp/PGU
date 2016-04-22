@@ -204,24 +204,23 @@ class Database {
         function SELECT_SECCION_NOTA_BYRUT($rut){
 		
 		try{
-			
-			$secciones = array();
-			$sql = "{CALL $this->DB_NAME.dbo.FAM_SELECT_SECCIONES_BYRUT(?)}";
-			
-			$stmt = $this->conn->prepare($sql);
-			$stmt->bindParam(1, $rut, PDO::PARAM_STR);
-			$stmt->execute();
-			
-			$result = $stmt->fetchAll();
-			
-			foreach($result as $row){
-				if((float) $row['NOTA'] > 4.0){
-					$row['ESTADO'] = 'APROBADO';
-				}else{
-					$row['ESTADO'] = 'REPROBADO';
-				}
-				$secciones[] = $row;
-			}
+                    $secciones = array();
+                    $sql = "{CALL $this->DB_NAME.dbo.FAM_SELECT_SECCIONES_BYRUT(?)}";
+
+                    $stmt = $this->conn->prepare($sql);
+                    $stmt->bindParam(1, $rut, PDO::PARAM_STR);
+                    $stmt->execute();
+
+                    $result = $stmt->fetchAll();
+
+                    foreach($result as $row){
+                            if((float) $row['NOTA'] > 4.0){
+                                    $row['ESTADO'] = 'APROBADO';
+                            }else{
+                                    $row['ESTADO'] = 'REPROBADO';
+                            }
+                            $secciones[] = $row;
+                    }
 			
 		}catch(PDOException $ex){
 			echo 'Error en sentencia: ' . $ex->getCode();
@@ -229,6 +228,65 @@ class Database {
 		
 		return $secciones;
 	}
+        
+        function FAM_SELECT_SECCIONES_ALUMNO_ALL($rut){
+            
+            try{
+                    $secciones = array();
+                    $sql = "{CALL $this->DB_NAME.dbo.FAM_SELECT_SECCIONES_ALUMNO_ALL(?)}";
+
+                    $stmt = $this->conn->prepare($sql);
+                    $stmt->bindParam(1, $rut, PDO::PARAM_STR);
+                    $stmt->execute();
+
+                    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                    return $result;
+                    
+		}catch(PDOException $ex){
+			echo 'Error en sentencia select: ' . $ex->getCode();
+		}
+            
+        }
+        
+        function FAM_SELECT_ALUMNOS_SECCION($cod_sec, $ano, $sem){
+            try{
+                
+                    $sql = "SELECT ID_OFERTA FROM $this->DB_NAME.dbo.OFERTA WHERE ANO = :ANO AND SEMESTRE = :SEMESTRE";
+			
+                    $stmt = $this->conn->prepare($sql);
+                    $stmt->bindParam(':ANO', $ano, PDO::PARAM_INT);
+                    $stmt->bindParam(':SEMESTRE', $sem, PDO::PARAM_INT);
+                    $stmt->execute();
+                
+                    $result1 = $stmt->fetchAll();
+		    $id_oferta = $result1[0]['ID_OFERTA'];
+                
+                
+                    $sql = "SELECT ID_SECCION FROM $this->DB_NAME.dbo.SECCION WHERE COD_SECCION = :COD_SECCION AND OFERTA_ID = :OFERTA_ID";
+			
+                    $stmt = $this->conn->prepare($sql);
+                    $stmt->bindParam(':COD_SECCION', $cod_sec, PDO::PARAM_STR);
+                    $stmt->bindParam(':OFERTA_ID', $id_oferta, PDO::PARAM_INT);
+                    $stmt->execute();
+                
+                    $result2 = $stmt->fetchAll();
+		    $id_seccion = $result2[0]['ID_SECCION'];
+                
+                    $sql = "{CALL $this->DB_NAME.dbo.FAM_SELECT_ALUMNOS_SECCION(?)}";
+
+                    $stmt = $this->conn->prepare($sql);
+                    $stmt->bindParam(1, $id_seccion, PDO::PARAM_INT);
+                    $stmt->execute();
+
+                    $alumnos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                    return $alumnos;
+                    
+		}catch(PDOException $ex){
+			echo 'Error en sentencia select: ' . $ex->getCode();
+		}
+        }
 	
         function FAM_VINCULAR_ALUM_SECC($codigo, $seccio, $año, $sem, $rut){
 		

@@ -14,30 +14,6 @@
 ?>
 <!-- FIN ZONA DE FUNCIONES PHP -->
 
-<script>
-    $(document).ready(function() {
-         $('#oferta_table').DataTable( {
-                "pagingType": "full_numbers",
-                "order": [[ 2, "desc" ]],
-                "language": {
-                "lengthMenu": "Mostrando _MENU_ datos por página.",
-                "zeroRecords": "No se encuentran registros.",
-                "info": "Mostrando página _PAGE_ de _PAGES_",
-                "paginate": {
-                    "first":      "Primera",
-                    "last":       "Última",
-                    "next":       "Siguiente",
-                    "previous":   "Anterior"
-                },
-                "infoEmpty": "No hay registros disponibles.",
-                "infoFiltered": "(Filtrado de _MAX_ registros totales.)"
-                    },
-                    bFilter: false,
-                    "bPaginate": false
-        } );
-    });
-</script>
-
 
 <!-- ZONA DE CABECERA -->
     <nav class="navbar navbar-default"> 
