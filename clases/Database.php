@@ -880,6 +880,47 @@ class Database {
             }
         }
         
+        function FAM_UPDATE_OFERTA_DATOS($id_oferta, $semestre, $ano){
+            try{
+                $sql = "{CALL $this->DB_NAME.dbo.FAM_UPDATE_OFERTA_DATOS(?,?,?)}";
+                
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindParam(1, $id_oferta, PDO::PARAM_INT);
+                $stmt->bindParam(2, $semestre, PDO::PARAM_INT);
+                $stmt->bindParam(3, $ano, PDO::PARAM_INT);
+                $stmt->execute();
+                
+                return 0;
+                
+            } catch (Exception $ex) {
+                echo 'Error en sentencia update: ' . $ex->getCode();
+            }
+        }
+        
+        function FAM_UPDATE_SECCIONES_OFERTA($id_seccion, $cod_seccion, $profesor, $inscritos, $cupos, $capacidad,
+                 $dia, $inicio, $termino, $modalidad){
+            try{
+                $sql = "{CALL $this->DB_NAME.dbo.FAM_UPDATE_SECCIONES_OFERTA(?,?,?,?,?,?,?,?,?,?)}";
+                
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindParam(1, $id_seccion, PDO::PARAM_INT);
+                $stmt->bindParam(2, $cod_seccion, PDO::PARAM_STR);
+                $stmt->bindParam(3, $profesor, PDO::PARAM_STR);
+                $stmt->bindParam(4, $inscritos, PDO::PARAM_INT);
+                $stmt->bindParam(5, $cupos, PDO::PARAM_INT);
+                $stmt->bindParam(6, $capacidad, PDO::PARAM_INT);
+                $stmt->bindParam(7, $dia, PDO::PARAM_STR);
+                $stmt->bindParam(8, $inicio, PDO::PARAM_STR);
+                $stmt->bindParam(9, $termino, PDO::PARAM_STR);
+                $stmt->bindParam(10, $modalidad, PDO::PARAM_STR);
+                $stmt->execute();
+                
+                
+            } catch (Exception $ex) {
+                echo 'Error en sentencia update: ' . $ex->getCode();
+            }
+        }
+        
         
         
         

@@ -23,7 +23,6 @@
                 "lengthMenu": "Mostrando _MENU_ datos por página.",
                 "zeroRecords": "No se encuentran registros.",
                 "info": "Mostrando página _PAGE_ de _PAGES_",
-                "search": "Buscar:",
                 "paginate": {
                     "first":      "Primera",
                     "last":       "Última",
@@ -32,7 +31,9 @@
                 },
                 "infoEmpty": "No hay registros disponibles.",
                 "infoFiltered": "(Filtrado de _MAX_ registros totales.)"
-                    }
+                    },
+                    bFilter: false,
+                    "bPaginate": false
         } );
     });
 </script>
@@ -68,59 +69,63 @@
     </form>
 </div><br><br>
 
-<div class="container">
-    
-    <label for="ano_oferta">Año:</label>
-    <input type="number" class="form-control" name="ano_oferta" id="ano_oferta" value="<?php echo (isset($_GET['ano']) ? $_GET['ano'] : ''); ?>" placeholder="Año Oferta"><br>
-    <label for="semestre_oferta">Semestre:</label>
-    <input type="number" class="form-control" name="semestre_oferta" id="semestre_oferta" value="<?php echo (isset($_GET['semestre']) ? $_GET['semestre'] : ''); ?>" placeholder="Semestre 1,2"><br>
-    
-    <?php if(isset($_GET['ano'])):?>
-    <input type="submit" value="ACTUALIZAR OFERTA" class="form-control btn btn-success"><br><br><br>
-    <?php endif;?>
-</div>
-<div class="container-fluid">
-    
+<form action="procesos_database/actualizar_oferta.php" method="POST">
+    <div class="container">
+
+        <label for="ano_oferta">Año:</label>
+        <input type="number" class="form-control" name="ano_oferta" <?php echo (isset($_GET['ano']) ? '' : 'disabled'); ?> id="ano_oferta" value="<?php echo (isset($_GET['ano']) ? $_GET['ano'] : ''); ?>" placeholder="Año Oferta"><br>
+        <label for="semestre_oferta">Semestre:</label>
+        <input type="number" class="form-control" name="semestre_oferta" <?php echo (isset($_GET['semestre']) ? '' : 'disabled'); ?> id="semestre_oferta" value="<?php echo (isset($_GET['semestre']) ? $_GET['semestre'] : ''); ?>" placeholder="Semestre 1,2"><br>
+    </div>
+    <input type="hidden" value="<?php echo (isset($secciones[0]['OFERTA_ID']) ? $secciones[0]['OFERTA_ID'] : ''); ?>" name="codigo_oferta">
+    <div class="container-fluid">
+
             <?php 
             if(isset($secciones) && $secciones != ''): 
                 ?>
-    <table id="oferta_table" class="table table-striped table-bordered" width="100%" >
-        <thead>
-            <tr>
-                <th>ID</th><th>Código Sección</th><th>Profesor</th><th>Inscritos</th><th>Cupos</th><th>Capacidad</th><th>Día</th><th>Inicio</th><th>Término</th><th>Modalidad</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-                 foreach($secciones as $seccion):
-                    ?>
-            <tr>
-                <td><?php echo $seccion['ID_SECCION'] ?></td>
-                <td><input type="text" class="form-control" value="<?php echo $seccion['COD_SECCION'] ?>" name="COD_SECCION" /></td>
-                <td><input type="text" class="form-control" value="<?php echo $seccion['PROFESOR_NOMBRE'] ?>" name="PROFESOR_NOMBRE" /></td>
-                <td><input type="text" class="form-control" value="<?php echo $seccion['INSCRITOS'] ?>" name="INSCRITOS" /></td>
-                <td><input type="text" class="form-control" value="<?php echo $seccion['CUPOS'] ?>" name="CUPOS" /></td>
-                <td><input type="text" class="form-control" value="<?php echo $seccion['CAPACIDAD'] ?>" name="CAPACIDAD" /></td>
-                <td><input type="text" class="form-control" value="<?php echo utf8_encode($seccion['DIA']) ?>" name="DIA" /></td>
-                <td><input type="text" class="form-control" value="<?php echo $seccion['INICIO'] ?>" name="INICIO" /></td>
-                <td><input type="text" class="form-control" value="<?php echo $seccion['TERMINO'] ?>" name="TERMINO" /></td>
-                <td><input type="text" class="form-control" value="<?php echo $seccion['MODALIDAD'] ?>" name="MODALIDAD" /></td>
-            </tr>
-            
-                    <?php
-                 endforeach; 
-                 ?>
-            </tbody>
-        <tfoot>
-            <tr>
-                <th>ID</th><th>Código Sección</th><th>Profesor</th><th>Inscritos</th><th>Cupos</th><th>Capacidad</th><th>Día</th><th>Inicio</th><th>Término</th><th>Modalidad</th>
-            </tr>
-        </tfoot>
-    </table>
+
+        <?php if(isset($_GET['ano'])):?>
+            <input type="submit" value="ACTUALIZAR OFERTA" class="form-control btn btn-success"><br><br><br>
+        <?php endif;?>
+        <table id="oferta_table" class="table table-striped table-bordered" width="100%" >
+            <thead>
+                <tr>
+                    <th>ID</th><th>Código Sección</th><th>Profesor</th><th>Inscritos</th><th>Cupos</th><th>Capacidad</th><th>Día</th><th>Inicio</th><th>Término</th><th>Modalidad</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                     foreach($secciones as $seccion):
+                        ?>
+                <tr>
+                    <td><?php echo $seccion['ID_SECCION'] ?></td>
+                    <td><input type="text" class="form-control" value="<?php echo $seccion['COD_SECCION'] ?>" name="<?php echo $seccion['ID_SECCION'] ?>[]" /></td>
+                    <td><input type="text" class="form-control" value="<?php echo utf8_encode($seccion['PROFESOR_NOMBRE']) ?>" name="<?php echo $seccion['ID_SECCION'] ?>[]" /></td>
+                    <td><input type="text" class="form-control" value="<?php echo $seccion['INSCRITOS'] ?>" name="<?php echo $seccion['ID_SECCION'] ?>[]" /></td>
+                    <td><input type="text" class="form-control" value="<?php echo $seccion['CUPOS'] ?>" name="<?php echo $seccion['ID_SECCION'] ?>[]" /></td>
+                    <td><input type="text" class="form-control" value="<?php echo $seccion['CAPACIDAD'] ?>" name="<?php echo $seccion['ID_SECCION'] ?>[]" /></td>
+                    <td><input type="text" class="form-control" value="<?php echo utf8_encode($seccion['DIA']) ?>" name="<?php echo $seccion['ID_SECCION'] ?>[]" /></td>
+                    <td><input type="text" class="form-control" value="<?php echo $seccion['INICIO'] ?>" name="<?php echo $seccion['ID_SECCION'] ?>[]" /></td>
+                    <td><input type="text" class="form-control" value="<?php echo $seccion['TERMINO'] ?>" name="<?php echo $seccion['ID_SECCION'] ?>[]" /></td>
+                    <td><input type="text" class="form-control" value="<?php echo $seccion['MODALIDAD'] ?>" name="<?php echo $seccion['ID_SECCION'] ?>[]" /></td>
+                </tr>
+
+                        <?php
+                     endforeach; 
+                     ?>
+                </tbody>
+            <tfoot>
+                <tr>
+                    <th>ID</th><th>Código Sección</th><th>Profesor</th><th>Inscritos</th><th>Cupos</th><th>Capacidad</th><th>Día</th><th>Inicio</th><th>Término</th><th>Modalidad</th>
+                </tr>
+            </tfoot>
+        </table>
+
             <?php
             endif; ?>   
-    
-</div>
+
+    </div>
+</form>
 <!-- FIN ZONA DE BUSQUEDA Y RESULTADO -->
 
 <?php include("../templates/footer.php"); ?>
