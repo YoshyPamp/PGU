@@ -239,7 +239,7 @@
                                     <!-- VERIFICA SI ALUMNO LLEGO CON PROBLEMAS POR NOMBRE O APELLIDO COMPUESTO-->
                                     <?php if(!preg_match('#[0-9]#',$alumno->rut)): ?>
                                         <td class='center'><?php echo $conA; ?></td>
-                                        <td class='center'><input type='text' name='alumno-<?php echo $key; ?>[]' style='background-color: lightsteelblue' placeholder='<?php echo $alumno->nombre; ?>' required></td>
+                                        <td class='center'><input type='text' name='alumno-<?php echo $key; ?>[]' style='background-color: lightsteelblue;' placeholder='<?php echo $alumno->nombre; ?>' required></td>
                                         <td class='center'><input type='text' name='alumno-<?php echo $key; ?>[]' style='background-color: lightsteelblue;' placeholder='<?php echo $alumno->apellidoPaterno; ?>' required></td>
                                         <td class='center'><input type='text' name='alumno-<?php echo $key; ?>[]' style='background-color: lightsteelblue;' placeholder='<?php echo $alumno->apellidoMaterno; ?>' required></td>
                                         <td class='center'><input type='text' name='alumno-<?php echo $key; ?>[]' style='background-color: lightsteelblue;' placeholder='<?php echo $alumno->rut; ?>' required></td>

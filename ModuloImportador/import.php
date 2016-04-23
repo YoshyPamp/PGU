@@ -58,6 +58,7 @@
 	$con_nada = 0;
 	$id_seccion = 'nada';
 	$acta_sin_notas = true;
+        
 	if(isset($_POST['acta'])){
 		foreach($_POST as $key => $arreglo_interno){
 			//No toma el primer campo ya que es auxiliar.
@@ -154,12 +155,22 @@
 					}else{
 						//Procesamiento cuando la acta viene vacía de notas
 						$datos = explode('-',$arreglo_interno);
+                                                
 						
 						$codigo = $datos[0];
 						$seccio = $datos[1];
 						$año    = $datos[2];
 						$sem    = $datos[3];
-						$rut    = $key;
+                                                
+                                                foreach($alumnos_malos as $alumno_malo){
+                                                    $datos_ = explode("-",$alumno_malo);
+                                                    if($datos_[1] == $key){
+                                                        $rut = $datos_[0];
+                                                    }else{
+                                                        $rut  = $key;
+                                                    }
+                                                }
+						
 						
 						if($db->FAM_VINCULAR_ALUM_SECC($codigo, $seccio, $año, $sem, $rut) == -1){
 							if(!in_array($codigo."-".$seccio, $ramos_sin_oferta)){
@@ -172,24 +183,24 @@
 		}
 		
 		if($id_seccion == 'nada' && $con_nada == 0){
-			if($acta_sin_notas){
-				if(count($ramos_sin_oferta) == 0){
-					echo "<script>window.location='index.php?acta=ok&num=".count($alumnos_insertados)."&notas=sin'</script>";
-				}else{
-					$ramos_sin_oferta = serialize($ramos_sin_oferta);
-					echo "<script>window.location='index.php?acta=ok&num=".count($alumnos_insertados)."&notas=sin&sinoferta=".$ramos_sin_oferta."'</script>";
-				}
-			}else{
-				echo "<script>window.location='index.php?acta=ok&num=".count($alumnos_insertados)."&notas=on&men=".$mensaje."'</script>";
-			}
-			
+                    if($acta_sin_notas){
+                            if(count($ramos_sin_oferta) == 0){
+                                    echo "<script>window.location='index.php?acta=ok&num=".count($alumnos_insertados)."&notas=sin'</script>";
+                            }else{
+                                    $ramos_sin_oferta = serialize($ramos_sin_oferta);
+                                    echo "<script>window.location='index.php?acta=ok&num=".count($alumnos_insertados)."&notas=sin&sinoferta=".$ramos_sin_oferta."'</script>";
+                            }
+                    }else{
+                            echo "<script>window.location='index.php?acta=ok&num=".count($alumnos_insertados)."&notas=on&men=".$mensaje."'</script>";
+                    }
+
 		}else{
-			if(count($ramos_sin_oferta) >= 1){
-				$ramos_sin_oferta = serialize($ramos_sin_oferta);
-				echo "<script>window.location='index.php?acta=ok&num=".count($alumnos_insertados)."&notas=yes&ramos=".$ramos_sin_oferta."'</script>";
-			}else{
-				echo "<script>window.location='index.php?acta=ok&num=".count($alumnos_insertados)."&notas=ok200'</script>";
-			}
+                    if(count($ramos_sin_oferta) >= 1){
+                            $ramos_sin_oferta = serialize($ramos_sin_oferta);
+                            echo "<script>window.location='index.php?acta=ok&num=".count($alumnos_insertados)."&notas=yes&ramos=".$ramos_sin_oferta."'</script>";
+                    }else{
+                            echo "<script>window.location='index.php?acta=ok&num=".count($alumnos_insertados)."&notas=ok200'</script>";
+                    }
 		}
 	}
 	

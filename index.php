@@ -40,7 +40,7 @@
       <?php endif;?>
         
       <?php if($_SESSION['perfil'] == 1 || $_SESSION['perfil'] == 4): ?>
-        <li role="presentation"><a href="#reporte" aria-controls="reporte" role="tab" data-toggle="tab">Modulo Reportes</a></li>
+        <li role="presentation"><a href="#reporte" aria-controls="reporte" role="tab" data-toggle="tab">Reportes</a></li>
       <?php endif;?>
         
       <?php if($_SESSION['perfil'] == 1): ?>
@@ -48,7 +48,7 @@
       <?php endif;?>
         
       <?php if($_SESSION['perfil'] == 1 || $_SESSION['perfil'] == 4): ?>
-        <li role="presentation"><a href="#importador" onclick="Javascript: window.location='ModuloImportador/index.php'" aria-controls="importador" role="tab" data-toggle="tab">Modulo Importador</a></li>
+        <li role="presentation"><a href="#importador" onclick="Javascript: window.location='ModuloImportador/index.php'" aria-controls="importador" role="tab" data-toggle="tab">Importador</a></li>
       <?php endif;?>
         
         <li ><a href="#" data-toggle="modal" data-target="#myModal"><b><span class="glyphicon glyphicon-off"></span> Cerrar Sesión</b></a></li>
