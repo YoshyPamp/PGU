@@ -123,9 +123,9 @@
     <?php if($_SESSION['perfil'] == 1 || $_SESSION['perfil'] == 2 || $_SESSION['perfil'] == 4): ?>
         
     <?php if($_SESSION['perfil'] != 2):?>
-    <?php   $alumnos = $db->select_alumnos(); ?>
+    <?php   $alumnos = $db->FAM_SELECT_ALUMNOS(); ?>
     <?php else: ?>
-    <?php   $alumnos[] = $db->select_alumno_rut($_SESSION['rut_alumno']); ?>
+    <?php   $alumnos[] = $db->FAM_SELECT_ALUMNO_RUT($_SESSION['rut_alumno']); ?>
     <?php endif;?>
     
             <div role="tabpanel" class="tab-pane content" id="alumno">
@@ -161,9 +161,9 @@
         <?php if($_SESSION['perfil'] == 1 || $_SESSION['perfil'] == 4 || $_SESSION['perfil'] == 3): ?>
  
         <?php if($_SESSION['perfil'] != 3):?>
-        <?php   $asignaturas = $db->select_asignaturas(); ?>
+        <?php   $asignaturas = $db->FAM_SELECT_ASIGNATURAS(); ?>
         <?php else: ?>
-        <?php   $asignaturas[] = $db->select_asignaturas_profesor(); ?>
+        <?php   $asignaturas[] = $db->FAM_SELECT_ASIGNATURAS_PROFESOR(); ?>
         <?php endif;?>
         <div role="tabpanel" class="tab-pane content" id="asignatura">
             <div class="col-md-12">

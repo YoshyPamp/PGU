@@ -46,7 +46,7 @@ class Database {
             }
         }
     
-        function select_alumnos(){
+        function FAM_SELECT_ALUMNOS(){
         
             try{
                     $sql = "SELECT * FROM $this->DB_NAME.dbo.ALUMNO";
@@ -104,7 +104,7 @@ class Database {
             }
         }
     
-        function select_asignaturas(){
+        function FAM_SELECT_ASIGNATURAS(){
         
 		try{
 			$asignaturas = array();
@@ -127,7 +127,7 @@ class Database {
         return $asignaturas;
     }
     
-        function select_alumno_rut($rut){
+        function FAM_SELECT_ALUMNO_RUT($rut){
 		
 		try{
 			$alumno = array();
@@ -261,8 +261,7 @@ class Database {
                 
                     $result1 = $stmt->fetchAll();
 		    $id_oferta = $result1[0]['ID_OFERTA'];
-                
-                
+
                     $sql = "SELECT ID_SECCION FROM $this->DB_NAME.dbo.SECCION WHERE COD_SECCION = :COD_SECCION AND OFERTA_ID = :OFERTA_ID";
 			
                     $stmt = $this->conn->prepare($sql);
@@ -272,7 +271,7 @@ class Database {
                 
                     $result2 = $stmt->fetchAll();
 		    $id_seccion = $result2[0]['ID_SECCION'];
-                
+                    
                     $sql = "{CALL $this->DB_NAME.dbo.FAM_SELECT_ALUMNOS_SECCION(?)}";
 
                     $stmt = $this->conn->prepare($sql);
@@ -280,7 +279,7 @@ class Database {
                     $stmt->execute();
 
                     $alumnos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+                    
                     return $alumnos;
                     
 		}catch(PDOException $ex){
@@ -863,6 +862,42 @@ class Database {
                 }
                 
                 return $asignaturas_plan;
+                
+            } catch (Exception $ex) {
+                echo 'Error en sentencia select: ' . $ex->getCode();
+            }
+        }
+        
+        function FAM_SELECT_SECCIONES_CODIGO_ASIGNATURA($codigo_asignatura){
+            try{
+                $sql = "{CALL $this->DB_NAME.dbo.FAM_SELECT_SECCIONES_CODIGO_ASIGNATURA(?)}";
+			
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindParam(1, $codigo_asignatura, PDO::PARAM_STR);
+                $stmt->execute();
+
+                $secciones_asignatura = array();
+                $resultado = $stmt->fetchAll();
+                if(count($resultado) > 0){
+			
+                    foreach($resultado as $row){
+                        $seccion['ID_SECCION'] = $row['ID_SECCION'];
+                        $seccion['COD_SECCION'] = $row['COD_SECCION'];
+                        $seccion['DIA'] = utf8_encode($row['DIA']);
+                        $seccion['INICIO'] = $row['INICIO'];
+                        $seccion['TERMINO'] = $row['TERMINO'];
+                        $seccion['MODALIDAD'] = $row['MODALIDAD'];
+                        $seccion['PROFESOR_NOMBRE'] = utf8_encode($row['PROFESOR_NOMBRE']);
+                        $seccion['NOM_ASIGNATURA'] = utf8_encode($row['NOM_ASIGNATURA']);
+                        $seccion['NIVEL'] = $row['NIVEL'];
+                        $seccion['PLANESTUDIO_COD_PLANESTUDIO'] = $row['PLANESTUDIO_COD_PLANESTUDIO'];
+                        $seccion['ANO'] = $row['ANO'];
+                        $seccion['SEMESTRE'] = $row['SEMESTRE'];
+                        $secciones_asignatura[] = $seccion;
+                    }
+                }
+                
+                return $secciones_asignatura;
                 
             } catch (Exception $ex) {
                 echo 'Error en sentencia select: ' . $ex->getCode();

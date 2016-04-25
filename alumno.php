@@ -13,7 +13,7 @@
     
 	
     if(isset($_GET['rut'])){
-        $alumno = $db->select_alumno_rut($_GET['rut']);
+        $alumno = $db->FAM_SELECT_ALUMNO_RUT($_GET['rut']);
         $nombreCompleto = explode(",",$alumno['NOMBRES']);
         $nombre = trim($nombreCompleto[1]);
         $apellidos = explode(" ",$nombreCompleto[0]);
