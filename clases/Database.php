@@ -1029,6 +1029,24 @@ class Database {
             }
         }
         
+        function FAM_VERIFICAR_NIVEL_MINIMO_ASIGNATURAS($cod_plan, $rut_alumno){
+            try{
+                $sql = "{CALL $this->DB_NAME.dbo.FAM_VERIFICAR_NIVEL_MINIMO_ASIGNATURAS(?,?)}";
+                
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindParam(1, $cod_plan, PDO::PARAM_STR);
+                $stmt->bindParam(2, $rut_alumno, PDO::PARAM_STR);
+                $stmt->execute();
+                
+                $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+                
+                return $resultado;
+                
+            } catch (Exception $ex) {
+                echo 'Error en sentencia delete: ' . $ex->getCode();
+            }
+        }
+        
         
         
         

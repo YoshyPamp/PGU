@@ -18,7 +18,10 @@
         $nombre = trim($nombreCompleto[1]);
         $apellidos = explode(" ",$nombreCompleto[0]);
         $apellidoPat = trim($apellidos[0]);
-        $apellidoMat = trim($apellidos[1]);     
+        $apellidoMat = trim($apellidos[1]); 
+        
+        $resultado = $db->FAM_VERIFICAR_NIVEL_MINIMO_ASIGNATURAS($alumno['CODIGO_PLAN'], $_GET['rut']);
+        $nivel_minimo = $resultado['NIVEL_MINIMO'];
     }
     
 	if($db->VERIFICAR_PLAN_EXISTENTE($alumno['CODIGO_PLAN'])){
@@ -39,7 +42,7 @@
 	}
         
         //xdebug_dump_superglobals();
-        //var_dump($historico);
+        //var_dump($nivel);
       
 	
 ?>
@@ -63,10 +66,17 @@
           <input type="text" value="<?php echo $alumno['N_MATRICULA']; ?>" class="form-control" readonly>
           
           <br>
-          <div class="alert alert-warning" role="alert">Bachillerato</div>
-          <div class="alert alert-warning" role="alert">Licenciatura</div>
-          <div class="alert alert-success" role="alert">Práctica 2</div>
-          <div class="alert alert-success" role="alert">Práctica 2</div>
+            <?php if($nivel_minimo > 4): ?>
+                <div class="alert alert-success" role="alert"><b>Cumple</b> con requisitos para Bachillerato.</div>
+            <?php else: ?>
+                <div class="alert alert-warning" role="alert"><b>No cumple</b> con requisitos para Bachillerato.</div>
+            <?php endif;?>
+                
+            <?php if($nivel_minimo > 8): ?>
+                <div class="alert alert-success" role="alert"><b>Cumple</b> con requisitos para Licenciatura.</div>
+            <?php else: ?>
+                <div class="alert alert-warning" role="alert"><b>No cumple</b> con requisitos para Licenciatura.</div>
+            <?php endif;?>
       </div>
   </div>
 </div>
