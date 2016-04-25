@@ -159,12 +159,9 @@
             
         <?php //ASIGNATURA ?>
         <?php if($_SESSION['perfil'] == 1 || $_SESSION['perfil'] == 4 || $_SESSION['perfil'] == 3): ?>
- 
-        <?php if($_SESSION['perfil'] != 3):?>
+        
         <?php   $asignaturas = $db->FAM_SELECT_ASIGNATURAS(); ?>
-        <?php else: ?>
-        <?php   $asignaturas[] = $db->FAM_SELECT_ASIGNATURAS_PROFESOR(); ?>
-        <?php endif;?>
+        
         <div role="tabpanel" class="tab-pane content" id="asignatura">
             <div class="col-md-12">
                 <table id="example_asignaturas" class="table table-striped table-bordered" width="100%">

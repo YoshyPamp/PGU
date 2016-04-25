@@ -56,7 +56,10 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th>NOMBRES</th><th>CÓDIGO PLAN</th><th>MATRÍCULA</th><th>RUT</th><th>ESTADO</th><th>IR A ALUMNO</th>
+                                <th>NOMBRES</th><th>RUT</th><th>MATRÍCULA</th><th>CÓDIGO PLAN</th><th>ESTADO</th>
+                                <?php if($_SESSION['perfil'] != 3): ?>
+                                    <th>IR A ALUMNO</th>
+                                <?php endif;?>
                             </tr>
                         </thead>
                         <tbody>
@@ -67,13 +70,18 @@
                                 <td><?php echo $alumno['N_MATRICULA']; ?></td>
                                 <td><?php echo $alumno['CODIGO_PLAN']; ?></td>
                                 <td><?php echo $alumno['ESTADO_ESTUDIO']; ?></td>
-                                <td><button class="btn btn-info" onclick="window.location='alumno.php?rut=<?php echo $alumno['RUT']; ?>';">VER ALUMNO</button></td>
+                                <?php if($_SESSION['perfil'] != 3): ?>
+                                    <td class="center"><button class="btn btn-info" onclick="window.location='alumno.php?rut=<?php echo $alumno['RUT']; ?>';">VER ALUMNO</button></td>
+                                <?php endif;?>
                             </tr>
                             <?php endforeach; ?>
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th>NOMBRES</th><th>CÓDIGO PLAN</th><th>MATRÍCULA</th><th>RUT</th><th>ESTADO</th><th>IR A ALUMNO</th>
+                                <th>NOMBRES</th><th>RUT</th><th>MATRÍCULA</th><th>CÓDIGO PLAN</th><th>ESTADO</th>
+                                <?php if($_SESSION['perfil'] != 3): ?>
+                                    <th>IR A ALUMNO</th>
+                                <?php endif;?>
                             </tr>
                         </tfoot>
                     </table>
