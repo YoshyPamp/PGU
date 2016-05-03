@@ -230,7 +230,9 @@
 					$sala = $_POST[$i][11];
 					$dia = $_POST[$i][10];
 					$inicio = $_POST[$i][8];
+                                        $inicio = substr($inicio, 0, -3);
 					$termino = $_POST[$i][9];
+                                        $termino = substr($termino, 0, -3);
 					$modalidad = $_POST[$i][4];
 				
 					$id_seccion = $db->FAM_SECCION_INSERT($codigo, $seccion, utf8_decode($profesor), $id_oferta, $inscritos, $cupos, $capacidad, $sala,

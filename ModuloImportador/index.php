@@ -187,7 +187,7 @@
         <button class="btn btn-lg btn-primary btn-block" type="submit">Leer Documento</button>
       </form>
         <br>
-        
+    
         <?php
         
         /**
@@ -221,6 +221,11 @@
         
                         <h3 class='col-md-12 text-center' >RESUMEN DE DATOS A IMPORTAR <small><em>Presione IMPORTAR cuando este seguro de los datos.</em></small></h3><br><br><br><br>
             
+                       
+</div>
+<div class="container-fluid">
+                        
+                        
                         <h3 style='color: green'>Alumnos a Importar <strong>(<?php echo $total_alumnos; ?>)</strong></h3>
                         <table class='table table-hover' >
                             <thead>
@@ -369,6 +374,10 @@
         
                         <h3 class='col-md-12 text-center' >RESUMEN DE DATOS A IMPORTAR <small><em>Presione IMPORTAR cuando este seguro de los datos.</em></small></h3><br><br><br><br>
             
+</div>
+<div class="container-fluid">
+                        
+                        
                         <fieldset>
                             <legend style='color: green'>Plan de Estudio</legend>
                             <label for="tipo">Tipo de Plan: </label>
@@ -442,12 +451,15 @@
                                 $resultado_oferta = $oferta->leerPaginas($inputFileName);
 
                                 ?>
-                                <form method="post" action="import.php" id='importar'>
+                                <form method="post" action="import.php" id='importar' class="container-fluid">
 
                                         <input type='submit' value='IMPORTAR DATOS' class='btn btn-success btn-lg center-block col-md-12' style='display:hidden' /><br><br>
 
                                         <h3 class='col-md-12 text-center' >RESUMEN DE DATOS A IMPORTAR <small><em>Presione IMPORTAR cuando este seguro de los datos.</em></small></h3><br><br><br><br>
-
+                                    
+</div>
+<div class="container-fluid">
+                 
                                         <legend style='color: green'>Oferta Académica (<?php echo count($resultado_oferta); ?>)</legend>
                                         <label for='año'>Año</label>
                                         <select name='año' class='form-control' required>
@@ -473,10 +485,10 @@
                                                 <?php foreach($resultado_oferta as $key => $asignatura): ?>
                                                         <tr><?php $key++; ?>
                                                                 <td><?php echo $key; ?></td>
-                                                                <td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo $asignatura->getNombre(); ?>' class="form-control" placeholder='Nombre Curso...' /></td>
+                                                                <td class="col-md-2"><input type='text' name='<?php echo $key; ?>[]' value='<?php echo $asignatura->getNombre(); ?>' class="form-control" placeholder='Nombre Curso...' /></td>
                                                                 <td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo $asignatura->getCodigo(); ?>' class="form-control" required /></td>
                                                                 <td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo $asignatura->getSeccion(); ?>' size='1' class="form-control" required /></td>
-                                                                <td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo ($asignatura->getProfesor() != null ? $asignatura->getProfesor() : 'S/I'); ?>' class="form-control"/></td>
+                                                                <td class="col-md-2"><input type='text' name='<?php echo $key; ?>[]' value='<?php echo ($asignatura->getProfesor() != null ? $asignatura->getProfesor() : 'S/I'); ?>' class="form-control"/></td>
                                                                 <td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo $asignatura->getModalidad(); ?>' class="form-control" required/></td>
                                                                 <td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo ($asignatura->getCapacidad() != null ? $asignatura->getCapacidad() : 0); ?>' size='1' class="form-control" /></td>
                                                                 <td><input type='text' name='<?php echo $key; ?>[]' value='<?php echo ($asignatura->getLibres() != null ? $asignatura->getLibres() : 0); ?>' size='1' class="form-control" /></td>

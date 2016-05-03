@@ -106,13 +106,13 @@
             
             <?php foreach($modulos as $mod => $hor): ?>
                 <tr>
-                    <td><?php echo $hor[0].' - '.$hor[1]; ?></td>
+                    <td class="col-md-1"><?php echo $hor[0].' - '.$hor[1]; ?></td>
                 <?php foreach($dias_semana as $dia): ?>
                     <?php $sec = buscaSec($dia, $hor, $horario);?>
                     <?php if($sec != null):?>
-                        <td class="info" style="width: 10%;"><?php echo utf8_encode($sec['NOM_ASIGNATURA'])."<br>".$sec['COD_SECCION']."<br>".$sec['PROFESOR_NOMBRE']."<br>".$sec['MODALIDAD']; ?></td>
+                        <td class="info col-md-1" style="width: 10%;"><?php echo utf8_encode($sec['NOM_ASIGNATURA'])."<br>".$sec['COD_SECCION']."<br>".$sec['PROFESOR_NOMBRE']."<br>".$sec['MODALIDAD']; ?></td>
                     <?php else:?>
-                        <td></td>
+                        <td class="col-md-2"></td>
                     <?php endif; ?>
                 <?php endforeach;?>
                 </tr>
