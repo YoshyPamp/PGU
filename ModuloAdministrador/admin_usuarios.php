@@ -36,6 +36,25 @@
             })
             .done(function( msg ) {
                 alert(msg);
+                $('#block'+id).removeAttr('disabled');
+                $('#unblock'+id).attr('disabled','disabled');
+            })
+            .fail(function() {
+                alert( "Error en solicitud a servidor.");
+            });
+    }
+    
+    function bloquear_cuenta(id, event){
+        event.preventDefault();
+        $.ajax({
+            method: "GET",
+            url: "procesos_ajax/ajax_bloquear_usuario.php",
+            data: { id: id }
+            })
+            .done(function( msg ) {
+                alert(msg);
+                $('#unblock'+id).removeAttr('disabled');
+                $('#block'+id).attr('disabled','disabled');
             })
             .fail(function() {
                 alert( "Error en solicitud a servidor.");
@@ -60,18 +79,6 @@
     }
 ?>
 <!-- ZONA DE MENSAJES -->
-
-<div class="panel panel-info container">
-    <div class="panel-heading">REFERENCIAS ID PERFIL</div>
-    <div class="panel-body">
-        <ul>
-            <li>Administrador: 1</li>
-            <li>Alumno: 2</li>
-            <li>Profesor: 3</li>
-            <li>Director: 4</li>
-        </ul>
-    </div>
-</div>
 
 <div class="container">
     <input type="submit" data-toggle="modal" data-target="#usuario_nuevo" value="CREAR USUARIO" class="btn btn-warning form-control">
@@ -133,7 +140,7 @@
     <table id="usuarios" class="table table-bordered">
         <thead>
             <tr>
-                <th>ID</th><th>USUARIO</th><th>CORREO</th><th>RUT ALUMNO</th><th>PERFIL</th><th>DESBLOQUEAR</th>
+                <th>ID</th><th>USUARIO</th><th>CORREO</th><th>RUT ALUMNO</th><th>PERFIL</th><th>DESBLOQUEAR</th><th>BLOQUEAR</th>
             </tr>
         </thead>
         <tbody>
@@ -144,9 +151,19 @@
                         <td><input type="text" name="<?php echo $usuario['ID_USUARIO'] ?>[]" class="form-control" value="<?php echo $usuario['USUARIO'] ?>"></td>
                         <td><input type="text" name="<?php echo $usuario['ID_USUARIO'] ?>[]" class="form-control" value="<?php echo $usuario['EMAIL'] ?>"></td>
                         <td><input type="text" name="<?php echo $usuario['ID_USUARIO'] ?>[]" class="form-control" value="<?php echo $usuario['RUT_ALUMNO'] ?>"></td>
-                        <td><input type="text" name="<?php echo $usuario['ID_USUARIO'] ?>[]" class="form-control" value="<?php echo $usuario['ID_PERFIL'] ?>"></td>
+                        <td>
+                            <select name="<?php echo $usuario['ID_USUARIO'] ?>[]" class="form-control">
+                                <option value="1" <?php echo $usuario['ID_PERFIL'] == 1 ? 'selected': '' ?> >Administrador</option>
+                                <option value="2" <?php echo $usuario['ID_PERFIL'] == 2 ? 'selected': '' ?> >Alumno</option>
+                                <option value="3" <?php echo $usuario['ID_PERFIL'] == 3 ? 'selected': '' ?> >Profesor</option>
+                                <option value="4" <?php echo $usuario['ID_PERFIL'] == 4 ? 'selected': '' ?> >Director</option>
+                            </select>
+                        </td>
                         <td class="text-center">
-                            <button class="btn btn-info" onclick="desbloquear_cuenta(<?php echo $usuario['ID_USUARIO'] ?>,event);"><span class="glyphicon glyphicon-lock"></span></button>
+                            <button <?php echo $usuario['BLOQUEADO'] == 'true' ? '': 'disabled' ?> class="btn btn-info" id="unblock<?php echo $usuario['ID_USUARIO']; ?>" onclick="desbloquear_cuenta(<?php echo $usuario['ID_USUARIO'] ?>,event);"><span class="glyphicon glyphicon-lock"></span></button>
+                        </td>
+                        <td class="text-center">
+                            <button <?php echo $usuario['BLOQUEADO'] == 'true' ? 'disabled': '' ?> class="btn btn-danger" id="block<?php echo $usuario['ID_USUARIO']; ?>" onclick="bloquear_cuenta(<?php echo $usuario['ID_USUARIO'] ?>,event);"><span class="glyphicon glyphicon-lock"></span></button>
                         </td>
                     </tr>
                 <?php endforeach;?>
@@ -154,7 +171,7 @@
         </tbody>
         <tfoot>
             <tr>
-                <th>ID</th><th>USUARIO</th><th>CORREO</th><th>RUT ALUMNO</th><th>PERFIL</th><th>DESBLOQUEAR</th>
+                <th>ID</th><th>USUARIO</th><th>CORREO</th><th>RUT ALUMNO</th><th>PERFIL</th><th>DESBLOQUEAR</th><th>BLOQUEAR</th>
             </tr>
         </tfoot>
     </table>

@@ -11,12 +11,12 @@
         try{
             if($key != 'usuarios_length'){
                 $id_usuario = $key;
-                $usuario = $usuario[0];
+                $usuario_n = $usuario[0];
                 $mail = $usuario[1];
                 $rut_alumno = $usuario[2];
                 $perfil = $usuario[3];
 
-                $db->FAM_UPDATE_USUARIOS($id_usuario, $usuario, $mail, $rut_alumno, $perfil);
+                $db->FAM_UPDATE_USUARIOS($id_usuario, $usuario_n, $mail, $rut_alumno, $perfil);
             }
             
         } catch (Exception $ex) {

@@ -19,7 +19,7 @@ if (isset($_POST['correo'], $_POST['p'])) {
             header('Location: ../../login.php?msg='.$msg);
             break;
         case -2:
-            $msg = '<div class="alert alert-danger"><strong>Error!</strong> Cuenta bloqueada por muchos intentos.</div>';
+            $msg = '<div class="alert alert-danger"><strong>Error!</strong> Cuenta a la que se hace referencia se encuentra bloqueada.</div>';
             header('Location: ../../login.php?msg='.$msg);
             break;
         case -3:

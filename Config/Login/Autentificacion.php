@@ -38,15 +38,20 @@
                         $stmt->execute();
                         $resultado_perfil = $stmt->fetch(PDO::FETCH_ASSOC);
                         
-                        $_SESSION['nom_perfil'] = $resultado_perfil['NOMBRE_PERFIL'];
+                        if($resultado['BLOQUEADO'] == null || $resultado['BLOQUEADO'] == 'false'){
                         
-                        // XSS protection as we might print this value
-                        $resultado['USUARIO'] = preg_replace("/[^a-zA-Z0-9_\-. ]+/", "", $resultado['USUARIO']);
-                        $_SESSION['usuario'] = $resultado['USUARIO'];
-                        $_SESSION['login_string'] = hash('sha512', $resultado['CONTRASENA'] . $user_browser);
-                        // Login successful.
-                        
-                        return 0;
+                            $_SESSION['nom_perfil'] = $resultado_perfil['NOMBRE_PERFIL'];
+
+                            // XSS protection as we might print this value
+                            $resultado['USUARIO'] = preg_replace("/[^a-zA-Z0-9_\-. ]+/", "", $resultado['USUARIO']);
+                            $_SESSION['usuario'] = $resultado['USUARIO'];
+                            $_SESSION['login_string'] = hash('sha512', $resultado['CONTRASENA'] . $user_browser);
+                            // Login successful.
+
+                            return 0;
+                        }else{
+                            return -2;
+                        }
                     } else {
                         // Password is not correct
                         // We record this attempt in the database

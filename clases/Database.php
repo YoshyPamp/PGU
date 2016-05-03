@@ -66,8 +66,8 @@ class Database {
         function FAM_SELECT_USUARIOS(){
             try{
                     $sql = "SELECT "
-                            . "ID_USUARIO, USUARIO, EMAIL, RUT_ALUMNO, ID_PERFIL "
-                            . "FROM $this->DB_NAME.dbo.SGU_USUARIO";
+                            . "ID_USUARIO, USUARIO, EMAIL, RUT_ALUMNO, ID_PERFIL, BLOQUEADO "
+                            . "FROM $this->DB_NAME.dbo.SGU_USUARIO ORDER BY USUARIO";
 
                     $stmt = $this->conn->prepare($sql);
                     $stmt->execute();
@@ -100,7 +100,7 @@ class Database {
                 $stmt->execute();
 			
             }catch(PDOException $ex){
-                echo 'Error en sentencia update: ' . $ex->getCode();
+                echo 'Error en sentencia update: ' . $ex->getMessage();
             }
         }
     
@@ -1026,6 +1026,21 @@ class Database {
                 
             } catch (Exception $ex) {
                 echo 'Error en sentencia delete: ' . $ex->getCode();
+            }
+        }
+        
+        function FAM_BLOQUEAR_USUARIO($id_usuario){
+            try{
+                $sql = "{CALL $this->DB_NAME.dbo.FAM_BLOQUEAR_USUARIO(?)}";
+                
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindParam(1, $id_usuario, PDO::PARAM_INT);
+                $stmt->execute();
+                
+                return 0;
+                
+            } catch (Exception $ex) {
+                echo 'Error en sentencia update: ' . $ex->getCode();
             }
         }
         
