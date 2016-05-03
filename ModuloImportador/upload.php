@@ -1,7 +1,7 @@
 <?php
 date_default_timezone_set("America/Santiago");
 
-$target_dir = $_SERVER['DOCUMENT_ROOT']."/ModuloImportador/Documentos/";
+$target_dir = $_SERVER['DOCUMENT_ROOT']."/PGU/ModuloImportador/Documentos/";
 
 $_FILES["fileToUpload"]["name"] = str_replace('.',',',$_FILES["fileToUpload"]["name"]);
 $_FILES["fileToUpload"]["name"] = preg_replace('/,(?=.*,)/', '_', $_FILES["fileToUpload"]["name"]);

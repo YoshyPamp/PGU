@@ -9,7 +9,7 @@
         if(login_check($db) == true) {
             // Add your protected page content here!
         } else { 
-            echo 'No está autorizado para ingresar a esta página, favor logearse.';
+            header('Location: login.php');
             die();
         }
     endif;

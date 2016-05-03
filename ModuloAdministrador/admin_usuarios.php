@@ -47,8 +47,8 @@
 
 <nav class="navbar navbar-default">  
     <div class="loader"></div>
-    <a class="navbar-brand logo" href="/../index.php">
-        <img alt="Brand"  src="/../Imagenes/logo-U.jpg">
+    <a class="navbar-brand logo" href="../index.php">
+        <img alt="Brand"  src="../Imagenes/logo-U.jpg">
     </a>
     <h2>ADMINISTRADOR DE USUARIOS DEL SISTEMA</h2>    
 </nav><br>

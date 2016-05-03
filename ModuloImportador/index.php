@@ -14,21 +14,20 @@
 <?php
         session_start();
         
-        if($_SESSION['perfil'] != 1 && $_SESSION['perfil'] != 4){
-            header("location: /../index.php");
-        }
-        
-        
-        
         $db = new Database();
         if(basename($_SERVER['PHP_SELF']) != 'login.php'):
             if(login_check($db) == true) {
                 // Add your protected page content here!
             } else { 
-                    echo 'You are not authorized to access this page, please login.';
+                    header("location: ../login.php");
                     die();
             }
         endif;
+		
+		if($_SESSION['perfil'] != 1 && $_SESSION['perfil'] != 4){
+            header("location: /../index.php");
+        }
+		
 	ini_set('xdebug.var_display_max_depth', -1);
 	ini_set('xdebug.var_display_max_children', -1);
 	ini_set('xdebug.var_display_max_data', -1);

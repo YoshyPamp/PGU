@@ -14,19 +14,21 @@
 <?php
     session_start();
 
-    if($_SESSION['perfil'] != 1){
-        header("location: /../index.php");
-    }
+    
 
     $db = new Database();
     if(basename($_SERVER['PHP_SELF']) != 'login.php'):
         if(login_check($db) == true) {
             // Add your protected page content here!
         } else { 
-                echo 'No está autorizado para ingresar a esta página, favor logearse.';
+                header("location: ../login.php");
                 die();
         }
     endif;
+	
+	if($_SESSION['perfil'] != 1){
+        header("location: /../index.php");
+    }
     
 ?>
 

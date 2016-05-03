@@ -1,0 +1,58 @@
+SCP secure copy entre 2 servidores...
+
+184589591
+
+------0------
+
+Payproxy PRD
+
+root
+umayor2015
+
+-------0--------
+Horas trabajadas en Matrícula
+
+Lunes     14 DIC 8:00 hasta 19:00 2
+Martes 	  15 DIC 8:30 hasta 19:00 1.5
+Miércoles 16 DIC 8:30 hasta 20:40 3
+Jueves    17 DIC 8:00 hasta 20:00 3
+Viernes   18 DIC 8:00 hasta 20:15 3
+Sábado    19 DIC 9:00 hasta 13:45 5
+Lunes     21 DIC 8:00 hasta 19:30 2.5
+Martes    22 DIC 8:00 hasta 20:30 3
+Miercoles 23 DIC 7:30 hasta 20:30
+Jueves    24 DIC 8:30 hasta 12:30
+Lunes     28 DIC 8:30 hasta 17:30
+Martes    29 DIC 8:30 hasta 17:30
+Miercoles 30 DIC 8:30 hasta 17:30
+Jueves    31 DIC 8:30 hasta 12:30
+Lunes     04 ENE 8:30 hasta 17:30
+Martes    05 ENE 8:30 hasta 17:30
+Miércoles 06 ENE 8:30 hasta 17:30
+Jueves    07 ENE 8:30 hasta 17:30
+Viernes   08 ENE 8:30 hasta 17:30
+Domingo   10 ENE 8:30 hasta 16:30   
+Lunes 	  11 ENE 7:30 hasta 21:00
+Martes    12 ENE 7:30 hasta
+
+CheckList a realizar
+
+1) Bloquear botón agregar nueva forma
+2) Generar modal automaticamente si está todo compensado
+3) Al pasar a PRD eliminar tokens de sistema y servicio, y agregar nuevos.
+4) Agregar textos importantes en base de datos.
+
+Checklist paso a PRD
+
+
+
+------0---------
+Comentarios Proyecto de Ingeniería
+
+1) Realizar investigación de depreciación de maquinas, cuando conviene repararlas cuando no.
+2) Describir el alcance de sedes, como manejar las distintas sedes.
+3) Formal, hablar siempre en tercera persona.
+4) Investigar que metodología de desarrollo se utilizará y por que.
+5) 
+
+
