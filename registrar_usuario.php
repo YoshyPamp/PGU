@@ -15,6 +15,12 @@ if (isset($_POST['dominio'], $_POST['email'], $_POST['tipo'] )) {
     
     if($id_perfil == 2){
         $rut_alum = $_POST['rut'];
+        $sql = "SELECT * FROM $db->DB_NAME.dbo.ALUMNO WHERE RUT = :RUT";
+        $stmt = $db->conn->prepare($sql);
+        $stmt->bindParam(':RUT', $rut_alum, PDO::PARAM_STR);
+        $stmt->execute();
+        $result_alumno = $stmt->fetchAll();
+        
     }else{
         $rut_alum = null;
     }
@@ -42,6 +48,11 @@ if (isset($_POST['dominio'], $_POST['email'], $_POST['tipo'] )) {
     $stmt->bindParam(':EMAIL', $email, PDO::PARAM_STR);
     $stmt->execute();
     $result = $stmt->fetchAll();
+    
+    if(empty($result_alumno)){
+        // A user with this email address already exists
+        $error_msg .= '<div class="container alert alert-danger"><strong>Error!</strong> No existe alumno con ese rut.</div>';
+    }
     
  
     // check existing email  
