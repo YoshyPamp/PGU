@@ -52,7 +52,7 @@
 	
 	//Procesamiento para Acta
 	
-	$alumnos_malos = array(); //Arreglo que vincula alumno malo con el rut que le corresponde
+	$alumnos_malos = array('nada' => '1-1'); //Arreglo que vincula alumno malo con el rut que le corresponde
 	$alumnos_insertados = array();
 	$ramos_sin_oferta = array();
 	$con_nada = 0;
@@ -64,9 +64,9 @@
 			//No toma el primer campo ya que es auxiliar.
 			if($key != 'acta' && $key != 'vacia'){
 				//Para filtrar entre importe de alumnos y de notas
+                                
 				//ALUMNOS
 				if(substr($key,0,6) == 'alumno'){
-                                    
 					//realiza un proceso si es de los que venían con problemas.
 					if(!is_numeric(substr($key,7,8))){
 						$alumnos_malos[] = $arreglo_interno[3]."-".substr($key,7,100);
@@ -83,11 +83,11 @@
 					}
 					
 				}else{
-					
 					if(!isset($_POST['vacia'])){
                                              	//NOTAS
 						$datos = explode('-',$key);
-						
+                                                
+                                                //alumnos que vienen malos
 						if(!is_numeric($datos[0])){
 							foreach($alumnos_malos as $alumno){
 								$rut_id = explode("-",$alumno);
@@ -105,8 +105,6 @@
                                                     $ano_ramo = $datos[3];
                                                     $sem_ramo = $datos[4];
                                                     $estado_A = $datos[5];
-
-
 
                                                     switch($db->VERIFICAR_NOTAS_EXISTENTES($rut_alum, $ano_ramo, $sem_ramo, $cod_ramo, $_seccion)){
                                                         case 0:
@@ -132,7 +130,7 @@
                                                             $con_nada++;
                                                             break;
                                                         case -1:
-                                                            $mensaje = 'YA EXISTEN NOTAS PARA ALGUNAS SECCIONES DE ESA OFERTA';
+                                                            $mensaje = 'YA EXISTEN NOTAS PARA ALGUNAS SECCIONES DE ESA OFERTA, DEBE BORRARLAS DESDE EL ADMINISTRADOR Y VOLVER A IMPORTAR.';
                                                             break;
                                                         case -2:
                                                             $mensaje = 'ALGUNA SECCION NO EXISTE EN OFERTA PARA ESE AÑO';
@@ -155,8 +153,7 @@
 					}else{
 						//Procesamiento cuando la acta viene vacía de notas
 						$datos = explode('-',$arreglo_interno);
-                                                
-						
+
 						$codigo = $datos[0];
 						$seccio = $datos[1];
 						$año    = $datos[2];
@@ -214,13 +211,15 @@
 			$año = $_POST['año'];
 			$semestre = $_POST['semestre'];
 			$total = count($_POST) - 2;
+                        $escuela = $_POST['escuela'];
 			
-			if(!$db->VERIFICAR_OFERTA_EXISTENTE($año, $semestre)){
-				$id_oferta = $db->FAM_OFERTA_INSERT($año,$semestre);
+			if(!$db->VERIFICAR_OFERTA_EXISTENTE($año, $semestre, $escuela)){
+				$id_oferta = $db->FAM_OFERTA_INSERT($año, $semestre, $escuela);
 		
 				for($i = 1; $i <= $total; $i++) {
 					//VARIABLES POR ASIGNATURA
-					$nombre = $_POST[$i][0];
+                                    if(isset($_POST[$i][0])){
+                                        $nombre = $_POST[$i][0];
 					$codigo = $_POST[$i][1];
 					$seccion = $_POST[$i][2];
 					$profesor = $_POST[$i][3];
@@ -244,6 +243,7 @@
 					}else{
 						$asignaturas_malas[] = $codigo;
 					}
+                                    }
 				}
 			}else{
 				echo "<script>window.location='index.php?imported=errorO'</script>";

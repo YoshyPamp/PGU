@@ -387,14 +387,15 @@ class Database {
 		}
 	}
 	
-        function VERIFICAR_OFERTA_EXISTENTE($ano, $semestre){
+        function VERIFICAR_OFERTA_EXISTENTE($ano, $semestre, $escuela){
 		
 		try{
-			$sql = "SELECT * FROM $this->DB_NAME.dbo.OFERTA WHERE ANO = :ANO AND SEMESTRE = :SEMESTRE";
+			$sql = "SELECT * FROM $this->DB_NAME.dbo.OFERTA WHERE ANO = :ANO AND SEMESTRE = :SEMESTRE AND ESCUELA = :ESCUELA";
 
 			$stmt = $this->conn->prepare($sql);
 			$stmt->bindParam(':ANO', $ano, PDO::PARAM_INT);
 			$stmt->bindParam(':SEMESTRE', $semestre, PDO::PARAM_INT);
+                        $stmt->bindParam(':ESCUELA', $escuela, PDO::PARAM_STR);
 			$stmt->execute();
 
 			$result = $stmt->fetchAll();
@@ -425,7 +426,10 @@ class Database {
                     $stmt->execute();
                     
                     $result = $stmt->fetchAll();
-		    $id_oferta = $result[0]['id_oferta'];
+                    if(count($result) > 0){
+                        $id_oferta = $result[0]['id_oferta'];
+                    }
+		    
                     
                     //Selecciona la ID de la seccion que se vinculara con la nota
                     $sql = "SELECT id_seccion FROM $this->DB_NAME.dbo.SECCION WHERE COD_SECCION = :COD_SECCION AND OFERTA_ID = :OFERTA_ID";
@@ -478,15 +482,16 @@ class Database {
             }
 	}
 	
-        function FAM_OFERTA_INSERT($ano, $semestre){
+        function FAM_OFERTA_INSERT($ano, $semestre, $escuela){
 		
 		try{
-			$sql = "INSERT INTO $this->DB_NAME.dbo.OFERTA(ANO,SEMESTRE) OUTPUT Inserted.ID_OFERTA 
-			VALUES(:ANO,:SEMESTRE)";
+			$sql = "INSERT INTO $this->DB_NAME.dbo.OFERTA(ANO,SEMESTRE,ESCUELA) OUTPUT Inserted.ID_OFERTA 
+			VALUES(:ANO,:SEMESTRE,:ESCUELA)";
 			
 			$stmt = $this->conn->prepare($sql);
 			$stmt->bindParam(':ANO', $ano, PDO::PARAM_INT);
 			$stmt->bindParam(':SEMESTRE', $semestre, PDO::PARAM_INT);
+                        $stmt->bindParam(':ESCUELA', $escuela, PDO::PARAM_STR);
 			$stmt->execute();
 			
 			$result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -545,12 +550,13 @@ class Database {
 				/*
 				*Inserta la sala de clases correspondiente
 				*/
-				$sql = "INSERT INTO $this->DB_NAME.dbo.SALACLASES(COD_SALA,CANTIDAD_ALUMNOS) OUTPUT Inserted.ID_SALA
-				VALUES(:COD_SALA,:CANTIDAD_ALUMNOS)";
+				$sql = "INSERT INTO $this->DB_NAME.dbo.SALACLASES(COD_SALA,CANTIDAD_ALUMNOS,ID_OFERTA) OUTPUT Inserted.ID_SALA
+				VALUES(:COD_SALA,:CANTIDAD_ALUMNOS,:ID_OFERTA)";
 				
 				$stmt = $this->conn->prepare($sql);
 				$stmt->bindParam(':COD_SALA', $sala, PDO::PARAM_STR);
 				$stmt->bindParam(':CANTIDAD_ALUMNOS', $capacidad, PDO::PARAM_INT);
+                                $stmt->bindParam(':ID_OFERTA', $oferta_id, PDO::PARAM_INT);
 				$stmt->execute();
 				
 				$result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -559,23 +565,25 @@ class Database {
 				/*
 				*Inserta la salaseccion correspondiente
 				*/
-				$sql = "INSERT INTO $this->DB_NAME.dbo.SALASECCION(SECCION_COD_SECCION,ID_SALA)
-				VALUES(:SECCION_COD_SECCION,:ID_SALA)";
+				$sql = "INSERT INTO $this->DB_NAME.dbo.SALASECCION(SECCION_COD_SECCION,ID_SALA,ID_OFERTA)
+				VALUES(:SECCION_COD_SECCION,:ID_SALA,:ID_OFERTA)";
 				
 				$stmt = $this->conn->prepare($sql);
 				$stmt->bindParam(':SECCION_COD_SECCION', $id_seccion, PDO::PARAM_INT);
 				$stmt->bindParam(':ID_SALA', $id_sala, PDO::PARAM_INT);
+                                $stmt->bindParam(':ID_OFERTA', $oferta_id, PDO::PARAM_INT);
 				$stmt->execute();
 				
 				/*
 				*Inserta la seccion asignatura correspondiente
 				*/
-				$sql = "INSERT INTO $this->DB_NAME.dbo.SECCIONASIG(ID_SECCION,ID_ASIGNATURA)
-				VALUES(:ID_SECCION,:ID_ASIGNATURA)";
+				$sql = "INSERT INTO $this->DB_NAME.dbo.SECCIONASIG(ID_SECCION,ID_ASIGNATURA,ID_OFERTA)
+				VALUES(:ID_SECCION,:ID_ASIGNATURA,:ID_OFERTA)";
 				
 				$stmt = $this->conn->prepare($sql);
 				$stmt->bindParam(':ID_SECCION', $id_seccion, PDO::PARAM_INT);
 				$stmt->bindParam(':ID_ASIGNATURA', $id_asignatura, PDO::PARAM_INT);
+                                $stmt->bindParam(':ID_OFERTA', $oferta_id, PDO::PARAM_INT);
 				$stmt->execute();
 			}
 			
@@ -779,14 +787,15 @@ class Database {
             }
         }
         
-        function FAM_SELECT_OFERTA($ano, $sem){
+        function FAM_SELECT_OFERTA($ano, $sem, $escuela){
             
             try{
-                $sql = "SELECT * FROM $this->DB_NAME.dbo.OFERTA WHERE ANO = :ANO AND SEMESTRE = :SEMESTRE";
+                $sql = "SELECT * FROM $this->DB_NAME.dbo.OFERTA WHERE ANO = :ANO AND SEMESTRE = :SEMESTRE AND ESCUELA = :ESCUELA";
 			
                 $stmt = $this->conn->prepare($sql);
                 $stmt->bindParam(':ANO', $ano, PDO::PARAM_INT);
                 $stmt->bindParam(':SEMESTRE', $sem, PDO::PARAM_INT);
+                $stmt->bindParam(':ESCUELA', $escuela, PDO::PARAM_STR);
                 $stmt->execute();
 
                 $oferta = $stmt->fetchAll();
@@ -973,14 +982,15 @@ class Database {
             }
         }
         
-        function FAM_UPDATE_OFERTA_DATOS($id_oferta, $semestre, $ano){
+        function FAM_UPDATE_OFERTA_DATOS($id_oferta, $semestre, $ano, $escuela){
             try{
-                $sql = "{CALL $this->DB_NAME.dbo.FAM_UPDATE_OFERTA_DATOS(?,?,?)}";
+                $sql = "{CALL $this->DB_NAME.dbo.FAM_UPDATE_OFERTA_DATOS(?,?,?,?)}";
                 
                 $stmt = $this->conn->prepare($sql);
                 $stmt->bindParam(1, $id_oferta, PDO::PARAM_INT);
                 $stmt->bindParam(2, $semestre, PDO::PARAM_INT);
                 $stmt->bindParam(3, $ano, PDO::PARAM_INT);
+                $stmt->bindParam(4, $escuela, PDO::PARAM_STR);
                 $stmt->execute();
                 
                 return 0;
@@ -1056,6 +1066,37 @@ class Database {
                 $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
                 
                 return $resultado;
+                
+            } catch (Exception $ex) {
+                echo 'Error en sentencia delete: ' . $ex->getCode();
+            }
+        }
+        
+        function FAM_SELECT_ESCUELAS(){
+            try{
+                $sql = "SELECT * FROM $this->DB_NAME.dbo.ESCUELAUMAYOR";
+                
+                $stmt = $this->conn->prepare($sql);
+                $stmt->execute();
+                
+                $resultado = $stmt->fetchAll();
+                
+                return $resultado;
+                
+            } catch (Exception $ex) {
+                echo 'Error en sentencia select: ' . $ex->getCode();
+            }
+        }
+        
+        function FAM_BORRAR_OFERTA($id_oferta){
+            try{
+                $sql = "{CALL $this->DB_NAME.dbo.FAM_BORRAR_OFERTA(?)}";
+                
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindParam(1, $id_oferta, PDO::PARAM_INT);
+                $stmt->execute();
+                
+                return 0;
                 
             } catch (Exception $ex) {
                 echo 'Error en sentencia delete: ' . $ex->getCode();

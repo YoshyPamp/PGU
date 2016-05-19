@@ -59,8 +59,8 @@
 			foreach($sheetData as $asignatura){
 				$OA = new OfertaAsignatura();
 				
-				if($asignatura['C'] != null && $asignatura['C'] != false && $asignatura['C'] != 'Paq.(abr.)'){
-					$OA->setNombre($asignatura['B']);
+				if($asignatura['C'] != null && $asignatura['C'] != false && $asignatura['C'] != 'Paq.(abr.)' && $asignatura['C'] != " "){
+					$OA->setNombre($asignatura['B']);   
 					$cod_sec = explode("-",$asignatura['C']);
 					
                                         $OA->setCodigo($cod_sec[0]);

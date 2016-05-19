@@ -9,6 +9,49 @@ if (login_check($db) == true) {
 } else {
     $logged = 'out';
 }
+
+
+//    // ejemplo de autenticación
+//    $ldaprdn  = 'joshe.onate@cmy.edu';     // ldap rdn or dn
+//    $ldappass = 'c00ndesa';  // associated password
+//
+//    // conexión al servidor LDAP
+//    $ldapconn = ldap_connect("172.16.39.2")
+//        or die("Could not connect to LDAP server.");
+//
+//    if ($ldapconn) {
+//
+//        // realizando la autenticación
+//        $ldapbind = ldap_bind($ldapconn, $ldaprdn, $ldappass);
+//
+//        // verificación del enlace
+//        if ($ldapbind) {
+//            echo "LDAP bind successful...";
+//        } else {
+//            echo "LDAP bind failed...";
+//        }
+//
+//    }
+
+
+//    function pingAddress($ip) {
+//        $pingresult = exec("ping $ip", $outcome, $status);
+//        if (0 == $status) {
+//            $status = "alive";
+//        } else {
+//            $status = "dead";
+//        }
+//        
+//        foreach($outcome as $result){
+//            var_dump(utf8_encode($result));
+//        }
+//
+//        echo "The IP address, $ip, is  ".$status;
+//    }
+//
+//    pingAddress("107.170.72.108");
+
+
 ?>
 <script>
 

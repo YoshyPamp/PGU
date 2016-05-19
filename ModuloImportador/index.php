@@ -1,5 +1,6 @@
 <?php
-	
+    //error_reporting(0);
+    
     foreach (glob("clases/*.php") as $filename)
     {
         include $filename;
@@ -32,6 +33,7 @@
 	ini_set('xdebug.var_display_max_children', -1);
 	ini_set('xdebug.var_display_max_data', -1);
 	date_default_timezone_set('America/Santiago');
+        $escuelas = $db->FAM_SELECT_ESCUELAS();
     
 	
 
@@ -53,7 +55,7 @@
 				}
 			}else{
 				if($_GET['imported'] == 'errorO'){
-					$importe_fallido = "ERROR : OFERTA YA EXISTE PARA ESE AÑO Y SEMESTRE, ELIMINAR Y VOLVER A IMPORTAR.";
+					$importe_fallido = "ERROR : OFERTA YA EXISTE PARA LA ESCUELA EN ESE AÑO Y SEMESTRE, ELIMINAR Y VOLVER A IMPORTAR.";
 				}else{
 					if($_GET['imported'] == 'error'){
 						$importe_fallido = "ERROR : PLAN DE ESTUDIO YA EXISTE CON ESE CÓDIGO, ELIMINAR ANTERIOR Y VOLVER A IMPORTAR.";
@@ -203,9 +205,11 @@
                     
                     $acta = new Acta();
                     $resultado_acta = $acta->mapearPaginas("Documentos/".$_GET['name']);
+                    
                     $total_alumnos = count($resultado_acta['alumnos']);
-					$alumnos_sin_nota = $total_alumnos; //Se utilizara para ir restando los alumnos sin notas, si llega a 0 es pq es acta vacía.
+                    $alumnos_sin_nota = $total_alumnos; //Se utilizara para ir restando los alumnos sin notas, si llega a 0 es pq es acta vacía.
                     $total_asignaturas = count($resultado_acta['asignaturas']);
+                    
                 
                     //Contadores por modificaciones    
                     $conAlumnos = 0;
@@ -225,7 +229,7 @@
 </div>
 <div class="container-fluid">
                         
-                        
+                       
                         <h3 style='color: green'>Alumnos a Importar <strong>(<?php echo $total_alumnos; ?>)</strong></h3>
                         <table class='table table-hover' >
                             <thead>
@@ -375,7 +379,7 @@
                         <h3 class='col-md-12 text-center' >RESUMEN DE DATOS A IMPORTAR <small><em>Presione IMPORTAR cuando este seguro de los datos.</em></small></h3><br><br><br><br>
             
 </div>
-<div class="container-fluid">
+<div class="container">
                         
                         
                         <fieldset>
@@ -464,6 +468,13 @@
                                         <label for='año'>Año</label>
                                         <select name='año' class='form-control' required>
                                                 <option value=''>Seleccione...</option>
+                                                <option value='<?php echo date('Y')-8; ?>'><?php echo date('Y')-8; ?></option>
+                                                <option value='<?php echo date('Y')-7; ?>'><?php echo date('Y')-7; ?></option>
+                                                <option value='<?php echo date('Y')-6; ?>'><?php echo date('Y')-6; ?></option>
+                                                <option value='<?php echo date('Y')-5; ?>'><?php echo date('Y')-5; ?></option>
+                                                <option value='<?php echo date('Y')-4; ?>'><?php echo date('Y')-4; ?></option>
+                                                <option value='<?php echo date('Y')-3; ?>'><?php echo date('Y')-3; ?></option>
+                                                <option value='<?php echo date('Y')-2; ?>'><?php echo date('Y')-2; ?></option>
                                                 <option value='<?php echo date('Y')-1; ?>'><?php echo date('Y')-1; ?></option>
                                                 <option value='<?php echo date('Y'); ?>'><?php echo date('Y'); ?></option>
                                                 <option value='<?php echo date('Y')+1; ?>'><?php echo date('Y')+1; ?></option>
@@ -473,6 +484,13 @@
                                                 <option value=''>Seleccione...</option>
                                                 <option value='1'>Primer semestre</option>
                                                 <option value='2'>Segundo semestre</option>
+                                        </select>
+                                        <label for='escuela'>Escuela</label>
+                                        <select name='escuela' class='form-control' required>
+                                            <option value=''>Seleccione...</option>
+                                            <?php foreach($escuelas as $escuela):?>
+                                            <option value="<?php echo $escuela['COD_ESCUELA']; ?>"><?php echo $escuela['NOM_ESCUELA']; ?></option>
+                                            <?php endforeach;?>       
                                         </select><br>
 
                                         <table class="table table-striped">
