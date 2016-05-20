@@ -254,7 +254,7 @@
                                         <td class='center'><input type='text' name='alumno-<?php echo $key; $conAlumnos++; ?>[]' style='background-color: lightsteelblue;' placeholder='<?php echo $alumno->plan; ?>' required></td>
                                         <td class='center'><label class='text-danger'>
                                                 <a href="#alumnoRut<?php echo $conAlumnos; ?>" id="alumnoRut<?php echo $conAlumnos; ?>back"><img width='20%' height='19%' src='../Imagenes/new-go-down.png'></a>
-                                                <a target='_blank' href="Documentos/<?php echo $_GET['name']; ?>"><img width='20%' height='19%' src='../Imagenes/Pdf.png'></a>
+                                                <a target='_blank' href="Documentos/<?php echo utf8_encode($_GET['name']); ?>"><img width='20%' height='19%' src='../Imagenes/Pdf.png'></a>
                                             </label></td>
                                     <?php else: ?>
                                         <td class='center'><?php echo $conA; ?></td>

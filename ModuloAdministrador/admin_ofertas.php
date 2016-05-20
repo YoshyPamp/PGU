@@ -76,8 +76,10 @@
         <select name="escuela_oferta" clasS="form-control">
             <option value="">Seleccione...</option>
             <?php foreach($escuelas as $escuela): ?>
-                <?php if($escuela['COD_ESCUELA'] == $_GET['escuela']):?>
-                <?php $selected = "selected";?>
+                <?php if(isset($_GET['escuela'])): ?>
+					<?php if($escuela['COD_ESCUELA'] == $_GET['escuela']):?>
+						<?php $selected = "selected";?>
+					<?php endif;?>
                 <?php endif;?>
                 <option <?php echo $selected; ?> value="<?php echo $escuela['COD_ESCUELA']; ?>"><?php echo $escuela['NOM_ESCUELA']; ?></option>
             <?php endforeach;?>
