@@ -224,13 +224,13 @@
 					$seccion = $_POST[$i][2];
 					$profesor = $_POST[$i][3];
 					$inscritos = $_POST[$i][5];
-					$cupos = $_POST[$i][6];
-					$capacidad = $_POST[$i][7];
-					$sala = $_POST[$i][11];
-					$dia = $_POST[$i][10];
-					$inicio = $_POST[$i][8];
-                                        $inicio = substr($inicio, 0, -3);
-					$termino = $_POST[$i][9];
+/*27					*/$cupos = $_POST[$i][6];
+/*28					*/$capacidad = $_POST[$i][7];
+/*29					*/$sala = $_POST[$i][11];
+/*30					*/$dia = $_POST[$i][10];
+/*30					*/$inicio = $_POST[$i][8];
+/*30					*/$inicio = substr($inicio, 0, -3);
+/*30					*/$termino = $_POST[$i][9];
                                         $termino = substr($termino, 0, -3);
 					$modalidad = $_POST[$i][4];
 				
@@ -264,6 +264,6 @@
 	
 	
 	
-	?>
+	
 	
     

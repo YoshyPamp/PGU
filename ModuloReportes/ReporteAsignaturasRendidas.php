@@ -1,5 +1,4 @@
-<?php include("templates/header.php"); ?>
-<?php include("templates/navbar.php"); ?>
+<?php include("header_reportes.php"); ?> 
 
 
 <div class="col-md-3"></div>
@@ -43,4 +42,4 @@
 <input align="center" type="submit" name="vovler" value="volver"/>
 
 
-<?php include("templates/footer.php"); ?> 
+<?php include("../templates/footer.php"); ?> 

@@ -1,5 +1,4 @@
-<?php include("templates/header.php"); ?>
-<?php include("templates/navbar.php"); ?>
+<?php include("header_reportes.php"); ?> 
 
 
 <div class="col-md-3"></div>
@@ -9,10 +8,8 @@
     </div>
   <div class="panel-body" id='collapseInformacion' >
       <div class="form-group">
-          <label>RUT: </label><input type="text" value="" class="form-control" readonly>
-          <p><input type="submit" name="buscar" value="buscar"/></p>
-          <label>Nombre: </label>
-          <input type="text" value=" " class="form-control" readonly> 
+          <label>RUT: </label><input type="text" value="" class="form-control" readonly><br>
+          <p><input type="submit" name="buscar" value="buscar" class="btn btn-warning"/></p>
           <label>Plan Estudio: </label>
           <input type="text" value="" class="form-control" readonly>
       </div> 
@@ -37,8 +34,8 @@
     </table>
   </div>
 </div>
-<input align="center" type="submit" name="vovler" value="volver"/>
+<input align="center" type="submit" name="vovler" value="volver" class="btn btn-info"/>
 
 
-<?php include("templates/footer.php"); ?> 
+<?php include("../templates/footer.php"); ?> 
     

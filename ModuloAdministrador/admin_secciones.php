@@ -174,7 +174,7 @@
                 <table class="table table-bordered" id="alumnos_table">
                     <thead>
                         <tr>
-                            <th>ID SECCION</th><th>CÓDIGO</th><th>PROFESOR</th><th>SEMESTRE</th><th>AÑO</th>
+                            <th>ALUMNO</th><th>CÓDIGO</th><th>MATRÍCULA</th><th>RUT</th><th>ESTADO</th>
                         </tr>
                     </thead>
                     <tbody id="body_alumnos">
@@ -182,7 +182,7 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th>ID SECCION</th><th>CÓDIGO</th><th>PROFESOR</th><th>SEMESTRE</th><th>AÑO</th>
+                            <th>ALUMNO</th><th>CÓDIGO</th><th>MATRÍCULA</th><th>RUT</th><th>ESTADO</th>
                         </tr>
                     </tfoot>
                 </table>

@@ -1,9 +1,5 @@
 <?php
 	
-    foreach (glob("clases/*.php") as $filename)
-    {
-        include $filename;
-    }
     foreach (glob("../clases/*.php") as $filename)
     {
         include $filename;
@@ -27,8 +23,8 @@
     endif;
 	
 	if($_SESSION['perfil'] != 1){
-        header("location: /../index.php");
-    }
+            header("location: /../index.php");
+        }
     
 ?>
 
@@ -43,15 +39,21 @@
         <title><-- Sistema de Gestión Universitaria --></title>
         <!-- Bootstrap Core CSS -->
         <link href="../librerias/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
         <link href="//cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css" rel="stylesheet">
-        <link href="../css/styles.css" rel="stylesheet">
-        
-        <script src="../librerias/bootstrap/js/jquery.js"></script>
         <script src="../librerias/bootstrap/js/bootstrap.min.js"></script>
         <script src="//cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
-        <script src="../js/datatables.js"></script>
         <script src='../js/helpers.js'></script>
         <!-- Custom CSS -->
-        
+        <link href="../css/styles.css" rel="stylesheet">
     </head>
+    
+    <nav class="navbar navbar-default nvb">       
+        <a class="navbar-brand logo" href="../index.php">
+            <img alt="Brand"  src="../Imagenes/logo-U.jpg">
+        </a>
+
+        <h2>SISTEMA DE GESTIÓN UNIVERSITARIO</h2>    
+    </nav>
+
 

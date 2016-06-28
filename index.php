@@ -208,12 +208,11 @@
             </h4>
             <hr>
             <ul class="list-group">
-                <li class="list-group-item"><a class="btn btn-default" href='ModuloReportes/ProyeccionAsignaturas.php'>Ver Reporte</a>  -Emisión de proyección de asignaturas a dictar.</li>
-                <li class="list-group-item"><a class="btn btn-default" href='#'>Ver Reporte</a>  -Tasa de aprobación y reprobación.</li>
-                <li class="list-group-item"><a class="btn btn-default" href='ModuloReportes/AdminyCentPractica.php'>Ver Reporte</a>  -Administración y centralización de práctica.</li>
-                <li class="list-group-item"><a class="btn btn-default" href='ModuloReportes/AprobacionSemestral.php'>Ver Reporte</a>  -Informe de no reprobación semestral.</li>
-                <li class="list-group-item"><a class="btn btn-default" href='#'>Ver Reporte</a>  -Informe de cumplimiento de Bachiller y licenciatura.</li>
-                <li class="list-group-item"><a class="btn btn-default" href='#'>Ver Reporte</a>  -Informe estadístico por sexo.</li>
+                <li class="list-group-item"><a class="btn btn-primary" href='ModuloReportes/informe_proyeccion_asignaturas.php'>Ver Reporte</a>  -Emisión de proyección de asignaturas a dictar.</li>
+                <li class="list-group-item"><a class="btn btn-primary" href='ModuloReportes/informe_tasa_aprob.php'>Ver Reporte</a>  -Tasa de aprobación y reprobación.</li>
+                <li class="list-group-item"><a class="btn btn-primary" href='ModuloReportes/admin_cent_practica.php'>Ver Reporte</a>  -Administración y centralización de práctica.</li>
+                <li class="list-group-item"><a class="btn btn-primary" href='ModuloReportes/informe_repr_sem.php'>Ver Reporte</a>  -Informe de no reprobación semestral.</li>
+                <li class="list-group-item"><a class="btn btn-primary" href='ModuloReportes/informe_bach_lice.php'>Ver Reporte</a>  -Informe de cumplimiento de Bachiller y licenciatura.</li>
             </ul>
              </div>
                 <div class="col-md-2 barra"></div>
@@ -250,6 +249,11 @@
                         <li class="list-group-item">
                             <h3>
                                 <a class="btn btn-info form-control" href="ModuloAdministrador/admin_alumnos.php">Alumnos</a>
+                            </h3>
+                        </li>
+                        <li class="list-group-item">
+                            <h3>
+                                <a class="btn btn-info form-control" href="ModuloAdministrador/admin_homologaciones.php">Tabla de Homologaciones</a>
                             </h3>
                         </li>
                     </ul>
