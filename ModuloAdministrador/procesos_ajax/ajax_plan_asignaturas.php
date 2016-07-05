@@ -7,7 +7,7 @@
     $db = new Database();
     
     if(isset($_GET['codigo_plan'])){
-        $asignaturas_plan = $db->FAM_SELECT_ASIGNATURAS_PLAN($_GET['codigo_plan'],'plan');
+        $asignaturas_plan = $db->FAM_SELECT_ASIGNATURAS_PLAN($_GET['codigo_plan'],'proyeccion');
         if(!empty($asignaturas_plan)){
             
             foreach($asignaturas_plan as $key => $asignatura){

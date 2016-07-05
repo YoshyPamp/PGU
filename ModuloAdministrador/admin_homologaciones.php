@@ -26,6 +26,17 @@
         
     });
     
+    Array.prototype.remove = function() {
+    var what, a = arguments, L = a.length, ax;
+    while (L && this.length) {
+        what = a[--L];
+        while ((ax = this.indexOf(what)) !== -1) {
+            this.splice(ax, 1);
+        }
+    }
+    return this;
+};
+    
     function trae_asignaturas_plan(){
         var plan = $('#plan').val();
 
@@ -51,20 +62,25 @@
         });
     }
     
+    var asignatura_inicial = null;
+    var asignatureas_adicionales = [];
+    
     function agregarCompararPlan(asignatura){
         var id = $(asignatura).parent().attr('id');
         var count = $("#inicial_drop > p").length;
         
         //Verifica si ya está agregada al listado inicial
-        if($(asignatura).parent().hasClass('success')){
+        if($(asignatura).parent().hasClass('danger')){
+            asignatura_inicial = null;
             $('#'+id+'drop').remove();
-            $(asignatura).parent().toggleClass('success');
+            $(asignatura).parent().toggleClass('danger');
         }else{
 
             //Verifica si ya hay una asignatura como inicial
             if(count < 1){
+                asignatura_inicial = id.substr(7);
                 $('#inicial_drop').append('<p id="'+id+'drop"><b>'+id.substr(7)+'</b></p>');
-                $(asignatura).parent().toggleClass('success');
+                $(asignatura).parent().toggleClass('danger');
             }else{
                 alert('Sólo puede seleccionar una asignatura como inicial.');
             }
@@ -76,11 +92,37 @@
         
         //Verifica si ya está agregada al listado inicial
         if($(asignatura).parent().hasClass('success')){
+            asignatureas_adicionales.remove(id);
             $('#'+id+'drop').remove();
             $(asignatura).parent().toggleClass('success');
         }else{
+            asignatureas_adicionales.push(id);
             $('#adicionales_drop').append('<p id="'+id+'drop"><b>'+id+'</b></p>');
             $(asignatura).parent().toggleClass('success');
+        }
+    }
+    
+    function homologar(){
+        
+        if(asignatura_inicial == null){
+            alert('Debe seleccionar una asignatura inicial del plan.');
+        }else{
+            if(asignatureas_adicionales.length < 1){
+                alert('Debe seleccionar al menos una asignatura del pool.');
+            }else{
+                $.ajax({
+                    method: "GET",
+                    url: "procesos_ajax/ajax_homologar.php",
+                    data: { inicial: asignatura_inicial,
+                            adicional: JSON.stringify(asignatureas_adicionales)}
+                })
+                .done(function( msg ) {
+                    alert(msg);
+                })
+                .fail(function() {
+                    alert( "Error en solicitud a servidor.");
+                });
+            }
         }
     }
     
@@ -102,7 +144,7 @@
         <div class="form-inline col-md-12">
             <label class="col-md-1">Plan de estudio</label>
             <input type="text" class="form-control col-md-1" id="plan" placeholder="ICF120-2014" /><div class="col-md-1"></div>
-            <input type="button" class="btn btn-warning col-md-1" value="TRAER PLAN" onclick="trae_asignaturas_plan();" /><div class="col-md-8"></div>
+            <input type="button" class="btn btn-warning col-md-1" value="TRAER PLAN" onclick="trae_asignaturas_plan();" /><input type="button" onclick="window.location='admin_tabla_homologaciones.php'" class="btn btn-success" style="margin-left: 60px;" value="VER TABLA DE HOMOLOGACIONES" /><div class="col-md-8"></div>
         </div>
         <div class="col-md-12"><hr></div>
         <div class="panel panel-primary col-md-5">
@@ -113,7 +155,7 @@
                 <table class="table table-responsive table-condensed" id="plan_asignaturas">
                     <thead>
                         <tr>
-                            <th>PLAN</th><th>CÓDIGO</th><th>ASIGNATURA</th><th>ADD</th>
+                            <th>PLAN</th><th>CÓDIGO</th><th>ASIGNATURA</th><th><span class="glyphicon glyphicon-triangle-right"></span></th>
                         </tr>
                     </thead>
                     <tbody id="plan_asignaturas_body">
@@ -136,6 +178,7 @@
                 <div id="adicionales_drop" class="well well-sm">
                     
                 </div>
+                <button class="btn btn-info" onclick="homologar();">HOMOLOGAR</button>
             </div>
         </div>
     
@@ -147,7 +190,7 @@
                 <table class="table table-responsive table-condensed" id="pool_asignaturas">
                     <thead>
                         <tr>
-                            <th>ADD</th><th>ASIGNATURA</th><th>CÓDIGO</th>
+                            <th><span class="glyphicon glyphicon-triangle-left"></span></th><th>ASIGNATURA</th><th>CÓDIGO</th>
                         </tr>
                     </thead>
                     <tbody>

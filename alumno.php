@@ -19,6 +19,7 @@
         $apellidos = explode(" ",$nombreCompleto[0]);
         $apellidoPat = trim($apellidos[0]);
         $apellidoMat = trim($apellidos[1]); 
+        $plus = '';
         
         $resultado = $db->FAM_VERIFICAR_NIVEL_MINIMO_ASIGNATURAS($alumno['CODIGO_PLAN'], $_GET['rut']);
         $nivel_minimo = $resultado['NIVEL_MINIMO'];
@@ -42,7 +43,7 @@
 	}
         
         //xdebug_dump_superglobals();
-        //var_dump($nivel);
+        //var_dump($horario);
       
 	
 ?>
@@ -110,7 +111,7 @@
                 <?php foreach($dias_semana as $dia): ?>
                     <?php $sec = buscaSec($dia, $hor, $horario);?>
                     <?php if($sec != null):?>
-                        <td class="info col-md-1" style="width: 10%;"><?php echo utf8_encode($sec['NOM_ASIGNATURA'])."<br>".$sec['COD_SECCION']."<br>".$sec['PROFESOR_NOMBRE']."<br>".$sec['MODALIDAD']; ?></td>
+                        <td class="info col-md-1" style="width: 10%;"><?php echo utf8_encode($sec['NOM_ASIGNATURA'])."<br>".$sec['COD_SECCION']."<br>".utf8_encode($sec['PROFESOR_NOMBRE'])."<br>".$sec['MODALIDAD']; ?></td>
                     <?php else:?>
                         <td class="col-md-2"></td>
                     <?php endif; ?>
@@ -130,34 +131,47 @@
   <div class="panel-body collapse" id='collapsePlan'>
 	   <?php if($existe): ?>
        <?php foreach($asignaturas as $nivel => $ramos): ?>
-			<table class="table table-condensed" style=" float: left; width: <?php echo $width; ?>%;">
-				<thead>
-					<tr>
-						<th><?php echo $nivel; ?></th>
-					</tr>
-				</thead>
-				
-				<tbody>
-					<?php foreach($ramos as $ramo): ?>
-					<?php 	if(substr($ramo[1],0,2) == 'FG'):?>
-					<?php 		$ramos_FG[] = $ramo ?>
-					<?php 	else:?>
-                                        <?php $estado = $db->FAM_SELECT_ESTADO_ASIGNATURA_BY_RUT($alumno['RUT'],$ramo[1].'%', $ramo[0].'%');?>
-						<tr class="<?php echo $estado; ?>">
-							<td style=" font-family: 'Courier';">
-								<?php echo utf8_encode($ramo[0]); ?><br>
-								<em><?php echo $ramo[1]; ?></em>
-							</td>
-						</tr>
-					<?php 	endif;?>
-					<?php endforeach;?>
-				</tbody>
-			</table>
+                <table class="table table-condensed table-bordered" style=" float: left; width: <?php echo $width; ?>%;">
+                    <thead>
+                            <tr>
+                                    <th><?php echo $nivel; ?></th>
+                            </tr>
+                    </thead>
+
+                    <tbody>
+                            <?php foreach($ramos as $ramo): ?>
+                            <?php 	if(substr($ramo[1],0,2) == 'FG'):?>
+                            <?php 		$ramos_FG[] = $ramo ?>
+                            <?php 	else:?>
+
+                            <?php $estado = $db->FAM_SELECT_ESTADO_ASIGNATURA_BY_RUT($alumno['RUT'],$ramo[1].'%');?>
+
+                            <?php if($estado == 'info'): ?>
+                            <?php $estado = $db->FAM_SELECT_ESTADO_ASIGNATURA_BY_RUT_PLUS($alumno['RUT'],$ramo[1]);?>
+                            <?php 
+                                if($estado != 'info'){
+                                    $plus = ' PLUS';
+                                }else{
+                                    $plus = '';
+                                }
+                            ?>
+                            <?php endif;?>
+
+                                    <tr class="<?php echo $estado; ?>">
+                                            <td style=" font-family: 'Courier';">
+                                                    <?php echo utf8_encode($ramo[0]); ?><br>
+                                                    <em><?php echo $ramo[1]; ?><b style='color: blue;'><?php echo $plus; ?></b></em>
+                                            </td>
+                                    </tr>
+                            <?php 	endif;?>
+                            <?php endforeach;?>
+                    </tbody>
+                </table>
 	   <?php endforeach;?>
 	   <?php if(count($ramos_FG) > 0):?>
 		<div>
                     <legend>Electivos de Formación General <em style="color: #01717c; cursor: pointer; " onclick="escondeElectivos();">(Presione para expandir o contraer)</em></legend>
-			<table class="table table-responsive" id="electivos" style="display: none;">
+			<table class="table table-responsive table-bordered" id="electivos" style="display: none;">
 				<tbody>
 					<tr class="info">
 					<?php foreach($ramos_FG as $ramo): ?>

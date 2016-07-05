@@ -172,6 +172,8 @@ class Database {
                                     $alumno['ESTADO_ESTUDIO'] = $row['ESTADO_ESTUDIO'];
                                     $alumno['ESTADO_PRACTICA'] = $row['ESTADO_PRACTICA'];
                                     $alumno['COMENTARIO_PRACTICA'] = $row['COMENTARIO_PRACTICA'];
+                                    $alumno['ESTADO_PRACTICA_PRO'] = $row['ESTADO_PRACTICA_PRO'];
+                                    $alumno['COMENTARIO_PRACTICA_PRO'] = $row['COMENTARIO_PRACTICA_PRO'];
                             }
                         }
 			
@@ -312,12 +314,12 @@ class Database {
 		}
         }
 	
-        function FAM_VINCULAR_ALUM_SECC($codigo, $seccio, $año, $sem, $rut){
+        function FAM_VINCULAR_ALUM_SECC($codigo, $seccio, $año, $sem, $rut, $resultado_ramo){
 		
 		try{
 			$codigo_completo = $codigo."-".$seccio;
 			$return = 1;
-			$sql = "{CALL $this->DB_NAME.dbo.FAM_VINCULAR_ALUM_SECC(?,?,?,?,?)}";
+			$sql = "{CALL $this->DB_NAME.dbo.FAM_VINCULAR_ALUM_SECC(?,?,?,?,?,?)}";
 			
 			$stmt = $this->conn->prepare($sql);
 			$stmt->bindParam(1, $rut, PDO::PARAM_STR);
@@ -325,6 +327,7 @@ class Database {
 			$stmt->bindParam(3, $sem, PDO::PARAM_INT);
 			$stmt->bindParam(4, $año, PDO::PARAM_INT);
 			$stmt->bindParam(5, $return, PDO::PARAM_INT,4);
+                        $stmt->bindParam(6, $resultado_ramo, PDO::PARAM_STR);
 			$stmt->execute();
 			
 			return $return;
@@ -718,14 +721,13 @@ class Database {
             return $id_seccion;
 	}
         
-        function FAM_SELECT_ESTADO_ASIGNATURA_BY_RUT($rut, $asig, $asig_nom){
+        function FAM_SELECT_ESTADO_ASIGNATURA_BY_RUT($rut, $asig){
             try{
-                $sql = "{CALL $this->DB_NAME.dbo.FAM_SELECT_ESTADO_ASIGNATURA_BY_RUT(?,?,?)}";
+                $sql = "{CALL $this->DB_NAME.dbo.FAM_SELECT_ESTADO_ASIGNATURA_BY_RUT(?,?)}";
                 
                 $stmt = $this->conn->prepare($sql);
 			$stmt->bindParam(1, $rut, PDO::PARAM_STR);
                         $stmt->bindParam(2, $asig, PDO::PARAM_STR);
-                        $stmt->bindParam(3, $asig_nom, PDO::PARAM_STR);
 			$stmt->execute();
 			
 			$result = $stmt->fetchAll();
@@ -756,6 +758,43 @@ class Database {
                 'Error en sentencia: ' . $ex->getCode();
             }
         }
+        function FAM_SELECT_ESTADO_ASIGNATURA_BY_RUT_PLUS($rut,$asignatura){
+            try{
+                $sql = "{CALL $this->DB_NAME.dbo.FAM_SELECT_ESTADO_ASIGNATURA_BY_RUT_PLUS(?,?)}";
+                
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindParam(1, $rut, PDO::PARAM_STR);
+                $stmt->bindParam(2, $asignatura, PDO::PARAM_STR);
+                $stmt->execute();
+			
+                $result = $stmt->fetchAll();
+                if(count($result) > 0){
+                    $estado = $result[0]['ESTADO'];
+                }else{
+                    $estado = '';
+                }
+                        
+                switch($estado){
+                    case 'REPROBADO':
+                        $estado = 'danger';
+                        break;
+                    case 'APROBADO':
+                        $estado = 'success';
+                        break;
+                    case 'INSCRITO':
+                        $estado = 'warning';
+                        break;
+                    default:
+                        $estado = 'info';
+                        break;
+                }
+
+                return $estado;
+                
+            } catch (Exception $ex) {
+                'Error en sentencia: ' . $ex->getCode();
+            }
+        }
         
         function FAM_SELECT_NOTAS_SECCION_BY_RUT($seccion, $rut){
             
@@ -769,6 +808,22 @@ class Database {
 			
 			$result = $stmt->fetchAll();
                         return $result;
+                
+            } catch (Exception $ex) {
+                'Error en sentencia: ' . $ex->getCode();
+            }
+        }
+        
+        function FAM_SELECT_SECCIONES_BYRUT($rut){
+            try{
+                $sql = "{CALL $this->DB_NAME.dbo.FAM_SELECT_SECCIONES_BYRUT(?)}";
+                
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindParam(1, $rut, PDO::PARAM_STR);
+                $stmt->execute();
+
+                $result = $stmt->fetchAll();
+                return $result;
                 
             } catch (Exception $ex) {
                 'Error en sentencia: ' . $ex->getCode();
@@ -1241,19 +1296,124 @@ class Database {
             }
         }
         
-        function FAM_UPDATE_ALUMNO_PRACTICA($rut, $estado, $comentarios){
+        function FAM_UPDATE_ALUMNO_PRACTICA($rut, $estado, $comentarios, $estado2, $comentarios2){
             
             try{
-                $sql = "{CALL $this->DB_NAME.dbo.FAM_UPDATE_ALUMNO_PRACTICA(?,?,?)}";
+                $sql = "{CALL $this->DB_NAME.dbo.FAM_UPDATE_ALUMNO_PRACTICA(?,?,?,?,?)}";
 
                 $stmt = $this->conn->prepare($sql);
                 $stmt->bindParam(1, $rut, PDO::PARAM_STR);
                 $stmt->bindParam(2, $estado, PDO::PARAM_STR);
                 $stmt->bindParam(3, $comentarios, PDO::PARAM_STR);
+                $stmt->bindParam(4, $estado2, PDO::PARAM_STR);
+                $stmt->bindParam(5, $comentarios2, PDO::PARAM_STR);
                 $stmt->execute();
 			
             }catch(PDOException $ex){
                 echo 'Error en sentencia update: ' . $ex->getMessage();
+            }
+        }
+        
+        function FAM_VINCULAR_HOMOLOGACION($inicial, $adicional){
+            
+            try{
+                $sql = "{CALL $this->DB_NAME.dbo.FAM_VINCULAR_HOMOLOGACION(?,?)}";
+
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindParam(1, $inicial, PDO::PARAM_STR);
+                $stmt->bindParam(2, $adicional, PDO::PARAM_STR);
+                $stmt->execute();
+			
+            }catch(PDOException $ex){
+                echo 'Error en sentencia insert: ' . $ex->getMessage();
+            }
+        }
+        
+        function FAM_ID_ASIGNATURA_BY_CODIGO($codigo){
+            
+            try{
+                $sql = "SELECT ID_ASIGNATURA FROM $this->DB_NAME.dbo.ASIGNATURA WHERE COD_ASIGNATURA = :COD_ASIGNATURA";
+			
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindParam(':COD_ASIGNATURA', $codigo, PDO::PARAM_STR);
+                $stmt->execute();
+
+                $result = $stmt->fetchAll();
+                $ID_ASIGNATURA = $result[0]['ID_ASIGNATURA'];
+                
+                return $ID_ASIGNATURA;
+                
+            } catch (PDOException $ex) {
+                echo 'Error en sentencia select: ' . $ex->getMessage();
+            }
+        }
+        
+        function FAM_SELECT_PLANES_ESCUELA($ESCUELA){
+            
+            try{
+                $sql = "{CALL $this->DB_NAME.dbo.FAM_SELECT_PLANES_ESCUELA(?)}";
+
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindParam(1, $ESCUELA, PDO::PARAM_STR);
+                $stmt->execute();
+                
+                $result = $stmt->fetchAll();
+                
+                return $result;
+			
+            }catch(PDOException $ex){
+                echo 'Error en sentencia select: ' . $ex->getMessage();
+            }
+        }
+        
+        function FAM_SELECT_HOMOLOGACIONES_ASIGNATURA($id_asig){
+            
+            try{
+                $sql = "{CALL $this->DB_NAME.dbo.FAM_SELECT_HOMOLOGACIONES_ASIGNATURA(?)}";
+
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindParam(1, $id_asig, PDO::PARAM_INT);
+                $stmt->execute();
+                
+                $result = $stmt->fetchAll();
+                
+                return $result;
+			
+            }catch(PDOException $ex){
+                echo 'Error en sentencia select: ' . $ex->getMessage();
+            }
+        }
+        
+        function FAM_BORRAR_HOMOLOGACION($id_inicial, $id_adicional){
+            try{
+                $sql = "{CALL $this->DB_NAME.dbo.FAM_BORRAR_HOMOLOGACION(?,?)}";
+                
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindParam(1, $id_inicial, PDO::PARAM_INT);
+                $stmt->bindParam(2, $id_adicional, PDO::PARAM_INT);
+                $stmt->execute();
+                
+                return 0;
+                
+            } catch (Exception $ex) {
+                echo 'Error en sentencia delete: ' . $ex->getCode();
+            }
+        }
+        
+        function FAM_SELECT_ASIGNATURAS_PLUS_BY_RUT($rut){
+            try{
+                $sql = "{CALL $this->DB_NAME.dbo.FAM_SELECT_ASIGNATURAS_PLUS_BY_RUT(?)}";
+                
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindParam(1, $rut, PDO::PARAM_STR);
+                $stmt->execute();
+                
+                $result = $stmt->fetchAll();
+                
+                return $result;
+                
+            } catch (Exception $ex) {
+                echo 'Error en sentencia select: ' . $ex->getCode();
             }
         }
         

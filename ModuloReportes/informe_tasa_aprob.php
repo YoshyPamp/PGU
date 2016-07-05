@@ -123,8 +123,8 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td align='center' class='success'><?php echo $tasas_general['TASA_APROBADOS'];  ?></td>
-                            <td align='center' class='danger'><?php echo $tasas_general['TASA_REPROBADOS'];  ?></td>
+                            <td align='center' class='success'><?php echo (isset($tasas_general['TASA_APROBADOS'])) ? $tasas_general['TASA_APROBADOS']: '';  ?></td>
+                            <td align='center' class='danger'><?php echo (isset($tasas_general['TASA_REPROBADOS'])) ? $tasas_general['TASA_REPROBADOS']: '';  ?></td>
                             <td align='center' class='primary'>ICC-01</td>
                         </tr>
                     </tbody>

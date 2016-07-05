@@ -200,8 +200,8 @@
             </h4>
             <hr>
             <ul class="list-group">
-                <li class="list-group-item"><a class="btn btn-default" href='ModuloReportes/HomologacionAsignaturas.php'>Ver Reporte</a>  -Registro de homlogaciones de asignaturas.</li>
-                <li class="list-group-item"><a class="btn btn-default" href='ModuloReportes/ReporteAsignaturasRendidas.php'>Ver Reporte</a>  -Emisión de informes de asignaturas rendidos, incluye homologación.</li>
+                <li class="list-group-item"><a class="btn btn-primary" href='ModuloReportes/informe_homologacion_asignaturas.php'>Ver Reporte</a>  -Registro de homlogaciones de asignaturas.</li>
+                <li class="list-group-item"><a class="btn btn-primary" href='ModuloReportes/informe_asignaturas_rendidas.php'>Ver Reporte</a>  -Emisión de informes de asignaturas rendidos, incluye homologación.</li>
             </ul>
             <h4>
                 Informe General
@@ -253,7 +253,7 @@
                         </li>
                         <li class="list-group-item">
                             <h3>
-                                <a class="btn btn-info form-control" href="ModuloAdministrador/admin_homologaciones.php">Tabla de Homologaciones</a>
+                                <a class="btn btn-info form-control" href="ModuloAdministrador/admin_homologaciones.php">Homologaciones</a>
                             </h3>
                         </li>
                     </ul>

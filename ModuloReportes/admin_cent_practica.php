@@ -35,14 +35,24 @@
             <div class='well'>
                 <div class="form-group">
                     <form method='POST' action='procesos_bd/guarda_practica.php'>
-                        <h2 class="panel-title"><b>Estado de Práctica</b></h2><br>
-                        <input type="radio" name="estado[]" value="EN CURSO" <?php echo (isset($alumno) && $alumno['ESTADO_PRACTICA'] == 'EN CURSO') ? 'checked': ''  ?>><b> En curso</b><br>
-                        <input type="radio" name="estado[]" value="CURSADA" <?php echo (isset($alumno) && $alumno['ESTADO_PRACTICA'] == 'CURSADA') ? 'checked': ''  ?>><b> Cursada</b><br>
-                        <input type="radio" name="estado[]" value="NO CURSADA" <?php echo (isset($alumno) && $alumno['ESTADO_PRACTICA'] == 'NO CURSADA') ? 'checked': ''  ?>><b> No Cursada</b><br><br>
-                        <label>Comentarios</label>
-                        <textarea name="comentario" style='resize: none;' rows='6' cols='6' class="form-control">
-                            <?php echo (isset($alumno)) ? $alumno['COMENTARIO_PRACTICA']: ''  ?>
-                        </textarea><br>
+                        <div class='col-md-6'>
+                            <h2 class="panel-title"><b>Práctica 1</b></h2><br>
+                            <input type="radio" name="estado" value="EN CURSO" <?php echo (isset($alumno) && $alumno['ESTADO_PRACTICA'] == 'EN CURSO') ? 'checked': ''  ?>><b> En curso</b><br>
+                            <input type="radio" name="estado" value="CURSADA" <?php echo (isset($alumno) && $alumno['ESTADO_PRACTICA'] == 'CURSADA') ? 'checked': ''  ?>><b> Cursada</b><br>
+                            <input type="radio" name="estado" value="NO CURSADA" <?php echo (isset($alumno) && $alumno['ESTADO_PRACTICA'] == 'NO CURSADA') ? 'checked': ''  ?>><b> No Cursada</b><br><br>
+
+                            <label>Comentarios</label>
+                            <textarea name="comentario" style='resize: none;' rows='6' class="form-control"><?php echo (isset($alumno)) ? $alumno['COMENTARIO_PRACTICA']: ''  ?></textarea><br>
+                        </div>
+                        <div class='col-md-6'>
+                            <h2 class="panel-title"><b>Práctica 2</b></h2><br>
+                            <input type="radio" name="estado2" value="EN CURSO" <?php echo (isset($alumno) && $alumno['ESTADO_PRACTICA_PRO'] == 'EN CURSO') ? 'checked': ''  ?>><b> En curso</b><br>
+                            <input type="radio" name="estado2" value="CURSADA" <?php echo (isset($alumno) && $alumno['ESTADO_PRACTICA_PRO'] == 'CURSADA') ? 'checked': ''  ?>><b> Cursada</b><br>
+                            <input type="radio" name="estado2" value="NO CURSADA" <?php echo (isset($alumno) && $alumno['ESTADO_PRACTICA_PRO'] == 'NO CURSADA') ? 'checked': ''  ?>><b> No Cursada</b><br><br>
+
+                            <label>Comentarios</label>
+                            <textarea name="comentario2" style='resize: none;' rows='6' class="form-control"><?php echo (isset($alumno)) ? $alumno['COMENTARIO_PRACTICA_PRO']: ''  ?></textarea><br>
+                        </div>
                         <input type="submit" class='btn btn-success' value="GUARDAR"/>
                         <input type='hidden' name='rutalumno' value='<?php echo (isset($alumno)) ? $alumno['RUT']: '' ?>' />
                     </form>
