@@ -35,7 +35,7 @@ class Database {
     
             try{
                     $this->conn = new PDO (
-                                    "odbc:Driver={SQL Server Native Client 11.0};Server=".$this->DB_SERVER.";Port:1433;dbname=".$this->DB_NAME,
+                                    "odbc:Driver={SQL Server Native Client 10.0};Server=".$this->DB_SERVER.";Port:1433;dbname=".$this->DB_NAME,
                                     $this->DB_USER,
                                     $this->DB_PASS
                                     );
@@ -162,26 +162,28 @@ class Database {
 			
 			$result = $stmt->fetchAll();
                         
-                        if(count($result) > 0){
-			
-                            foreach($result as $row){
-                                    $alumno['RUT'] = $row['RUT'];
-                                    $alumno['N_MATRICULA'] = $row['N_MATRICULA'];
-                                    $alumno['NOMBRES'] = utf8_encode($row['NOMBRES']);
-                                    $alumno['CODIGO_PLAN'] = $row['CODIGO_PLAN'];
-                                    $alumno['ESTADO_ESTUDIO'] = $row['ESTADO_ESTUDIO'];
-                                    $alumno['ESTADO_PRACTICA'] = $row['ESTADO_PRACTICA'];
-                                    $alumno['COMENTARIO_PRACTICA'] = $row['COMENTARIO_PRACTICA'];
-                                    $alumno['ESTADO_PRACTICA_PRO'] = $row['ESTADO_PRACTICA_PRO'];
-                                    $alumno['COMENTARIO_PRACTICA_PRO'] = $row['COMENTARIO_PRACTICA_PRO'];
-                            }
-                        }
+				if(count($result) > 0){
+	
+					foreach($result as $row){
+							$alumno['RUT'] = $row['RUT'];
+							$alumno['N_MATRICULA'] = $row['N_MATRICULA'];
+							$alumno['NOMBRES'] = utf8_encode($row['NOMBRES']);
+							$alumno['CODIGO_PLAN'] = $row['CODIGO_PLAN'];
+							$alumno['ESTADO_ESTUDIO'] = $row['ESTADO_ESTUDIO'];
+							$alumno['ESTADO_PRACTICA'] = $row['ESTADO_PRACTICA'];
+							$alumno['COMENTARIO_PRACTICA'] = $row['COMENTARIO_PRACTICA'];
+							$alumno['ESTADO_PRACTICA_PRO'] = $row['ESTADO_PRACTICA_PRO'];
+							$alumno['COMENTARIO_PRACTICA_PRO'] = $row['COMENTARIO_PRACTICA_PRO'];
+					}
+				}
+				
+				return $alumno;
 			
 		}catch(PDOException $ex){
 			echo 'Error en sentencia: ' . $ex->getCode();
 		}
         
-        return $alumno;
+        
     }
 	
         function SELECT_ASIGNATURAS_BYPLAN($codigo) {

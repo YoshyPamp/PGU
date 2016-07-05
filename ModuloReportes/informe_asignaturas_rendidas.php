@@ -2,28 +2,6 @@
 
 <script>
     
-    $(document).ready(function(){
-        $('#rendidas').DataTable({
-            "pagingType": "full_numbers",
-            "paging": false,
-            "searching": false,
-            "order": [[ 1, "asc" ]],
-            "language": {
-                "lengthMenu": "Mostrando _MENU_ datos por página.",
-                "zeroRecords": "No existen asignaturas rendidas.",
-                "info": "Mostrando página _PAGE_ de _PAGES_",
-                "search": "Buscar:",
-                "paginate": {
-                    "first":      "Primera",
-                    "last":       "Última",
-                    "next":       "Siguiente",
-                    "previous":   "Anterior"
-                },
-                "infoEmpty": "No hay registros disponibles.",
-                "infoFiltered": "(Filtrado de _MAX_ registros totales.)"
-            }
-        });
-    });
     
     function traer_alumno(){
         var rut_alumno = $('#rut').val(); 

@@ -10,7 +10,7 @@
             url: "procesos_ajax/ajax_alumno.php",
             data: { rut: rut_alumno }
         })
-        .done(function( msg ) {
+        .success(function( msg ) {
             alumno = JSON.parse(msg);
             if(alumno.length == 0){
                 alert("NO EXISTE ALUMNO CON ESE RUT.");
@@ -19,8 +19,9 @@
             $('#plan').val(alumno.CODIGO_PLAN);
             $('#nivel').val('NIVEL '+alumno.NIVEL);
         })
-        .fail(function() {
+        .error(function(exception) {
             alert( "Error en solicitud a servidor.");
+			alert('Exeption:'+exception);
         });
         
         //Trae asignaturas homologadas

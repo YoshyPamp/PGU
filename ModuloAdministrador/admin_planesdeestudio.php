@@ -103,7 +103,7 @@
                     }
                 })
                 .fail(function() {
-                    alert( "Error en solicitud a servidor.");
+                    alert( "Error en solicitud o no existe plan de estudio.");
                 });
         }
     }
