@@ -2,6 +2,10 @@
 
 <script>
         
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 23c97cdbca27cd8152b48154e134370e892c1341
     function trae_proyeccion_alumno(){
         var rut_alumno = $('#rut').val();
         var alumno;
