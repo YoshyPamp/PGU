@@ -4,6 +4,7 @@
     }
     
     $db = new Database();
+    
     if(isset($_GET['rut'])){
         $datos_alumno = $db->FAM_SELECT_ALUMNO_RUT($_GET['rut']);
         if(!empty($datos_alumno)){

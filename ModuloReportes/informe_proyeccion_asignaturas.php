@@ -2,28 +2,6 @@
 
 <script>
         
-    $(document).ready(function(){
-        $('#proyeccion').DataTable({
-            "pagingType": "full_numbers",
-            "paging": false,
-            "searching": false,
-            "order": [[ 1, "asc" ]],
-            "language": {
-                "lengthMenu": "Mostrando _MENU_ datos por página.",
-                "zeroRecords": "No se encuentran registros.",
-                "info": "Mostrando página _PAGE_ de _PAGES_",
-                "search": "Buscar:",
-                "paginate": {
-                    "first":      "Primera",
-                    "last":       "Última",
-                    "next":       "Siguiente",
-                    "previous":   "Anterior"
-                },
-                "infoEmpty": "No hay registros disponibles.",
-                "infoFiltered": "(Filtrado de _MAX_ registros totales.)"
-            }
-        });
-    });
     
     function trae_proyeccion_alumno(){
         var rut_alumno = $('#rut').val();
@@ -62,10 +40,10 @@
             $.each(proyeccion, function(index,seccion){
                 var color;
                 
-                $('#proyeccionbody').append('<tr>');
-                $('#proyeccionbody').append('<td>'+seccion.COD_ASIGNATURA+'</td>');
-                $('#proyeccionbody').append('<td>'+seccion.NOM_ASIGNATURA+'</td>');
-                $('#proyeccionbody').append('<td>'+seccion.NIVEL+'</td>');
+                $('#proyeccionbody').append('<tr id="'+seccion.COD_ASIGNATURA+'">');
+                $('#'+seccion.COD_ASIGNATURA).append('<td>'+seccion.COD_ASIGNATURA+'</td>');
+                $('#'+seccion.COD_ASIGNATURA).append('<td>'+seccion.NOM_ASIGNATURA+'</td>');
+                $('#'+seccion.COD_ASIGNATURA).append('<td>'+seccion.NIVEL+'</td>');
                 $('#proyeccionbody').append('</tr>');
             });
                 

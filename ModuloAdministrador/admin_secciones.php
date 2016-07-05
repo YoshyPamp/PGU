@@ -17,7 +17,7 @@
         $(document).ready(function() {
             $('#secciones_table').DataTable( {
                    "pagingType": "full_numbers",
-                   "order": [[ 2, "desc" ]],
+                   "order": false,
                    "language": {
                        "lengthMenu": "Mostrando _MENU_ datos por página.",
                        "zeroRecords": "No se encuentran registros.",
@@ -40,7 +40,7 @@
         $(document).ready(function() {
             $('#alumnos_table').DataTable( {
                    "pagingType": "full_numbers",
-                   "order": [[ 2, "desc" ]],
+                   "order": false,
                    "language": {
                        "lengthMenu": "Mostrando _MENU_ datos por página.",
                        "zeroRecords": "No se encuentran registros.",
@@ -75,6 +75,7 @@
                 data: { rut: rut_alumno }
                 })
                 .done(function( msg ) {
+                    console.log(msg);
                     var secciones = JSON.parse(msg);
                     $('#body_secciones').empty();
                     $.each(secciones, function(indice, seccion){

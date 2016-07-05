@@ -159,6 +159,8 @@ class Database {
 			$stmt = $this->conn->prepare($sql);
 			$stmt->bindParam(1, $rut, PDO::PARAM_STR);
 			$stmt->execute();
+                        
+                        
 			
 			$result = $stmt->fetchAll();
                         
@@ -175,12 +177,13 @@ class Database {
                                     $alumno['ESTADO_PRACTICA_PRO'] = $row['ESTADO_PRACTICA_PRO'];
                                     $alumno['COMENTARIO_PRACTICA_PRO'] = $row['COMENTARIO_PRACTICA_PRO'];
                             }
-                        }
-			
+                        }	
 		}catch(PDOException $ex){
 			echo 'Error en sentencia: ' . $ex->getCode();
 		}
         
+        
+                
         return $alumno;
     }
 	
@@ -288,7 +291,7 @@ class Database {
                 
                     $result1 = $stmt->fetchAll();
 		    $id_oferta = $result1[0]['ID_OFERTA'];
-
+                    
                     $sql = "SELECT ID_SECCION FROM $this->DB_NAME.dbo.SECCION WHERE COD_SECCION = :COD_SECCION AND OFERTA_ID = :OFERTA_ID";
 			
                     $stmt = $this->conn->prepare($sql);
