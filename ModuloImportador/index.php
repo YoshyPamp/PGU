@@ -186,6 +186,12 @@
             <option value="2">Decreto</option>
             <option value="3">Oferta</option>
         </select><br>
+        <label><b>Consideraciones: </b></label>
+        <ul>
+            <li>El nombre de los documentos no debe contener caracteres especiales como tildes o letras Ñ.</li>
+            <li>Para el documento de oferta, este debe ser convertido a csv UTF sin puntos ni comas antes de la conversión.</li>
+            <li>La acta final de la asignatura deberá ser importada al momento de contener las notas de exámenes.</li>
+        </ul><br>    
         <button class="btn btn-lg btn-primary btn-block" type="submit">Leer Documento</button>
       </form>
         <br>
