@@ -164,25 +164,7 @@ class Database {
 			
 			$result = $stmt->fetchAll();
                         
-<<<<<<< HEAD
-				if(count($result) > 0){
-	
-					foreach($result as $row){
-							$alumno['RUT'] = $row['RUT'];
-							$alumno['N_MATRICULA'] = $row['N_MATRICULA'];
-							$alumno['NOMBRES'] = utf8_encode($row['NOMBRES']);
-							$alumno['CODIGO_PLAN'] = $row['CODIGO_PLAN'];
-							$alumno['ESTADO_ESTUDIO'] = $row['ESTADO_ESTUDIO'];
-							$alumno['ESTADO_PRACTICA'] = $row['ESTADO_PRACTICA'];
-							$alumno['COMENTARIO_PRACTICA'] = $row['COMENTARIO_PRACTICA'];
-							$alumno['ESTADO_PRACTICA_PRO'] = $row['ESTADO_PRACTICA_PRO'];
-							$alumno['COMENTARIO_PRACTICA_PRO'] = $row['COMENTARIO_PRACTICA_PRO'];
-					}
-				}
-				
-				return $alumno;
-			
-=======
+
                         if(count($result) > 0){
 			
                             foreach($result as $row){
@@ -197,17 +179,16 @@ class Database {
                                     $alumno['COMENTARIO_PRACTICA_PRO'] = $row['COMENTARIO_PRACTICA_PRO'];
                             }
                         }	
->>>>>>> 23c97cdbca27cd8152b48154e134370e892c1341
+
 		}catch(PDOException $ex){
 			echo 'Error en sentencia: ' . $ex->getCode();
 		}
         
         
-<<<<<<< HEAD
-=======
+
                 
         return $alumno;
->>>>>>> 23c97cdbca27cd8152b48154e134370e892c1341
+
     }
 	
         function SELECT_ASIGNATURAS_BYPLAN($codigo) {
