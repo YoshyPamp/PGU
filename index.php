@@ -127,9 +127,9 @@
     <?php else: ?>
     <?php   $alumnos[] = $db->FAM_SELECT_ALUMNO_RUT($_SESSION['rut_alumno']); ?>
     <?php endif;?>
-    
             <div role="tabpanel" class="tab-pane content" id="alumno">
                 <div class="col-md-12">
+                        <button class="btn btn-success" onclick="$('#example_alumnos').tableExport({type:'excel'});">Exportar a XLS</button><br>
                         <table id="example_alumnos" width="100%" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
@@ -154,9 +154,7 @@
                 </div>
             </div>
         <?php endif; ?>
-        
-            
-            
+           
         <?php //ASIGNATURA ?>
         <?php if($_SESSION['perfil'] == 1 || $_SESSION['perfil'] == 4 || $_SESSION['perfil'] == 3): ?>
         
@@ -164,6 +162,7 @@
         
         <div role="tabpanel" class="tab-pane content" id="asignatura">
             <div class="col-md-12">
+                <button class="btn btn-success" onclick="$('#example_asignaturas').tableExport({type:'excel'});">Exportar a XLS</button><br>
                 <table id="example_asignaturas" class="table table-striped table-bordered" width="100%">
                     <thead>
                         <tr>

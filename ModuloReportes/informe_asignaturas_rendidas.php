@@ -2,11 +2,6 @@
 
 <script>
     
-<<<<<<< HEAD
-=======
-   
->>>>>>> 23c97cdbca27cd8152b48154e134370e892c1341
-    
     function traer_alumno(){
         var rut_alumno = $('#rut').val(); 
         
@@ -76,6 +71,7 @@
                 <input type="text" class="form-control" id='nivel' readonly><br>
             </div>
             <hr>
+            <button class="btn btn-success" onclick="$('#rendidas').tableExport({type:'excel'});">Exportar a XLS</button><br><br>
             <table class='table table-bordered table-striped' id='rendidas'>
                 <thead>
                     <tr>

@@ -2,10 +2,6 @@
 
 <script>
         
-<<<<<<< HEAD
-=======
-    
->>>>>>> 23c97cdbca27cd8152b48154e134370e892c1341
     function trae_proyeccion_alumno(){
         var rut_alumno = $('#rut').val();
         var alumno;
@@ -80,6 +76,7 @@
                 <input type="text" class="form-control" id="nivel" readonly><br>
             </div>
             <hr>
+            <button class="btn btn-success" onclick="$('#proyeccion').tableExport({type:'excel'});">Exportar a XLS</button><br><br>
             <legend>Asignaturas</legend>
             <table class="table table-striped table-bordered" id="proyeccion" >
                 <thead>

@@ -15,7 +15,8 @@ $notas = $db->FAM_SELECT_NOTAS_SECCION_BY_RUT($seccion, $rut);
 
 ?>
 <div class="container">
-    <table class="table table-responsive table-bordered table-hover">
+    <br><button class="btn btn-success btn-sm" onclick="$('#table-notas').tableExport({type:'excel'});">Exportar a XLS</button><br><br>
+    <table class="table table-responsive table-bordered table-hover" id="table-notas">
         <thead>
             <tr>
                 <th><em><?php echo $ramo;?></em></th><th><em><?php echo $rut;?></em></th><th><em><?php echo $sem_ano;?></em></th>

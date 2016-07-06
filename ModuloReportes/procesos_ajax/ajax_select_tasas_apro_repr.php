@@ -17,9 +17,10 @@
         echo json_encode($TASAS);
     }else{
         if($asignatura == null){
-            $TASAS = $db->FAM_REPORT_TASAAPROBADOS_BY_DOCENTE($año, $semestre, $docente, $escuela);
+            $TASAS = $db->FAM_REPORT_TASAAPROBADOS_BY_DOCENTE($año, $semestre, utf8_decode($docente), $escuela);
             echo json_encode($TASAS);
         }
     }
+    
 
 ?>

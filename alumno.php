@@ -91,7 +91,8 @@
         <h2 class="panel-title">Horario</h2>
     </div>
   <div class="panel-body collapse" id='collapseHorario'>
-    <table class="table table-bordered table-responsive" >
+    <button class="btn btn-success btn-sm" onclick="$('#table-horario').tableExport({type:'excel'});">Exportar a XLS</button><br><br>
+    <table class="table table-bordered table-responsive" id="table-horario" >
         <thead>
             <tr>
                 <th>Modulo</th>
@@ -111,7 +112,7 @@
                 <?php foreach($dias_semana as $dia): ?>
                     <?php $sec = buscaSec($dia, $hor, $horario);?>
                     <?php if($sec != null):?>
-                        <td class="info col-md-1" style="width: 10%;"><?php echo utf8_encode($sec['NOM_ASIGNATURA'])."<br>".$sec['COD_SECCION']."<br>".utf8_encode($sec['PROFESOR_NOMBRE'])."<br>".$sec['MODALIDAD']; ?></td>
+                        <td class="info col-md-1" style="width: 10%;"><?php echo utf8_encode($sec['NOM_ASIGNATURA'])."<br>".$sec['COD_SECCION']."<br>".utf8_encode($sec['PROFESOR_NOMBRE'])."<br>".$sec['MODALIDAD']." (<b>".$sec['COD_SALA']."</b>)"; ?></td>
                     <?php else:?>
                         <td class="col-md-2"></td>
                     <?php endif; ?>
@@ -131,7 +132,7 @@
   <div class="panel-body collapse" id='collapsePlan'>
 	   <?php if($existe): ?>
        <?php foreach($asignaturas as $nivel => $ramos): ?>
-                <table class="table table-condensed table-bordered" style=" float: left; width: <?php echo $width; ?>%;">
+                <table class="table table-condensed table-bordered" id="table-plan" style=" float: left; width: <?php echo $width; ?>%;">
                     <thead>
                             <tr>
                                     <th><?php echo $nivel; ?></th>
@@ -171,7 +172,7 @@
 	   <?php if(count($ramos_FG) > 0):?>
 		<div>
                     <legend>Electivos de Formación General <em style="color: #01717c; cursor: pointer; " onclick="escondeElectivos();">(Presione para expandir o contraer)</em></legend>
-			<table class="table table-responsive table-bordered" id="electivos" style="display: none;">
+                        <table class="table table-responsive table-bordered" id="electivos" style="display: none;">
 				<tbody>
 					<tr class="info">
 					<?php foreach($ramos_FG as $ramo): ?>
@@ -194,6 +195,7 @@
         <h2 class="panel-title">Histórico</h2>
     </div>
   <div class="panel-body collapse" id='collapseHistorico'>
+    <button class="btn btn-success btn-sm" onclick="$('#historico_alumno').tableExport({type:'excel'});">Exportar a XLS</button><br>
     <table class="table table-striped table-bordered" width="100%" id="historico_alumno">
         <thead>
             <tr>

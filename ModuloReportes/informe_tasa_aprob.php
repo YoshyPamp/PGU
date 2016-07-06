@@ -38,9 +38,10 @@
                     data: { ano: ano, semestre: sem, docente: docente, asig: asignatura, escu: escuela }
                 })
                 .done(function( msg ) {
+                    console.log(msg);
                     if(msg.length > 5){
                         var tasas = JSON.parse(msg);
-                        console.log(tasas);
+                        
                         $('#resultado_busqueda').empty();
                         $('#resultado_busqueda').append('<thead id="head">');
                         $('#head').append('<tr id="headtr">');
@@ -107,7 +108,7 @@
                 <select disabled name='asignatura' class='form-control asignatura'>
                     <option value=''>Seleccione Asignatura...</option>
                     <?php foreach($asignaturas as $asignatura):?>
-                        <option value='<?php echo $asignatura['COD_ASIGNATURA']; ?>'><?php  echo $asignatura['COD_ASIGNATURA']." / ".utf8_encode($asignatura['NOM_ASIGNATURA']); ?></option>
+                        <option value='<?php echo $asignatura['COD_ASIGNATURA']; ?>'><?php  echo utf8_encode($asignatura['NOM_ASIGNATURA'])." / ".$asignatura['COD_ASIGNATURA']; ?></option>
                     <?php endforeach;?>
                 </select><br>
                 <input type="button" onclick='trae_tasas();' class="btn btn-success" value="MOSTRAR TASAS">
@@ -115,6 +116,7 @@
             </div>
             <!-- FINAL FORMULARIO PARA BUSCAR -->
             <div>
+                <button class="btn btn-success" onclick="$('#resultado_busqueda').tableExport({type:'excel'});">Exportar a XLS</button><br><br>
                 <table class='table table-striped table-bordered' id='resultado_busqueda'>
                     <thead>
                         <tr>

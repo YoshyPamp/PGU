@@ -5,6 +5,7 @@
     
     if(isset($_GET['ano']) && isset($_GET['semestre'])){
         $secciones = $db->FAM_SELECT_OFERTA($_GET['ano'], $_GET['semestre'], $_GET['escuela']);
+        
         if($secciones != ''){
             
         }else{
@@ -103,7 +104,7 @@
         <table id="oferta_table" class="table table-striped table-bordered" width="100%" >
             <thead>
                 <tr>
-                    <th>ID</th><th>Código Sección</th><th>Profesor</th><th>Inscritos</th><th>Cupos</th><th>Capacidad</th><th>Día</th><th>Inicio</th><th>Término</th><th>Modalidad</th>
+                    <th>ID</th><th>Código Sección</th><th>Profesor</th><th>Inscritos</th><th>Cupos</th><th>Capacidad</th><th>Día</th><th>Inicio</th><th>Término</th><th>Modalidad</th><th>Sala</th>
                 </tr>
             </thead>
             <tbody>
@@ -112,15 +113,16 @@
                         ?>
                 <tr>
                     <td><?php echo $seccion['ID_SECCION'] ?></td>
-                    <td><input type="text" class="form-control" value="<?php echo $seccion['COD_SECCION'] ?>" name="<?php echo $seccion['ID_SECCION'] ?>[]" /></td>
+                    <td><input type="text" style="width: 150px;" class="form-control" value="<?php echo $seccion['COD_SECCION'] ?>" name="<?php echo $seccion['ID_SECCION'] ?>[]" /></td>
                     <td><input type="text" class="form-control" value="<?php echo utf8_encode($seccion['PROFESOR_NOMBRE']) ?>" name="<?php echo $seccion['ID_SECCION'] ?>[]" /></td>
-                    <td><input type="text" class="form-control" value="<?php echo $seccion['INSCRITOS'] ?>" name="<?php echo $seccion['ID_SECCION'] ?>[]" /></td>
-                    <td><input type="text" class="form-control" value="<?php echo $seccion['CUPOS'] ?>" name="<?php echo $seccion['ID_SECCION'] ?>[]" /></td>
-                    <td><input type="text" class="form-control" value="<?php echo $seccion['CAPACIDAD'] ?>" name="<?php echo $seccion['ID_SECCION'] ?>[]" /></td>
-                    <td><input type="text" class="form-control" value="<?php echo utf8_encode($seccion['DIA']) ?>" name="<?php echo $seccion['ID_SECCION'] ?>[]" /></td>
-                    <td><input type="text" class="form-control" value="<?php echo $seccion['INICIO'] ?>" name="<?php echo $seccion['ID_SECCION'] ?>[]" /></td>
-                    <td><input type="text" class="form-control" value="<?php echo $seccion['TERMINO'] ?>" name="<?php echo $seccion['ID_SECCION'] ?>[]" /></td>
-                    <td><input type="text" class="form-control" value="<?php echo $seccion['MODALIDAD'] ?>" name="<?php echo $seccion['ID_SECCION'] ?>[]" /></td>
+                    <td><input type="text" style="width: 50px;" class="form-control" value="<?php echo $seccion['INSCRITOS'] ?>" name="<?php echo $seccion['ID_SECCION'] ?>[]" /></td>
+                    <td><input type="text" style="width: 50px;" class="form-control" value="<?php echo $seccion['CUPOS'] ?>" name="<?php echo $seccion['ID_SECCION'] ?>[]" /></td>
+                    <td><input type="text" style="width: 50px;" class="form-control" value="<?php echo $seccion['CAPACIDAD'] ?>" name="<?php echo $seccion['ID_SECCION'] ?>[]" /></td>
+                    <td><input type="text" style="width: 150px;" class="form-control" value="<?php echo utf8_encode($seccion['DIA']) ?>" name="<?php echo $seccion['ID_SECCION'] ?>[]" /></td>
+                    <td><input type="text" style="width: 70px;" class="form-control" value="<?php echo $seccion['INICIO'] ?>" name="<?php echo $seccion['ID_SECCION'] ?>[]" /></td>
+                    <td><input type="text" style="width: 70px;" class="form-control" value="<?php echo $seccion['TERMINO'] ?>" name="<?php echo $seccion['ID_SECCION'] ?>[]" /></td>
+                    <td><input type="text" style="width: 150px;" class="form-control" value="<?php echo $seccion['MODALIDAD'] ?>" name="<?php echo $seccion['ID_SECCION'] ?>[]" /></td>
+                    <td><input type="text" style="width: 150px;" class="form-control" value="<?php echo $seccion['COD_SALA'] ?>" name="<?php echo $seccion['COD_SALA'] ?>[]" /></td>
                 </tr>
 
                         <?php

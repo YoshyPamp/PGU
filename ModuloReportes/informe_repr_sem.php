@@ -64,6 +64,7 @@
                 </form>
             </div>
             <div class="well">
+                <button class="btn btn-success" onclick="$('#report_norpro').tableExport({type:'excel'});">Exportar a XLS</button><br><br>
                 <table class="table table-striped table-bordered" id='report_norpro'>
                     <thead>
                         <tr>

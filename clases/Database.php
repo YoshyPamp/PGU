@@ -35,7 +35,7 @@ class Database {
     
             try{
                     $this->conn = new PDO (
-                                    "odbc:Driver={SQL Server Native Client 10.0};Server=".$this->DB_SERVER.";Port:1433;dbname=".$this->DB_NAME,
+                                    "odbc:Driver={SQL Server Native Client 11.0};Server=".$this->DB_SERVER.";Port:1433;dbname=".$this->DB_NAME,
                                     $this->DB_USER,
                                     $this->DB_PASS
                                     );
@@ -890,10 +890,10 @@ class Database {
                 if(count($oferta) > 0){
                     $oferta_id = $oferta[0]['ID_OFERTA'];
                     
-                    $sql = "SELECT * FROM $this->DB_NAME.dbo.SECCION WHERE OFERTA_ID = :OFERTA_ID";
+                    $sql = "{CALL $this->DB_NAME.dbo.FAM_SELECT_OFERTA(?)}";
 			
                     $stmt = $this->conn->prepare($sql);
-                    $stmt->bindParam(':OFERTA_ID', $oferta_id, PDO::PARAM_INT);
+                    $stmt->bindParam(1, $oferta_id, PDO::PARAM_INT);
                     $stmt->execute();
 
                     $secciones = $stmt->fetchAll();

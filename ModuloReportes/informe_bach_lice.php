@@ -39,6 +39,7 @@
         </div>
         <div class="panel-body">
             <div class="form-group">
+                <button class="btn btn-success" onclick="$('#tb_informe_bach_lic').tableExport({type:'excel'});">Exportar a XLS</button><br><br>
                 <table class="table table-striped table-bordered" id="tb_informe_bach_lic">
                     <thead>
                         <tr>

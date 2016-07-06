@@ -31,6 +31,7 @@
             data: { rut: rut_alumno }
         })
         .done(function( msg ) {
+            console.log(msg);
              var resultado = JSON.parse(msg);
              $('#resultado').empty();
             
@@ -77,7 +78,8 @@
                     <h2 class="panel-title">Asignaturas Homologadas <b><i>Presione para ver</i></b></h2>
                 </div>
                 <div class="panel-body collapse" id='collapseHorario'>
-                    <table class="table table-condensed table-bordered" >
+                    <button class="btn btn-success" onclick="$('#tabla_homologaciones').tableExport({type:'excel'});">Exportar a XLS</button><br><br>
+                    <table class="table table-condensed table-bordered" id="tabla_homologaciones">
                         <thead>
                             <tr>
                                 <th>PLAN DE ESTUDIO</th>

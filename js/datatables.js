@@ -6,6 +6,7 @@
 $(document).ready(function() {
     $('#example_alumnos').DataTable( {
         "pagingType": "full_numbers",
+        "paging":false,
         "order": [[ 1, "desc" ]],
         "language": {
         "lengthMenu": "Mostrando _MENU_ datos por página.",
@@ -25,6 +26,7 @@ $(document).ready(function() {
     
     $('#historico_alumno').DataTable( {
         "pagingType": "full_numbers",
+        "paging":false,
         "order": [[ 1, "desc" ]],
         "language": {
         "lengthMenu": "Mostrando _MENU_ datos por página.",
@@ -44,6 +46,7 @@ $(document).ready(function() {
        
     $('#example_asignaturas').DataTable( {
         "pagingType": "full_numbers",
+        "paging":false,
         "order": [[ 2, "desc" ]],
         "language": {
         "lengthMenu": "Mostrando _MENU_ datos por página.",

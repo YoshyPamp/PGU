@@ -7,7 +7,7 @@ include_once 'Config/login/funciones.php';
 $error_msg = "";
 $db = new Database();
 
-if (isset($_POST['dominio'], $_POST['email'], $_POST['tipo'] )) {
+if (isset($_POST['dominio']) && isset($_POST['email']) && isset($_POST['tipo'])) {
     
     $usuario = $_POST['email'];
     $email = $_POST['email'].$_POST['dominio'];
@@ -49,7 +49,7 @@ if (isset($_POST['dominio'], $_POST['email'], $_POST['tipo'] )) {
     $stmt->execute();
     $result = $stmt->fetchAll();
     
-    if(empty($result_alumno)){
+    if($id_perfil == 2 && empty($result_alumno)){
         // A user with this email address already exists
         $error_msg .= '<div class="container alert alert-danger"><strong>Error!</strong> No existe alumno con ese rut.</div>';
     }

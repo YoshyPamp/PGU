@@ -44,6 +44,8 @@
         <script src="../librerias/bootstrap/js/bootstrap.min.js"></script>
         <script src="//cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
         <script src='../js/helpers.js'></script>
+        <script type="text/javascript" src="../librerias/tableExport/tableExport/libs/FileSaver/FileSaver.min.js"></script>
+        <script type="text/javascript" src="../librerias/tableExport/tableExport/tableExport.min.js"></script>
         <!-- Custom CSS -->
         <link href="../css/styles.css" rel="stylesheet">
     </head>
