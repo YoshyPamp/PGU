@@ -113,7 +113,7 @@ if (login_check($db) == true) {
                     <div class="form-group"> 
                         <div class="col-sm-10">
                             <button type="submit" value="Login" class="btn btn-info">INICIAR</button>
-                            <button type="button" value="Registro" class="btn btn-default" onclick="$('#registro').toggle();">REGISTRARME</button>
+<!--                            <button type="button" value="Registro" class="btn btn-default" onclick="$('#registro').toggle();">REGISTRARME</button>-->
                         </div>
                     </div>
                 </form>

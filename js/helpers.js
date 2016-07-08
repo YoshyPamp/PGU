@@ -73,6 +73,25 @@ function ajax_cambiar_pass(){
             
 }
 
+function ajax_enviar_registro(){
+    var titulo = $('#titulo_bug').val();
+    var comentario = $('#comentario_bug').val();
+    
+    $.ajax({
+        method: "POST",
+        url: "Config/enviar_correo.php",
+        data: { tit: titulo,
+                com: comentario}
+        })
+        .done(function( msg ){
+            alert(msg);
+        })
+        .fail(function(){
+            alert( "Error en solicitud a servidor.");
+        });
+
+}
+
 
 
 

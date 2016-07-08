@@ -152,44 +152,39 @@ class Database {
     
         function FAM_SELECT_ALUMNO_RUT($rut){
 		
-		try{
-			$alumno = array();
-			$sql = "{CALL $this->DB_NAME.dbo.select_alumno_rut(?)}";
-			
-			$stmt = $this->conn->prepare($sql);
-			$stmt->bindParam(1, $rut, PDO::PARAM_STR);
-			$stmt->execute();
-                        
-                        
-			
-			$result = $stmt->fetchAll();
-                        
+            try{
+                $alumno = array();
+                $sql = "{CALL $this->DB_NAME.dbo.select_alumno_rut(?)}";
 
-                        if(count($result) > 0){
-			
-                            foreach($result as $row){
-                                    $alumno['RUT'] = $row['RUT'];
-                                    $alumno['N_MATRICULA'] = $row['N_MATRICULA'];
-                                    $alumno['NOMBRES'] = utf8_encode($row['NOMBRES']);
-                                    $alumno['CODIGO_PLAN'] = $row['CODIGO_PLAN'];
-                                    $alumno['ESTADO_ESTUDIO'] = $row['ESTADO_ESTUDIO'];
-                                    $alumno['ESTADO_PRACTICA'] = $row['ESTADO_PRACTICA'];
-                                    $alumno['COMENTARIO_PRACTICA'] = $row['COMENTARIO_PRACTICA'];
-                                    $alumno['ESTADO_PRACTICA_PRO'] = $row['ESTADO_PRACTICA_PRO'];
-                                    $alumno['COMENTARIO_PRACTICA_PRO'] = $row['COMENTARIO_PRACTICA_PRO'];
-                            }
-                        }	
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindParam(1, $rut, PDO::PARAM_STR);
+                $stmt->execute();
 
-		}catch(PDOException $ex){
-			echo 'Error en sentencia: ' . $ex->getCode();
-		}
-        
-        
 
-                
-        return $alumno;
 
-    }
+                $result = $stmt->fetchAll();
+
+
+                if(count($result) > 0){
+
+                    foreach($result as $row){
+                        $alumno['RUT'] = $row['RUT'];
+                        $alumno['N_MATRICULA'] = $row['N_MATRICULA'];
+                        $alumno['NOMBRES'] = utf8_encode($row['NOMBRES']);
+                        $alumno['CODIGO_PLAN'] = $row['CODIGO_PLAN'];
+                        $alumno['ESTADO_ESTUDIO'] = $row['ESTADO_ESTUDIO'];
+                        $alumno['ESTADO_PRACTICA'] = $row['ESTADO_PRACTICA'];
+                        $alumno['COMENTARIO_PRACTICA'] = $row['COMENTARIO_PRACTICA'];
+                        $alumno['ESTADO_PRACTICA_PRO'] = $row['ESTADO_PRACTICA_PRO'];
+                        $alumno['COMENTARIO_PRACTICA_PRO'] = $row['COMENTARIO_PRACTICA_PRO'];
+                    }
+                }	
+
+            }catch(PDOException $ex){
+                echo 'Error en sentencia: ' . $ex->getCode();
+            }      
+            return $alumno;
+        }
 	
         function SELECT_ASIGNATURAS_BYPLAN($codigo) {
 		
@@ -1321,6 +1316,21 @@ class Database {
             }
         }
         
+        function FAM_INSERT_PRACTICA_APROBADA($rut, $nota, $practica){
+            try{
+                $sql = "{CALL $this->DB_NAME.dbo.FAM_INSERT_PRACTICA_APROBADA(?,?,?)}";
+
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindParam(1, $rut, PDO::PARAM_STR);
+                $stmt->bindParam(2, $nota, PDO::PARAM_INT);
+                $stmt->bindParam(3, $practica, PDO::PARAM_INT);
+                $stmt->execute();
+			
+            }catch(PDOException $ex){
+                echo 'Error en sentencia insert/update: ' . $ex->getMessage();
+            }
+        }
+        
         function FAM_VINCULAR_HOMOLOGACION($inicial, $adicional){
             
             try{
@@ -1413,6 +1423,78 @@ class Database {
                 
                 $stmt = $this->conn->prepare($sql);
                 $stmt->bindParam(1, $rut, PDO::PARAM_STR);
+                $stmt->execute();
+                
+                $result = $stmt->fetchAll();
+                
+                return $result;
+                
+            } catch (Exception $ex) {
+                echo 'Error en sentencia select: ' . $ex->getCode();
+            }
+        }
+        
+        function FAM_SELECT_ASIGNATURAS_PLUS_BY_OFERTA($ano, $sem){
+            try{
+                $sql = "{CALL $this->DB_NAME.dbo.FAM_SELECT_ASIGNATURAS_PLUS_BY_OFERTA(?,?)}";
+                
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindParam(1, $ano, PDO::PARAM_INT);
+                $stmt->bindParam(2, $sem, PDO::PARAM_INT);
+                $stmt->execute();
+                
+                $result = $stmt->fetchAll();
+                
+                return $result;
+                
+            } catch (Exception $ex) {
+                echo 'Error en sentencia select: ' . $ex->getCode();
+            }
+        }
+        
+        function FAM_SELECT_ASIGNATURAS_PLUS_BY_PLAN($plan, $ano, $sem){
+            try{
+                $sql = "{CALL $this->DB_NAME.dbo.FAM_SELECT_ASIGNATURAS_PLUS_BY_PLAN(?,?,?)}";
+                
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindParam(1, $plan, PDO::PARAM_STR);
+                $stmt->bindParam(2, $ano, PDO::PARAM_INT);
+                $stmt->bindParam(3, $sem, PDO::PARAM_INT);
+                $stmt->execute();
+                
+                $result = $stmt->fetchAll();
+                
+                return $result;
+                
+            } catch (Exception $ex) {
+                echo 'Error en sentencia select: ' . $ex->getCode();
+            }
+        }
+        
+        function FAM_SELECT_ASIGNATURAS_PRACTICA($rut){
+            try{
+                $sql = "{CALL $this->DB_NAME.dbo.FAM_SELECT_ASIGNATURAS_PRACTICA(?)}";
+                
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindParam(1, $rut, PDO::PARAM_STR);
+                $stmt->execute();
+                
+                $result = $stmt->fetchAll();
+                
+                return $result;
+                
+            } catch (Exception $ex) {
+                echo 'Error en sentencia select: ' . $ex->getCode();
+            }
+        }
+        
+        function FAM_SELECT_NOTA_PRACTICA_BY_COD($codigo, $rut){
+            try{
+                $sql = "{CALL $this->DB_NAME.dbo.FAM_SELECT_NOTA_PRACTICA_BY_COD(?,?)}";
+                
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindParam(1, $codigo, PDO::PARAM_STR);
+                $stmt->bindParam(2, $rut, PDO::PARAM_STR);
                 $stmt->execute();
                 
                 $result = $stmt->fetchAll();

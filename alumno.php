@@ -48,7 +48,9 @@
 	
 ?>
 
-<div class="col-md-3"></div>
+<div class="col-md-3">
+    <a href="index.php?activo=alumno"><img src="Imagenes/back.png" width="30px" heigth="30px"></a>
+</div>
 <div class="panel panel-default col-md-6">
     <div class="panel-heading">
         <h2 class="panel-title">Información Personal</h2>

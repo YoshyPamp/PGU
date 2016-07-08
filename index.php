@@ -1,6 +1,35 @@
 <?php include("templates/header.php"); ?>
 <?php include("templates/navbar.php"); ?>
+
 <?php
+    $inicio_sel = 'active';
+    $alumno_sel = '';
+    $asignatura_sel = '';
+    $reporte_sel = '';
+    $administrador_sel = '';
+
+    if(isset($_GET['activo'])){
+        switch($_GET['activo']){
+            case 'alumno':
+                $alumno_sel = 'active';
+                $inicio_sel = '';
+                break;
+            case 'asignatura':
+                $asignatura_sel = 'active';
+                $inicio_sel = '';
+                break;
+            case 'reporte':
+                $reporte_sel = 'active';
+                $inicio_sel = '';
+                break;
+            case 'administrador':
+                $administrador_sel = 'active';
+                $inicio_sel = '';
+                break;
+            default:
+                $inicio_sel = 'active';
+        }
+    }
 
     foreach (glob("/ModuloImportador/clases/*.php") as $filename)
     {
@@ -29,22 +58,22 @@
     <!-- Nav Con permisos por cada perfil -->
     <ul class="nav nav-tabs" role="tablist">
         
-        <li role="presentation" class="active"><a href="#inicio" aria-control="inicio" role="tab" data-toggle="tab">INICIO</a></li>
+        <li role="presentation" class="<?php echo $inicio_sel; ?>"><a href="#inicio" aria-control="inicio" role="tab" data-toggle="tab">INICIO</a></li>
         
       <?php if($_SESSION['perfil'] == 1 || $_SESSION['perfil'] == 2 || $_SESSION['perfil'] == 4): ?>
-        <li role="presentation"><a href="#alumno" aria-controls="alumno" role="tab" data-toggle="tab">Alumno</a></li>
+        <li role="presentation" class="<?php echo $alumno_sel; ?>"><a href="#alumno" aria-controls="alumno" role="tab" data-toggle="tab">Alumno</a></li>
       <?php endif; ?>
         
       <?php if($_SESSION['perfil'] == 1 || $_SESSION['perfil'] == 4 || $_SESSION['perfil'] == 3): ?>
-        <li role="presentation"><a href="#asignatura" aria-controls="asignatura" role="tab" data-toggle="tab">Asignaturas</a></li>
+        <li role="presentation" class="<?php echo $asignatura_sel; ?>"><a href="#asignatura" aria-controls="asignatura" role="tab" data-toggle="tab">Asignaturas</a></li>
       <?php endif;?>
         
       <?php if($_SESSION['perfil'] == 1 || $_SESSION['perfil'] == 4): ?>
-        <li role="presentation"><a href="#reporte" aria-controls="reporte" role="tab" data-toggle="tab">Reportes</a></li>
+        <li role="presentation" class="<?php echo $reporte_sel; ?>"><a href="#reporte" aria-controls="reporte" role="tab" data-toggle="tab">Reportes</a></li>
       <?php endif;?>
         
       <?php if($_SESSION['perfil'] == 1): ?>
-        <li role="presentation"><a href="#administrador" aria-controls="administrador" role="tab" data-toggle="tab">Administrador</a></li>
+        <li role="presentation" class="<?php echo $administrador_sel; ?>"><a href="#administrador" aria-controls="administrador" role="tab" data-toggle="tab">Administrador</a></li>
       <?php endif;?>
         
       <?php if($_SESSION['perfil'] == 1 || $_SESSION['perfil'] == 4): ?>
@@ -53,7 +82,35 @@
         
         <li ><a href="#" data-toggle="modal" data-target="#myModal"><b><span class="glyphicon glyphicon-off"></span> Cerrar Sesión</b></a></li>
       <li ><a href="#" data-toggle="modal" data-target="#cambiar_clave"><b><span class="glyphicon glyphicon-wrench"></span> Cambiar Contraseña</b></a></li>
+      
+      <?php if($_SESSION['perfil'] == 1 || $_SESSION['perfil'] == 4): ?>
+      <li><a href="#" data-toggle="modal" data-target="#bug"><span style="color: red;"><b>Reporte de error</b></span></a></li>
+      <?php endif;?>
     </ul>
+    
+    <!-- MODAL PARA REPORTAR BUG -->
+    <div id="bug" class="modal fade" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>REPORTAR ERROR</h4>
+                </div>
+                <div class="modal-body">
+                    <legend>Ingrese Datos</legend>
+                    <label>Asunto:</label>
+                    <input type="text" class="form-control" id="titulo_bug"><br>
+                    <label>Comentario:</label>
+                    <textarea id="comentario_bug" class="form-control" style='resize: none;' rows='10'></textarea><br><br>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" onclick="ajax_enviar_registro();">Enviar Reporte</button>
+                    <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- FINAL MODAL PARA REPORTAR BUG -->
+    
     
     
     
@@ -107,7 +164,7 @@
     <div class="tab-content">
         
         <?php //INICIO ?>
-        <div role="tabpanel" class="tab-pane content active" id="inicio">
+        <div role="tabpanel" class="tab-pane content <?php echo $inicio_sel ?>" id="inicio">
             <div class="jumbotron text-center">
                 <h2>
                     Bienvenido al Sistema de Gestión Universitario <br> <label class="text-danger">Universidad</label> <label class="text-success">Mayor</label>
@@ -115,6 +172,7 @@
                 <div class="well">
                     <p>Usuario: <b><em><?php echo $_SESSION['usuario']; ?></em></b></p>
                     <p>Perfil: <b><em><?php echo $_SESSION['nom_perfil']; ?></em></b></p>
+                    <img src="Imagenes/mayor.jpg" width="300px" height="300px">
                 </div>
             </div>
         </div>
@@ -127,7 +185,7 @@
     <?php else: ?>
     <?php   $alumnos[] = $db->FAM_SELECT_ALUMNO_RUT($_SESSION['rut_alumno']); ?>
     <?php endif;?>
-            <div role="tabpanel" class="tab-pane content" id="alumno">
+            <div role="tabpanel" class="tab-pane content <?php echo $alumno_sel ?>" id="alumno">
                 <div class="col-md-12">
                         <button class="btn btn-success" onclick="$('#example_alumnos').tableExport({type:'excel'});">Exportar a XLS</button><br>
                         <table id="example_alumnos" width="100%" class="table table-striped table-bordered">
@@ -160,7 +218,7 @@
         
         <?php   $asignaturas = $db->FAM_SELECT_ASIGNATURAS(); ?>
         
-        <div role="tabpanel" class="tab-pane content" id="asignatura">
+        <div role="tabpanel" class="tab-pane content <?php echo $asignatura_sel ?>" id="asignatura">
             <div class="col-md-12">
                 <button class="btn btn-success" onclick="$('#example_asignaturas').tableExport({type:'excel'});">Exportar a XLS</button><br>
                 <table id="example_asignaturas" class="table table-striped table-bordered" width="100%">
@@ -191,7 +249,7 @@
         
         <?php //REPORTES ?>
         <?php if($_SESSION['perfil'] == 1 || $_SESSION['perfil'] == 4): ?>
-        <div role="tabpanel" class="tab-pane content" id="reporte">
+        <div role="tabpanel" class="tab-pane content <?php echo $reporte_sel ?>" id="reporte">
             <div class="col-md-2 barra"></div>
                 <div class="col-md-8 contenido">
             <h4>
@@ -199,7 +257,8 @@
             </h4>
             <hr>
             <ul class="list-group">
-                <li class="list-group-item"><a class="btn btn-primary" href='ModuloReportes/informe_homologacion_asignaturas.php'>Ver Reporte</a>  -Registro de homlogaciones de asignaturas.</li>
+                <li class="list-group-item"><a class="btn btn-primary" href='ModuloReportes/informe_homologacion_asignaturas.php'>Ver Reporte</a>  -Informe de Homologaciones por alumno.</li>
+                <li class="list-group-item"><a class="btn btn-primary" href='ModuloReportes/informe_homologacion_asignaturas_all.php'>Ver Reporte</a>  -Informe de Homologaciones por oferta o plan.</li>
                 <li class="list-group-item"><a class="btn btn-primary" href='ModuloReportes/informe_asignaturas_rendidas.php'>Ver Reporte</a>  -Emisión de informes de asignaturas rendidos, incluye homologación.</li>
             </ul>
             <h4>
@@ -220,39 +279,39 @@
         
         <?php //ADMINISTRADOR ?>
         <?php if($_SESSION['perfil'] == 1): ?>
-        <div role="tabpanel" class="tab-pane content" id="administrador">
+        <div role="tabpanel" class="tab-pane content <?php echo $administrador_sel ?>" id="administrador">
             <div class="col-md-2 barra"></div>
                 <div class="col-md-8 contenido">
                     <legend>Opciones de Administrador</legend>
                     <ul class="list-group">
                         <li class="list-group-item">
                             <h3>
-                                <a class="btn btn-info form-control" href="ModuloAdministrador/admin_usuarios.php">Usuarios del Sistema</a>
+                                <a class="btn btn-primary form-control" href="ModuloAdministrador/admin_usuarios.php">Usuarios del Sistema</a>
                             </h3>
                         </li>
                         <li class="list-group-item">
                             <h3>
-                                <a class="btn btn-info form-control" href="ModuloAdministrador/admin_planesdeestudio.php">Planes de Estudio</a>
+                                <a class="btn btn-primary form-control" href="ModuloAdministrador/admin_planesdeestudio.php">Planes de Estudio</a>
                             </h3>
                         </li>
                         <li class="list-group-item">
                             <h3>
-                                <a class="btn btn-info form-control" href="ModuloAdministrador/admin_ofertas.php">Ofertas</a>
+                                <a class="btn btn-primary form-control" href="ModuloAdministrador/admin_ofertas.php">Ofertas</a>
                             </h3>
                         </li>
                         <li class="list-group-item">
                             <h3>
-                                <a class="btn btn-info form-control" href="ModuloAdministrador/admin_secciones.php">Secciones</a>
+                                <a class="btn btn-primary form-control" href="ModuloAdministrador/admin_secciones.php">Secciones</a>
                             </h3>
                         </li>
                         <li class="list-group-item">
                             <h3>
-                                <a class="btn btn-info form-control" href="ModuloAdministrador/admin_alumnos.php">Alumnos</a>
+                                <a class="btn btn-primary form-control" href="ModuloAdministrador/admin_alumnos.php">Alumnos</a>
                             </h3>
                         </li>
                         <li class="list-group-item">
                             <h3>
-                                <a class="btn btn-info form-control" href="ModuloAdministrador/admin_homologaciones.php">Homologaciones</a>
+                                <a class="btn btn-primary form-control" href="ModuloAdministrador/admin_homologaciones.php">Homologaciones</a>
                             </h3>
                         </li>
                     </ul>

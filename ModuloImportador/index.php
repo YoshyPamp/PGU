@@ -58,7 +58,7 @@
 					$importe_fallido = "ERROR : OFERTA YA EXISTE PARA LA ESCUELA EN ESE AÑO Y SEMESTRE, ELIMINAR Y VOLVER A IMPORTAR.";
 				}else{
 					if($_GET['imported'] == 'error'){
-						$importe_fallido = "ERROR : PLAN DE ESTUDIO YA EXISTE CON ESE CÓDIGO, ELIMINAR ANTERIOR Y VOLVER A IMPORTAR.";
+						$importe_fallido = "ERROR : PLAN DE ESTUDIO YA EXISTE CON ESE CÓDIGO, ACTUALIZAR EN ADMINISTRADOR.";
 					}
 					
 				}
@@ -123,8 +123,40 @@
     $(window).load(function() {
         $(".loader").fadeOut("slow");
     })
-	
-	
+    
+    function buscar_alumno(rut,id, id_notas){
+        
+        //Trae datos alumno
+        $.ajax({
+            method: "GET",
+            url: "../ModuloReportes/procesos_ajax/ajax_alumno.php",
+            data: { rut: rut }
+        })
+        .done(function( msg ) {
+            $('#'+id+'plan').val('');
+            $('#'+id+'nom').val('');
+            $('#'+id+'ape1').val('');
+            $('#'+id+'ape2').val('');
+            $(id_notas).val('');
+            
+            alumno = JSON.parse(msg);
+            if(alumno.length == 0){
+                alert("NO EXISTE ALUMNO CON ESE RUT.");
+            }
+            var nombres = alumno.NOMBRES.split(",");
+            var apellidos = nombres[0].split(" ");
+            
+            $('#'+id+'plan').val(alumno.CODIGO_PLAN);
+            $('#'+id+'nom').val(nombres[1]);
+            $('#'+id+'ape1').val(apellidos[0]);
+            $('#'+id+'ape2').val(apellidos[1]);
+            $(id_notas).val(rut);
+            
+        })
+        .fail(function() {
+            alert( "Error en solicitud a servidor.");
+        });
+    }	
 
 </script>
 <style>
@@ -190,7 +222,7 @@
         <ul>
             <li>El nombre de los documentos no debe contener caracteres especiales como tildes o letras Ñ.</li>
             <li>Para el documento de oferta, este debe ser convertido a csv UTF sin puntos ni comas antes de la conversión.</li>
-            <li>La acta final de la asignatura deberá ser importada al momento de contener las notas de exámenes.</li>
+            <li>El acta final de la asignatura deberá ser importada al momento de contener las notas de exámenes.</li>
         </ul><br>    
         <button class="btn btn-lg btn-primary btn-block" type="submit">Leer Documento</button>
       </form>
@@ -253,14 +285,15 @@
                                     <!-- VERIFICA SI ALUMNO LLEGO CON PROBLEMAS POR NOMBRE O APELLIDO COMPUESTO-->
                                     <?php if(!preg_match('#[0-9]#',$alumno->rut)): ?>
                                         <td class='center'><?php echo $conA; ?></td>
-                                        <td class='center'><input type='text' name='alumno-<?php echo $key; ?>[]' style='background-color: lightsteelblue;' placeholder='<?php echo $alumno->nombre; ?>' required></td>
-                                        <td class='center'><input type='text' name='alumno-<?php echo $key; ?>[]' style='background-color: lightsteelblue;' placeholder='<?php echo $alumno->apellidoPaterno; ?>' required></td>
-                                        <td class='center'><input type='text' name='alumno-<?php echo $key; ?>[]' style='background-color: lightsteelblue;' placeholder='<?php echo $alumno->apellidoMaterno; ?>' required></td>
-                                        <td class='center'><input type='text' name='alumno-<?php echo $key; ?>[]' style='background-color: lightsteelblue;' placeholder='<?php echo $alumno->rut; ?>' required></td>
-                                        <td class='center'><input type='text' name='alumno-<?php echo $key; $conAlumnos++; ?>[]' style='background-color: lightsteelblue;' placeholder='<?php echo $alumno->plan; ?>' required></td>
+                                        <td class='center'><input type='text' id="<?php echo $conA; ?>nom" name='alumno-<?php echo $key; ?>[]' style='background-color: lightsteelblue;' placeholder='<?php echo $alumno->nombre; ?>' required></td>
+                                        <td class='center'><input type='text' id="<?php echo $conA; ?>ape1" name='alumno-<?php echo $key; ?>[]' style='background-color: lightsteelblue;' placeholder='<?php echo $alumno->apellidoPaterno; ?>' required></td>
+                                        <td class='center'><input type='text' id="<?php echo $conA; ?>ape2" name='alumno-<?php echo $key; ?>[]' style='background-color: lightsteelblue;' placeholder='<?php echo $alumno->apellidoMaterno; ?>' required></td>
+                                        <td class='center'><input type='text' id="<?php echo $conA; ?>rut" name='alumno-<?php echo $key; ?>[]' style='background-color: lightpink;' placeholder='<?php echo $alumno->rut; ?>' required></td>
+                                        <td class='center'><input type='text' id="<?php echo $conA; ?>plan" name='alumno-<?php echo $key; $conAlumnos++; ?>[]' style='background-color: lightsteelblue;' placeholder='<?php echo $alumno->plan; ?>' required></td>
                                         <td class='center'><label class='text-danger'>
-                                                <a href="#alumnoRut<?php echo $conAlumnos; ?>" id="alumnoRut<?php echo $conAlumnos; ?>back"><img width='20%' height='19%' src='../Imagenes/new-go-down.png'></a>
-                                                <a target='_blank' href="Documentos/<?php echo utf8_encode($_GET['name']); ?>"><img width='20%' height='19%' src='../Imagenes/Pdf.png'></a>
+                                                <a onclick="buscar_alumno($('#'+<?php echo $conA; ?>+'rut').val(),<?php echo $conA; ?>,'#alumnoRut<?php echo $conAlumnos; ?>');" ><img width='8%' height='8%' src='../Imagenes/Search.jpg'></a>
+                                                <a href="#alumnoRut<?php echo $conAlumnos; ?>" id="alumnoRut<?php echo $conAlumnos; ?>back"><img width='8%' height='8%' src='../Imagenes/new-go-down.png'></a>
+                                                <a target='_blank' href="Documentos/<?php echo utf8_encode($_GET['name']); ?>"><img width='8%' height='8%' src='../Imagenes/Pdf.png'></a>
                                             </label></td>
                                     <?php else: ?>
                                         <td class='center'><?php echo $conA; ?></td>
@@ -379,7 +412,7 @@
 					<?php if(!$existe):?>
                         <input type='submit' value='IMPORTAR DATOS' class='btn btn-success btn-lg center-block col-md-12' style='display:hidden' /><br><br>
 					<?php else:?>
-						<div class='alert alert-danger' role='danger'>PLAN CON CODIGO <?php echo $resultado_decreto['DATOS']->getCodigo(); ?> YA EXISTE EN BD, SI DESEA ACTUALIZARLO DEBE BORRAR EL QUE YA EXISTE EN EL MODULO DE ADMINISTRADOR, Y LUEGO VOLVER A REALIZAR LA IMPORTACIÓN.</div>
+						<div class='alert alert-danger' role='danger'>PLAN CON CODIGO <?php echo $resultado_decreto['DATOS']->getCodigo(); ?> YA EXISTE EN BD, SI DESEA ACTUALIZARLO DEBE INGRESAR AL MODULO DE ADMINISTRADOR.</div>
 					<?php endif;?>
         
                         <h3 class='col-md-12 text-center' >RESUMEN DE DATOS A IMPORTAR <small><em>Presione IMPORTAR cuando este seguro de los datos.</em></small></h3><br><br><br><br>
@@ -407,7 +440,7 @@
                             <label for="nombre">Nombre Plan: </label>
                             <input type="text" name="nombre" value="<?php echo $resultado_decreto['DATOS']->getNombre(); ?>" class="form-control" required>
                             <label for="codigo">Código: </label>
-                            <input type="text" name="codigo" value="<?php echo $resultado_decreto['DATOS']->getCodigo(); ?>" class="form-control" pattern="[A-Z]{3}[0-9]{3}[-][0-9]{4}" data-toggle="tooltip" data-placement="left" data-container="body" title="Ej: ICC120-2015" required>
+                            <input type="text" name="codigo" value="<?php echo $resultado_decreto['DATOS']->getCodigo(); ?>" class="form-control" pattern="[A-Z]{3}[0-9]{3}[-][0-9]+" data-toggle="tooltip" data-placement="left" data-container="body" title="Ej: ICC120-2015" required>
                             <label for="jornada">Jornada: </label>
                             <input type="text" name="jornada" value="<?php echo $resultado_decreto['DATOS']->getJornada(); ?>" class="form-control" required>
                             <label for="duracion">Duración: </label>

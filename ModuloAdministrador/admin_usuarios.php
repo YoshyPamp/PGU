@@ -10,6 +10,7 @@
          $('#usuarios').DataTable( {
                 "pagingType": "full_numbers",
                 "order": [[ 2, "desc" ]],
+                "paging": false
                 "language": {
                     "lengthMenu": "Mostrando _MENU_ datos por página.",
                     "zeroRecords": "No se encuentran registros.",
@@ -70,7 +71,10 @@
         <img alt="Brand"  src="../Imagenes/logo-U.jpg">
     </a>
     <h2>ADMINISTRADOR DE USUARIOS DEL SISTEMA</h2>    
-</nav><br>
+</nav>
+    <div class="container-fluid">
+        <a href="../index.php?activo=administrador"><img src="../Imagenes/back.png" width="30px" heigth="30px"></a>
+    </div>
 
 <!-- ZONA DE MENSAJES -->
 <?php
@@ -136,7 +140,7 @@
             <input type="submit" value="ACTUALIZAR USUARIOS" class="btn btn-success form-control">
         </div><br><br>
     <?php endif;?>
-        
+        <button class="btn btn-success col-md-1" onclick="$('#usuarios').tableExport({type:'excel'});">Exportar a XLS</button><div class="col-md-1"></div><label class="col-md-3"> Nota: Para editar presionar la id del usuario.</label><br><br>
     <table id="usuarios" class="table table-bordered">
         <thead>
             <tr>
@@ -147,12 +151,13 @@
             <?php if($usuarios != ''): ?>
                 <?php foreach($usuarios as $usuario):?>
                     <tr>
-                        <td><?php echo $usuario['ID_USUARIO'] ?></td>
-                        <td><input type="text" name="<?php echo $usuario['ID_USUARIO'] ?>[]" class="form-control" value="<?php echo $usuario['USUARIO'] ?>"></td>
-                        <td><input type="text" name="<?php echo $usuario['ID_USUARIO'] ?>[]" class="form-control" value="<?php echo $usuario['EMAIL'] ?>"></td>
-                        <td><input type="text" name="<?php echo $usuario['ID_USUARIO'] ?>[]" class="form-control" value="<?php echo $usuario['RUT_ALUMNO'] ?>"></td>
-                        <td>
-                            <select name="<?php echo $usuario['ID_USUARIO'] ?>[]" class="form-control">
+                        <td style=" cursor: pointer;" onclick="$('.texto<?php echo $usuario['ID_USUARIO'] ?>').toggle('fast'); $('.input<?php echo $usuario['ID_USUARIO'] ?>').toggle('fast');"><?php echo $usuario['ID_USUARIO'] ?></td>
+                        <td align="center"><span class="texto<?php echo $usuario['ID_USUARIO'] ?>"><?php echo $usuario['USUARIO'] ?></span><input style="display: none;" type="text" name="<?php echo $usuario['ID_USUARIO'] ?>[]" class="form-control input<?php echo $usuario['ID_USUARIO'] ?>" value="<?php echo $usuario['USUARIO'] ?>"></td>
+                        <td align="center"><span class="texto<?php echo $usuario['ID_USUARIO'] ?>"><?php echo $usuario['EMAIL'] ?></span><input style="display: none;" type="text" name="<?php echo $usuario['ID_USUARIO'] ?>[]" class="form-control input<?php echo $usuario['ID_USUARIO'] ?>" value="<?php echo $usuario['EMAIL'] ?>"></td>
+                        <td align="center"><span class="texto<?php echo $usuario['ID_USUARIO'] ?>"><?php echo $usuario['RUT_ALUMNO'] ?></span><input style="display: none;" type="text" name="<?php echo $usuario['ID_USUARIO'] ?>[]" class="form-control input<?php echo $usuario['ID_USUARIO'] ?>" value="<?php echo $usuario['RUT_ALUMNO'] ?>"></td>
+                        <td align="center">
+                            <span class="texto<?php echo $usuario['ID_USUARIO'] ?>"><?php echo $usuario['ID_PERFIL']; ?></span>
+                            <select name="<?php echo $usuario['ID_USUARIO'] ?>[]" class="form-control input<?php echo $usuario['ID_USUARIO'] ?>" style="display: none;">
                                 <option value="1" <?php echo $usuario['ID_PERFIL'] == 1 ? 'selected': '' ?> >Administrador</option>
                                 <option value="2" <?php echo $usuario['ID_PERFIL'] == 2 ? 'selected': '' ?> >Alumno</option>
                                 <option value="3" <?php echo $usuario['ID_PERFIL'] == 3 ? 'selected': '' ?> >Profesor</option>

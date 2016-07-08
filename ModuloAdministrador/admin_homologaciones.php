@@ -137,6 +137,9 @@
         </a>
         <h2>ADMINISTRACIÓN DE HOMOLOGACIONES</h2>    
     </nav>
+    <div class="container-fluid">
+        <a href="../index.php?activo=administrador"><img src="../Imagenes/back.png" width="30px" heigth="30px"></a>
+    </div><br>
 <!-- FIN ZONA DE CABECERA -->
 
 <div class="container-fluid">

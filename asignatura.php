@@ -14,6 +14,9 @@
         
     }
 ?>
+<div class="container-fluid">
+    <a href="index.php?activo=asignatura"><img src="Imagenes/back.png" width="30px" heigth="30px"></a>
+</div>
 
 <div class="container-fluid">
     <legend>Secciones Existentes</legend>

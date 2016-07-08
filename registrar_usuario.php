@@ -7,6 +7,7 @@ include_once 'Config/login/funciones.php';
 $error_msg = "";
 $db = new Database();
 
+
 if (isset($_POST['dominio']) && isset($_POST['email']) && isset($_POST['tipo'])) {
     
     $usuario = $_POST['email'];

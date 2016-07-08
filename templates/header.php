@@ -17,7 +17,7 @@
 ?>
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="full">
 
 <head>
     <meta charset="utf-8">
@@ -37,7 +37,14 @@
     <script type="text/javascript" src="librerias/tableExport/tableExport/libs/FileSaver/FileSaver.min.js"></script>
     <script type="text/javascript" src="librerias/tableExport/tableExport/tableExport.min.js"></script>
     <!-- Custom CSS -->
+    <link href='http://fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+
+
+
     <link href="css/styles.css" rel="stylesheet">
+    
+
 </head>
 
 

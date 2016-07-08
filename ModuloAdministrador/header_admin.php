@@ -33,7 +33,7 @@
 ?>
 
 <!DOCTYPE html>
-<html>
+<html class="full">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -54,6 +54,13 @@
         <script type="text/javascript" src="../librerias/tableExport/tableExport/libs/FileSaver/FileSaver.min.js"></script>
         <script type="text/javascript" src="../librerias/tableExport/tableExport/tableExport.min.js"></script>
         <!-- Custom CSS -->
+        <link href='http://fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'>
+
+
+
         
     </head>
+    
+   
 

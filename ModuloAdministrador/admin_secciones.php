@@ -5,6 +5,9 @@
         </a>
         <h2>ADMINISTRADOR DE SECCIONES</h2>    
     </nav>
+    <div class="container-fluid">
+        <a href="../index.php?activo=administrador"><img src="../Imagenes/back.png" width="30px" heigth="30px"></a>
+    </div>
 
     <!-- ZONA DE MENSAJES -->
     <?php

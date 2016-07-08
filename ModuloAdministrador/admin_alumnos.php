@@ -8,6 +8,9 @@
         </a>
         <h2>ADMINISTRADOR DE ALUMNOS</h2>    
     </nav>
+    <div class="container-fluid">
+        <a href="../index.php?activo=administrador"><img src="../Imagenes/back.png" width="30px" heigth="30px"></a>
+    </div>
 <!-- FIN ZONA DE CABECERA -->
 
 

@@ -14,9 +14,32 @@ and open the template in the editor.
  * For details, see http://www.apache.org/licenses/LICENSE-2.0.
  */
 
+
+.full {
+  background: url(../Imagenes/background6.jpg) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+
 body {
-    font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
-    
+    font-family: 'PT Sans', Georgia, Times, serif;
+    font-size: 15px;
+    background: none;
+}
+
+h1 {
+ font-family: 'Arvo', Helvetica, Arial, sans-serif;
+ font-size: 25px;
+ line-height: 70px;
+}
+ 
+p {
+ font-family: 'PT Sans', Georgia, Times, serif;
+ font-size: 15px;
+ line-height: 25px;
 }
 
 .nvb{  
@@ -52,4 +75,11 @@ body {
 
 .panel-title{
     cursor: pointer;
+}
+
+th{
+    background-color: #f6c47c;
+}
+td{
+    background-color: #e2decc;
 }

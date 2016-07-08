@@ -4,7 +4,7 @@
 <?php
     if(isset($_GET['plan'])){
         $plan_actual = $_GET['plan'];
-        $asignaturas = $db->FAM_SELECT_ASIGNATURAS_PLAN($plan_actual,'plan');
+        $asignaturas = $db->FAM_SELECT_ASIGNATURAS_PLAN($plan_actual,'proyeccion');
     }
 ?>
     
@@ -23,7 +23,7 @@
         })
         .done(function( msg ) {
             alert(msg);
-            window.location.reload();
+           
         })
         .fail(function() {
             alert( "Error en solicitud a servidor.");
@@ -37,6 +37,9 @@
         </a>
         <h2>TABLA DE HOMOLOGACIONES</h2>    
     </nav>
+    <div class="container-fluid">
+        <a href="admin_homologaciones.php"><img src="../Imagenes/back.png" width="30px" heigth="30px"></a>
+    </div>
     <div class="loader"></div>
 
     <!-- ZONA DE MENSAJES -->
@@ -75,6 +78,7 @@
             <tbody>
                 <?php if(isset($asignaturas)):?>
                     <?php foreach($asignaturas as $asignatura): ?>
+                    <?php if(substr($asignatura['COD_ASIGNATURA'],0,2) != 'FG'):?>
                     <tr>
                         <td><?php echo $asignatura['NOM_ASIGNATURA']; ?></td>
                         <td><?php echo $asignatura['COD_ASIGNATURA']; ?></td>
@@ -98,14 +102,10 @@
                             </table>
                         </td>
                     </tr>
+                    <?php endif;?>
                     <?php endforeach;?>
                 <?php endif;?>
             </tbody>
-            <tfoot>
-                <tr>
-                    <th>NOMBRE ASIGNATURA</th><th>CÓDIGO ASIGNATURA</th><th>HOMOLOGACIONES</th>
-                </tr>
-            </tfoot>
         </table>
     </div>
 
