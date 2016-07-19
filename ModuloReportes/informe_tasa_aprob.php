@@ -120,7 +120,7 @@
                 <table class='table table-striped table-bordered' id='resultado_busqueda'>
                     <thead>
                         <tr>
-                            <th>TASA DE APROBACIÓN</th><th>TASA DE REPROBACIÓN</th><th>ESCUELA</th>
+                            <th>TASA DE APROBACIÓN GLOBAL</th><th>TASA DE REPROBACIÓN GLOBAL</th><th>ESCUELA</th>
                         </tr>
                     </thead>
                     <tbody>

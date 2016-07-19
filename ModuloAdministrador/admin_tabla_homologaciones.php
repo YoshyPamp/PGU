@@ -23,7 +23,7 @@
         })
         .done(function( msg ) {
             alert(msg);
-           
+            location.reload();
         })
         .fail(function() {
             alert( "Error en solicitud a servidor.");

@@ -10,11 +10,11 @@
         $rut = $_POST['rut_alumno'];
         $nombres = $_POST['nombre'];
         $estado = $_POST['estado'];
-        $plan = $_POST['plan'];
         $matricula = $_POST['matricula'];
+        $correo = $_POST['email'];
         
         try{
-            $db->FAM_UPDATE_ALUMNO($rut, $matricula, $nombres, $estado, $plan);
+            $db->FAM_UPDATE_ALUMNO($rut, $matricula, $nombres, $estado, $correo);
                 
             $msg = "<div class='container alert alert-success'>Alumno Actualizado Satisfactoriamente.</div>";
             header("Location: ../admin_alumnos.php?msg='".$msg."'");

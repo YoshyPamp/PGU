@@ -177,6 +177,8 @@ class Database {
                         $alumno['COMENTARIO_PRACTICA'] = $row['COMENTARIO_PRACTICA'];
                         $alumno['ESTADO_PRACTICA_PRO'] = $row['ESTADO_PRACTICA_PRO'];
                         $alumno['COMENTARIO_PRACTICA_PRO'] = $row['COMENTARIO_PRACTICA_PRO'];
+                        $alumno['ANO_INGRESO'] = $row['ANO_INGRESO'];
+                        $alumno['CORREO'] = $row['CORREO'];
                     }
                 }	
 
@@ -647,15 +649,17 @@ class Database {
 			
 				$nom_completo = utf8_encode($ap1." ".$ap2.", ".$nom);
 				$estado = "REGULAR";
+                                $ano_ingreso = date('Y');
 
-				$sql = "INSERT INTO $this->DB_NAME.dbo.ALUMNO (NOMBRES, RUT, CODIGO_PLAN, ESTADO_ESTUDIO) 
-				VALUES(:NOMBRES, :RUT, :CODIGO_PLAN, :ESTADO_ESTUDIO)";			
+				$sql = "INSERT INTO $this->DB_NAME.dbo.ALUMNO (NOMBRES, RUT, CODIGO_PLAN, ESTADO_ESTUDIO,ANO_INGRESO) 
+				VALUES(:NOMBRES, :RUT, :CODIGO_PLAN, :ESTADO_ESTUDIO, :ANO_INGRESO)";			
 				
 				$stmt = $this->conn->prepare($sql);
 				$stmt->bindParam(':NOMBRES', $nom_completo, PDO::PARAM_STR);
 				$stmt->bindParam(':RUT', $rut, PDO::PARAM_STR);
 				$stmt->bindParam(':CODIGO_PLAN', $pln, PDO::PARAM_STR);
 				$stmt->bindParam(':ESTADO_ESTUDIO', $estado, PDO::PARAM_STR);
+                                $stmt->bindParam(':ANO_INGRESO', $ano_ingreso, PDO::PARAM_INT);
 				$stmt->execute();
 				
 				return true;
@@ -851,7 +855,7 @@ class Database {
             }
         }
         
-        function FAM_UPDATE_ALUMNO($rut, $matricula, $nombres, $estado, $plan){
+        function FAM_UPDATE_ALUMNO($rut, $matricula, $nombres, $estado, $correo){
             
             try{
                 $sql = "{CALL $this->DB_NAME.dbo.FAM_UPDATE_ALUMNO(?,?,?,?,?)}";
@@ -861,7 +865,7 @@ class Database {
                         $stmt->bindParam(2, $matricula, PDO::PARAM_INT);
                         $stmt->bindParam(3, $nombres, PDO::PARAM_STR);
                         $stmt->bindParam(4, $estado, PDO::PARAM_STR);
-                        $stmt->bindParam(5, $plan, PDO::PARAM_STR);
+                        $stmt->bindParam(5, $correo, PDO::PARAM_STR);
 			$stmt->execute();
                 
             } catch (Exception $ex) {
@@ -1503,6 +1507,45 @@ class Database {
                 
             } catch (Exception $ex) {
                 echo 'Error en sentencia select: ' . $ex->getCode();
+            }
+        }
+        
+        function FAM_SELECT_OTROSPLANES_BYRUT($rut){
+            try{
+                $sql = "{CALL $this->DB_NAME.dbo.FAM_SELECT_OTROSPLANES_BYRUT(?)}";
+                
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindParam(1, $rut, PDO::PARAM_STR);
+                $stmt->execute();
+                
+                $result = $stmt->fetchAll();
+                
+                return $result;
+                
+            } catch (Exception $ex) {
+                echo 'Error en sentencia select: ' . $ex->getCode();
+            }
+        }
+        
+        function FAM_UPDATE_PLAN_ACTUAL_ALUMNO($estado_antiguo, $plan_nuevo, $ano_nuevo, $rut, $plan_antiguo, $ano_antiguo){
+            try{
+                $sql = "{CALL $this->DB_NAME.dbo.FAM_UPDATE_PLAN_ACTUAL_ALUMNO(?,?,?,?,?,?)}";
+                
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bindParam(1, $estado_antiguo, PDO::PARAM_STR);
+                $stmt->bindParam(2, $plan_nuevo, PDO::PARAM_STR);
+                $stmt->bindParam(3, $plan_antiguo, PDO::PARAM_STR);
+                $stmt->bindParam(4, $ano_nuevo, PDO::PARAM_INT);
+                $stmt->bindParam(5, $ano_antiguo, PDO::PARAM_INT);
+                $stmt->bindParam(6, $rut, PDO::PARAM_STR);
+                $stmt->execute();
+                
+                $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+                
+                return $resultado;
+                
+            } catch (Exception $ex) {
+                echo 'Error en sentencia select: ' . $ex->getMessage();
             }
         }
         

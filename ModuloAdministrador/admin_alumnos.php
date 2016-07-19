@@ -38,10 +38,12 @@
         <input type="number" class="form-control" name="matricula" id="matricula" placeholder="Nro. Matrícula"><br>
         <label for="nombre">Nombre Alumno:</label>
         <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Nombre" required><br>
+        <label for="nombre">Correo:</label>
+        <input type="email" class="form-control" name="email" id="email" placeholder="Email" required><br>
         <label for="estado">Estado Estudio:</label>
         <input type="text" class="form-control" name="estado" id="estado" placeholder="Estado estudio" required><br>
         <label for="plan">Código Plan de Estudio:</label>
-        <input type="text" class="form-control" name="plan" id="plan" placeholder="Plan de estudio" required><br>
+        <input type="text" class="form-control" name="plan" id="plan" placeholder="Plan de estudio" disabled><br>
         <input class="btn btn-success" type="submit" value="ACTUALIZAR INFORMACIÓN" >
     </form>
 </div>
@@ -69,6 +71,7 @@
                         $('#nombre').val(alumno.NOMBRES);
                         $('#estado').val(alumno.ESTADO_ESTUDIO);
                         $('#plan').val(alumno.CODIGO_PLAN); 
+                        $('#email').val(alumno.CORREO); 
                     }else{
                         alert(alumno.error);
                     }

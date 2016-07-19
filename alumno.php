@@ -63,10 +63,18 @@
           <input type="text" value="<?php echo $apellidoPat; ?>" class="form-control" readonly> 
           <label>Apellido Materno: </label>
           <input type="text" value="<?php echo $apellidoMat; ?>" class="form-control" readonly>
+          <label>Correo: </label>
+          <input type="text" value="<?php echo $alumno['CORREO']; ?>" class="form-control" readonly>
           <label>Rut: </label>
           <input type="text" value="<?php echo $alumno['RUT']; ?>" class="form-control" readonly>
           <label>Matrícula: </label>
           <input type="text" value="<?php echo $alumno['N_MATRICULA']; ?>" class="form-control" readonly>
+          <label>Plan de Estudio: </label>
+          <input type="text" value="<?php echo $alumno['CODIGO_PLAN']; ?>" class="form-control" readonly>
+          <label>Año de ingreso: </label>
+          <input type="text" value="<?php echo $alumno['ANO_INGRESO']; ?>" class="form-control" readonly><br>
+          <input type="button" value="Cambiar Plan Actual" class="btn btn-warning" data-toggle="modal" data-target="#cambio_plan" ><br><br>
+          <input type="button" value="Ver Planes Anteriores" class="btn btn-success" onclick="window.location='alumno_planes.php?rut=<?php echo $alumno['RUT']; ?>'"><br>
           
           <br>
             <?php if($nivel_minimo > 4): ?>
@@ -85,7 +93,50 @@
 </div>
 <div class="col-md-3"></div>
 
-
+<!-- MODAL PARA CAMBIAR PLAN -->
+    <div id="cambio_plan" class="modal fade" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>CAMBIO DE PLAN</h4>
+                </div>
+                <div class="modal-body">
+                    <legend>Ingrese Datos</legend>
+                    <label>Estado Plan Actual:</label>
+                    <select id="estado_actual" class="form-control">
+                        <option value="">Seleccione opción...</option>
+                        <option value="INCOMPLETO">INCOMPLETO</option>
+                        <option value="COMPLETO">COMPLETO</option>
+                        <option value="SUSPENDIDO">SUSPENDIDO</option>
+                    </select>
+                    <br>
+                    <?php $planes = $db->FAM_SELECT_PLANES_ESCUELA('ICC-01');?>
+                    <label>Código Plan Nuevo:</label>
+                    <select class="form-control" id="plan_nuevo">
+                        <option value="">Seleccione plan...</option>
+                        <?php foreach($planes as $plan): ?>
+                            <option 
+                                value="<?php echo $plan['COD_PLANESTUDIO']; ?>">
+                                <?php echo utf8_encode($plan['NOM_PLANESTUDIO'])." | ".$plan['COD_PLANESTUDIO']; ?>
+                            </option>
+                        <?php endforeach;?>
+                    </select>
+                    <br>
+                    <label>Año de ingreso nuevo</label>
+                    <input type="text" class="form-control" value="<?php echo date('Y'); ?>" id="ano_nuevo">
+                    <input type="hidden" value="<?php echo $alumno['ANO_INGRESO']; ?>" id="ano_ingreso_actual">
+                    <input type="hidden" value="<?php echo $alumno['RUT']; ?>" id="rut_modal">
+                    <input type="hidden" value="<?php echo $alumno['CODIGO_PLAN']; ?>" id="cod_plan_antiguo">
+                    <br><br>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-success" onclick="ajax_cambiar_plan();">CAMBIAR PLAN</button>
+                    <button class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- FINAL MODAL PARA CAMBIAR PLAN -->
 
 
 <div class="panel panel-default col-md-12">

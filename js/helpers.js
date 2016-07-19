@@ -92,6 +92,33 @@ function ajax_enviar_registro(){
 
 }
 
+function ajax_cambiar_plan(){
+    var estado_actual = $('#estado_actual').val();
+    var plan_nuevo = $('#plan_nuevo').val();
+    var ano_nuevo = $('#ano_nuevo').val();
+    var rut = $('#rut_modal').val();
+    var plan_actual = $('#cod_plan_antiguo').val();
+    var ano_actual = $('#ano_ingreso_actual').val();
+    
+    $.ajax({
+        method: "POST",
+        url: "cambiar_plan.php",
+        data: { estado: estado_actual,
+                plan: plan_nuevo,
+                ano: ano_nuevo,
+                rut: rut,
+                plan_actual: plan_actual,
+                ano_actual: ano_actual}
+        })
+        .done(function( msg ){
+            location.reload();
+        })
+        .fail(function(){
+            alert( "Error en solicitud a servidor.");
+        });
+
+}
+
 
 
 
