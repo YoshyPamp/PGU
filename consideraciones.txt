@@ -1,0 +1,13 @@
+PGU Consideraciones
+- max_input_vars = 15000
+- PDO_ODBC module
+- Agregar conexión ODBC y cambiar driver en PHP
+- Cambiar credenciales qas/prd
+- Verificar rutas
+- Archivos sin tildes ni ñ
+- Crear carpeta Documentos
+- Configurar función MAIL
+
+PGU Consideraciones de proceso
+- Archivo csv debe ser sin puntos ni comas adicionales antes de la conversión.
+- LA acta final se debe agregar al final del período incluyendo los examenes.
